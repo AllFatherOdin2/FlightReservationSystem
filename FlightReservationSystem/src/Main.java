@@ -49,7 +49,7 @@ public class Main {
 	
 	private static String getDepartDate(){
 
-		System.out.println("What date would you like to leave? (mm/dd/yyyy) or \"Back\"");
+		System.out.println("What date would you like to leave? (yyyy_mm_dd) or \"Back\"");
 		String dateString = sc.nextLine().toUpperCase();
 		
 		//TODO implement BACK functionality and error handling

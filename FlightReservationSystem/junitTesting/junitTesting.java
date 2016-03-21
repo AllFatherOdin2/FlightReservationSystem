@@ -1,5 +1,9 @@
 import static org.junit.Assert.*;
 
+import java.util.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -7,7 +11,6 @@ import CS509.client.airport.Airport;
 import CS509.client.airport.AirportNotFoundException;
 import CS509.client.airport.Airports;
 import CS509.client.dao.ServerInterface;
-import CS509.client.flight.Flight;
 import CS509.client.flight.Flights;
 import CS509.client.util.QueryFactory;
 
@@ -15,14 +18,9 @@ import CS509.client.util.QueryFactory;
 public class junitTesting {
 	static final String agencyTicketString = "Team07";
 	
-	public void Before(){
-		
-	}
-
 	@Test
 	public void testCodeGetsAirports() throws AirportNotFoundException{
 		ServerInterface serverInterface = new ServerInterface();
-		String airportCode = "BOS";
 		
 		//Lock database for our use
 		serverInterface.lock(agencyTicketString);
@@ -38,11 +36,11 @@ public class junitTesting {
 	}
 	
 	@Test
-	public void testCodeGetsFlights() {
+	public void testCodeGetsFlights() throws ParseException {
 		//Get input from users regarding departure airport and date
 		ServerInterface serverInterface = new ServerInterface();
 		String departAirport = "BOS";
-		String departDate = "05/10/2016";
+		String departDate = "2016_05_10";
 		
 		
 		//Lock database for our use
@@ -51,6 +49,7 @@ public class junitTesting {
 		//Create flightManager using xmlstring from query factory using user inputs
 		Flights flightManager = new Flights();
 		String xmlString = serverInterface.getFlights(agencyTicketString, departAirport, departDate);
+		
 		flightManager.addAll(xmlString);
 	
 		
