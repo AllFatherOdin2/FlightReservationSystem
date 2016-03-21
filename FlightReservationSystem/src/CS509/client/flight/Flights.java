@@ -18,6 +18,9 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import CS509.client.airport.Airport;
+import CS509.client.airport.AirportNotFoundException;
+
 /**
  * This class holds values pertaining to an aggregate flights. The aggregate is implemented
  * as an ArrayList. Flights can be populated from XML string returned from CS509 server.
@@ -174,6 +177,35 @@ public class Flights extends ArrayList <Flight> {
 	        return cd.getData();
 	      }
 	      return "";
+	}
+	
+	/**
+	 * Searches through list and returns a specific flight based on the flight number which should be unique
+	 * 
+	 * @param number Unique identifier for flights
+	 * @return Flight that the user is searching for
+	 * @throws FlightNotFoundException Thrown if the flight is not returned by the query.
+	 */
+	public Flight getSpecificFlight(String number) throws FlightNotFoundException{
+		Flight flight = null;
+		int counter = 0;
+		int found = 0;
+		for (Flight a : this){
+			if (flight == null && a.getmNumber().compareToIgnoreCase(number) == 0){
+				flight = a;
+				found = counter;
+			} else if (flight != null) {
+				//should only occur if a flight is duplicated somehow.
+				//TODO: Test to see if this can even happen
+				if(this.get(found).equals(this.get(counter))){
+					this.remove(a);
+				}
+			} else {
+				throw new FlightNotFoundException("Flight " + number +" not found by query");
+			}
+			counter++;
+		}
+		return flight;
 	}
 
 }
