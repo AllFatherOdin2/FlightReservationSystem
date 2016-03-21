@@ -81,7 +81,7 @@ public class Airport {
 	 * @preconditions the latitude and longitude are valid String representations of decimal values
 	 */
 	public Airport (String name, String code, String latitude, String longitude) {
-		this (name, code, Double.parseDouble(latitude), Double.parseDouble(latitude));
+		this (name, code, Double.parseDouble(latitude), Double.parseDouble(longitude));
 	}
 	
 	/**

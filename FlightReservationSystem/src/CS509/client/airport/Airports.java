@@ -159,4 +159,33 @@ public class Airports extends ArrayList<Airport> {
 	      }
 	      return "";
 	}
+	
+	/**
+	 * Returns a single Airport from returned list of Airports.
+	 * 
+	 * @param airportName Name of airport to find
+	 * @return Airport that user is looking for
+	 * @throws AirportNotFoundException Thrown if the airport doesn't exist or is not returned by the server
+	 */
+	public Airport getSpecificAirport(String code) throws AirportNotFoundException{
+		Airport airport = null;
+		int counter = 0;
+		int found = 0;
+		for (Airport a : this){
+			if (airport == null && a.code().compareToIgnoreCase(code) == 0){
+				airport = a;
+				found = counter;
+			} else if (airport != null) {
+				//should only occur if an airport is duplicated somehow.
+				//TODO: Test to see if this can even happen
+				if(this.get(found).equals(this.get(counter))){
+					this.remove(a);
+				}
+			} else {
+				throw new AirportNotFoundException("Airport " + code +" not found by query");
+			}
+			counter++;
+		}
+		return airport;
+	}
 }
