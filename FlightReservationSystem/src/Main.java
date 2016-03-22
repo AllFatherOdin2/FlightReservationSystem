@@ -1,9 +1,9 @@
 import java.util.Scanner;
 
-import CS509.client.airport.Airports;
+import CS509.client.airport.AirportManager;
 import CS509.client.dao.ServerInterface;
 import CS509.client.flight.Flight;
-import CS509.client.flight.Flights;
+import CS509.client.flight.FlightManager;
 
 
 public class Main {
@@ -29,12 +29,12 @@ public class Main {
 		serverInterface.lock(agencyTicketString);
 		
 		//Create airportManager using xmlString from query factory that gets all airports
-		Airports airportManger = new Airports();
+		AirportManager airportManger = new AirportManager();
 		String xmlString = serverInterface.getAirports(agencyTicketString);
 		airportManger.addAll(xmlString);
 		
 		//Create flightManager using xmlstring from query factory using user inputs
-		Flights flightManager = new Flights();
+		FlightManager flightManager = new FlightManager();
 		xmlString = serverInterface.getFlights(agencyTicketString, departAirport, departDate);
 		flightManager.addAll(xmlString);
 		

@@ -28,7 +28,7 @@ import org.xml.sax.SAXException;
   * @author blake
  *
  */
-public class Airports extends ArrayList<Airport> {
+public class AirportManager extends ArrayList<Airport> {
 	private static final long serialVersionUID = 1L;
 	
 	/**

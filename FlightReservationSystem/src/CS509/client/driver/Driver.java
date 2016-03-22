@@ -5,7 +5,7 @@ package CS509.client.driver;
 
 import CS509.client.dao.ServerInterface;
 import CS509.client.flight.Flight;
-import CS509.client.flight.Flights;
+import CS509.client.flight.FlightManager;
 
 /**
  * @author blake
@@ -28,7 +28,7 @@ public class Driver {
 		System.out.println(xmlFlights);
 		
 		// Create the aggregate flights
-		Flights flights = new Flights();
+		FlightManager flights = new FlightManager();
 		flights.addAll(xmlFlights);
 		
 		//try to reserve a coach seat on one of the flights

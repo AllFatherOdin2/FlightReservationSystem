@@ -30,7 +30,7 @@ import CS509.client.airport.AirportNotFoundException;
  * @since 2016-02-24
  *
  */
-public class Flights extends ArrayList <Flight> {
+public class FlightManager extends ArrayList <Flight> {
 
 	private static final long serialVersionUID = 1L;
 
