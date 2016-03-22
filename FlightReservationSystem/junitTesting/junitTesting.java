@@ -16,15 +16,10 @@ public class junitTesting {
 	public void testCodeGetsAirports() throws AirportNotFoundException{
 		ServerInterface serverInterface = new ServerInterface();
 		
-		//Lock database for our use
-		serverInterface.lock(agencyTicketString);
-		
 		//Create airportManager using xmlString from query factory that gets all airports
 		AirportManager airportManger = new AirportManager();
 		String xmlString = serverInterface.getAirports(agencyTicketString);
 		airportManger.addAll(xmlString);
-		
-		serverInterface.unlock(agencyTicketString);
 		
 		assertTrue(airportManger.size()>0);
 	}
@@ -36,19 +31,11 @@ public class junitTesting {
 		String departAirport = "BOS";
 		String departDate = "2016_05_10";
 		
-		
-		//Lock database for our use
-		serverInterface.lock(agencyTicketString);
-		
 		//Create flightManager using xmlstring from query factory using user inputs
 		FlightManager flightManager = new FlightManager();
 		String xmlString = serverInterface.getFlights(agencyTicketString, departAirport, departDate);
 		
 		flightManager.addAll(xmlString);
-	
-		
-		//unlock database for other teams to use
-		serverInterface.unlock(agencyTicketString);
 		
 		assertTrue(flightManager.size()>0);
 	}

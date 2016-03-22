@@ -24,10 +24,6 @@ public class Main {
 		String departDate = getDepartDate();
 		ServerInterface serverInterface = new ServerInterface();
 		
-		
-		//Lock database for our use
-		serverInterface.lock(agencyTicketString);
-		
 		//Create airportManager using xmlString from query factory that gets all airports
 		AirportManager airportManger = new AirportManager();
 		String xmlString = serverInterface.getAirports(agencyTicketString);
@@ -38,8 +34,12 @@ public class Main {
 		xmlString = serverInterface.getFlights(agencyTicketString, departAirport, departDate);
 		flightManager.addAll(xmlString);
 		
+		/*
+		//Lock database for our use
+		serverInterface.lock(agencyTicketString);
 		//unlock database for other teams to use
 		serverInterface.unlock(agencyTicketString);
+		*/
 		
 		for (Flight flight : flightManager) {
 			if(arriveAirport.compareTo(flight.getmCodeArrival()) == 0){
