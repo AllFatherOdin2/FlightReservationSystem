@@ -3,6 +3,8 @@
  */
 package CS509.client.airport;
 
+import CS509.client.Interfaces.IAirport;
+
 /**
  * This class holds values pertaining to a single Airport. Class member attributes
  * are the same as defined by the CS509 server API and store values after conversion from
@@ -14,7 +16,8 @@ package CS509.client.airport;
  * @since 2016-02-24
  *
  */
-public class Airport {
+public class Airport implements IAirport
+{
 	
 	/**
 	 * Constant values used for latitude and longitude range validation
@@ -218,5 +221,11 @@ public class Airport {
 		}
 		
 		return true;
+	}
+
+	@Override
+	public String GetLocalTime(String gmtTime) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

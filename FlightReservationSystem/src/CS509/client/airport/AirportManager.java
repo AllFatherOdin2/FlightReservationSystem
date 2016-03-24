@@ -19,6 +19,9 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import CS509.client.Interfaces.IAirport;
+import CS509.client.Interfaces.IAirportManager;
+
 /**
  * This class aggregates a number of Airport. The aggregate is implemented as an ArrayList.
  * Airports can be added to the aggregate via XML strings in the format returned form the 
@@ -28,7 +31,9 @@ import org.xml.sax.SAXException;
   * @author blake
  *
  */
-public class AirportManager extends ArrayList<Airport> {
+public class AirportManager extends ArrayList<Airport>
+implements IAirportManager
+ {
 	private static final long serialVersionUID = 1L;
 	
 	/**
@@ -190,5 +195,11 @@ public class AirportManager extends ArrayList<Airport> {
 			throw new AirportNotFoundException("Airport " + code +" not found by query");
 		
 		return airport;
+	}
+
+	@Override
+	public IAirport GetAirport(String airportCode) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
