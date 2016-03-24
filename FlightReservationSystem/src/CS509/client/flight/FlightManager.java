@@ -200,11 +200,13 @@ public class FlightManager extends ArrayList <Flight> {
 				if(this.get(found).equals(this.get(counter))){
 					this.remove(a);
 				}
-			} else {
-				throw new FlightNotFoundException("Flight " + number +" not found by query");
-			}
+			} 
+			
 			counter++;
 		}
+		if(flight == null)
+			throw new FlightNotFoundException("Flight " + number +" not found by query");
+		
 		return flight;
 	}
 
