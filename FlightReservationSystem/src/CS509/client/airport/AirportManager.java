@@ -181,11 +181,14 @@ public class AirportManager extends ArrayList<Airport> {
 				if(this.get(found).equals(this.get(counter))){
 					this.remove(a);
 				}
-			} else {
-				throw new AirportNotFoundException("Airport " + code +" not found by query");
-			}
+			} 
+			
 			counter++;
 		}
+		
+		if(airport == null)
+			throw new AirportNotFoundException("Airport " + code +" not found by query");
+		
 		return airport;
 	}
 }

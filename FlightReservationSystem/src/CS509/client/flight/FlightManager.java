@@ -205,6 +205,9 @@ public class FlightManager extends ArrayList <Flight> {
 			}
 			counter++;
 		}
+		if(flight == null)
+			throw new FlightNotFoundException("Flight " + number +" not found by query");
+		
 		return flight;
 	}
 

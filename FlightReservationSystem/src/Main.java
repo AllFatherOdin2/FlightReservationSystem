@@ -1,3 +1,4 @@
+
 import java.util.Scanner;
 
 import CS509.client.airport.AirportManager;
@@ -33,6 +34,10 @@ public class Main {
 		FlightManager flightManager = new FlightManager();
 		xmlString = serverInterface.getFlights(agencyTicketString, departAirport, departDate);
 		flightManager.addAll(xmlString);
+		
+		String airplanesString = serverInterface.getAirplanes(agencyTicketString);
+		
+		
 		
 		/*
 		//Lock database for our use
