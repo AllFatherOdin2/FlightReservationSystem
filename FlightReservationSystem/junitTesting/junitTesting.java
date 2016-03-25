@@ -1,6 +1,7 @@
 import static org.junit.Assert.*;
 
 import java.text.ParseException;
+import java.util.Dictionary;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -201,5 +202,11 @@ public class junitTesting {
 
 		assertEquals(coachBefore, flight.getmSeatsCoach());
 		assertEquals(firstClassBefore + 1, flight.getmSeatsFirstclass());
+	}
+	
+	@Test
+	public void testServiceGetsAirplanes(){
+		String xmlAirplanesString = serverInterface.getAirports(agencyTicketString);
+		assertNotNull(xmlAirplanesString);
 	}
 }
