@@ -1,8 +1,8 @@
 package CS509.client.Interfaces;
 
-import java.util.Dictionary;
+import java.util.HashMap;
 
 public interface IFlightManager 
 {
-	public Dictionary<String, IFlight> getFlights(IAirport departureAirport, IAirport arrivalAirport,String date);
+	public HashMap<String, IFlight> getFlights(IAirport departureAirport, IAirport arrivalAirport,String date);
 }
