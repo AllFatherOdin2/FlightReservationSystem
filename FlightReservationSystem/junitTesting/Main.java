@@ -47,13 +47,13 @@ public class Main {
 		*/
 		
 		for (Flight flight : flightManager) {
-			//if(arriveAirport.compareTo(flight.getmCodeArrival()) == 0){
+			if(arriveAirport.compareTo(flight.getmCodeArrival()) == 0){
 				System.out.println();
 				System.out.println(flight.getmNumber());
 				System.out.println("Depart Time: " + flight.getmTimeDepart() + " from " + flight.getmCodeDepart());
 				System.out.println("Arrive Time: " + flight.getmTimeArrival() + " to " + flight.getmCodeArrival());
 			
-			//}
+			}
 		}
 	}
 	
