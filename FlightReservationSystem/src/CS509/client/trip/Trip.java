@@ -1,6 +1,8 @@
 package CS509.client.trip;
 
-public class Trip 
-{
+import CS509.client.Interfaces.ITrip;
 
+public class Trip implements ITrip
+{
+	
 }
