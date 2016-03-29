@@ -8,7 +8,5 @@ public interface ITripManager
 		RoundTrip,
 	}
 	
-	public void planTrip(ITrip currentTrip);
-	
 	public ITrip getNewTrip(TripType trip);
 }
