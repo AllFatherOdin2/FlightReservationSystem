@@ -2,11 +2,8 @@ package CS509.client.trip;
 
 import CS509.client.Interfaces.ITrip;
 
-public class Trip implements ITrip
+public class RoundTrip implements ITrip
 {
-	private String departureAirportCode;
-	
-	private String arrivalAirportCode;
 
 	@Override
 	public String getDepartureAirportCode() {
@@ -18,5 +15,6 @@ public class Trip implements ITrip
 	public String getArrivalAirportCode() {
 		// TODO Auto-generated method stub
 		return null;
-	}	
+	}
+
 }
