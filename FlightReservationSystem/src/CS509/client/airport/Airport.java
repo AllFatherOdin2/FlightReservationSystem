@@ -193,7 +193,7 @@ public class Airport implements IAirport
 		
 		return false;	
 	}
-	
+
 	/**
 	 * Determine if object instance has valid attribute data
 	 * 

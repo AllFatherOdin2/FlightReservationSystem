@@ -34,6 +34,20 @@ public class Flight {
 	private String mPriceCoach;
 	private int mSeatsCoach;
 	
+	public Flight () {
+	    mAirplane = "";
+	    mFlightTime = "";
+	    mNumber = "";
+	    mCodeDepart = "";
+		mTimeDepart = "";
+		mCodeArrival = "";
+		mTimeArrival = "";
+		mPriceFirstclass = "";
+		mSeatsFirstclass = 0;
+		mPriceCoach = "";
+		mSeatsCoach = 0;
+	}
+	
 	public Flight (
 			String airplane,
 			String flightTime,
