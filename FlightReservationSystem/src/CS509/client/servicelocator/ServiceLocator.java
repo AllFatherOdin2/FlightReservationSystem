@@ -3,10 +3,10 @@ package CS509.client.servicelocator;
 import CS509.client.Interfaces.IAirportManager;
 import CS509.client.Interfaces.IFlightManager;
 import CS509.client.Interfaces.IServiceLocator;
-import CS509.client.Interfaces.ITripManager;
+import CS509.client.Interfaces.ITripFactory;
 import CS509.client.airport.AirportManager;
 import CS509.client.flight.FlightManager;
-import CS509.client.trip.TripManager;
+import CS509.client.trip.TripFactory;
 
 public class ServiceLocator implements IServiceLocator
 {
@@ -14,13 +14,13 @@ public class ServiceLocator implements IServiceLocator
 	
 	private IFlightManager flightManager;
 	
-	private ITripManager tripManager;
+	private ITripFactory tripManager;
 	
 	public ServiceLocator()
 	{
 		this.airportManager = new AirportManager();
 		//this.flightManager =  new FlightManager();
-		this.tripManager = new TripManager(this.airportManager, this.flightManager);
+		this.tripManager = new TripFactory(this.airportManager, this.flightManager);
 	}
 	
 	public IAirportManager getAirportManager()
@@ -34,7 +34,7 @@ public class ServiceLocator implements IServiceLocator
 		return this.flightManager;
 	}
 	
-	public ITripManager getTripManager(){
+	public ITripFactory getTripManager(){
 		return this.tripManager;
 	}
 }

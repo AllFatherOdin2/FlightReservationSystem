@@ -7,15 +7,15 @@ import CS509.client.Interfaces.IAirportManager;
 import CS509.client.Interfaces.IFlight;
 import CS509.client.Interfaces.IFlightManager;
 import CS509.client.Interfaces.ITrip;
-import CS509.client.Interfaces.ITripManager;
+import CS509.client.Interfaces.ITripFactory;
 
-public class TripManager implements ITripManager
+public class TripFactory implements ITripFactory
 {	
 	private IAirportManager airportManager;
 	
 	private IFlightManager flightManager;
 	
-	public TripManager(IAirportManager airportManager, IFlightManager flightManager)
+	public TripFactory(IAirportManager airportManager, IFlightManager flightManager)
 	{
 		this.airportManager = airportManager;
 		this.flightManager = flightManager;

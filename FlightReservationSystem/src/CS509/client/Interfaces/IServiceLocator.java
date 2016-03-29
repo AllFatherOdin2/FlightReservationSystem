@@ -6,5 +6,5 @@ public interface IServiceLocator
 	
 	public IFlightManager getFlightManager();
 	
-	public ITripManager getTripManager();
+	public ITripFactory getTripManager();
 }

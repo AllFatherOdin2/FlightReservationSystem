@@ -1,6 +1,6 @@
 package CS509.client.Interfaces;
 
-public interface ITripManager 
+public interface ITripFactory 
 {
 	public enum TripType
 	{
