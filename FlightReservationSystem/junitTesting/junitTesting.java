@@ -11,7 +11,7 @@ import org.junit.rules.ExpectedException;
 import CS509.client.airport.Airport;
 import CS509.client.airport.AirportNotFoundException;
 import CS509.client.airport.AirportManager;
-import CS509.client.dao.ServerInterface;
+import CS509.client.dao.Server;
 import CS509.client.flight.Flight;
 import CS509.client.flight.FlightManager;
 import CS509.client.flight.FlightNotFoundException;
@@ -23,10 +23,10 @@ public class junitTesting {
     public ExpectedException thrown= ExpectedException.none();
 	
 	static final String agencyTicketString = "Team07";
-	ServerInterface serverInterface;
+	Server serverInterface;
 	
 	@Before public void initialize(){
-		serverInterface = new ServerInterface();
+		serverInterface = new Server();
 	}
 	
 	
@@ -48,8 +48,7 @@ public class junitTesting {
 		airportManger.addAll(xmlString);
 		
 		Airport airport = airportManger.getSpecificAirport("BOS");
-		assertEquals("BOS", airport.code());
-		
+		assertEquals("BOS", airport.code());		
 	}
 	
 	@Test
