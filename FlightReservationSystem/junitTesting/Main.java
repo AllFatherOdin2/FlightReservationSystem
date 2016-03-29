@@ -2,7 +2,7 @@
 import java.util.Scanner;
 
 import CS509.client.airport.AirportManager;
-import CS509.client.dao.ServerInterface;
+import CS509.client.dao.Server;
 import CS509.client.flight.Flight;
 import CS509.client.flight.FlightManager;
 
@@ -23,7 +23,7 @@ public class Main {
 		String departAirport = getDepartAirport();
 		String arriveAirport = getArriveAirport();
 		String departDate = getDepartDate();
-		ServerInterface serverInterface = new ServerInterface();
+		Server serverInterface = new Server();
 		
 		//Create airportManager using xmlString from query factory that gets all airports
 		AirportManager airportManger = new AirportManager();

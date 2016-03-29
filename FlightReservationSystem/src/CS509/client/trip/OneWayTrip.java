@@ -15,4 +15,10 @@ public class OneWayTrip implements ITrip
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public void PlanTrip() {
+		// TODO Auto-generated method stub
+		
+	}
 }

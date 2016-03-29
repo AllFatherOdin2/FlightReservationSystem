@@ -17,4 +17,10 @@ public class RoundTrip implements ITrip
 		return null;
 	}
 
+	@Override
+	public void PlanTrip() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
