@@ -1,153 +1,94 @@
 package CS509.client.util;
 
 import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
-import com.google.api.client.http.HttpTransport;
-//Here is using time zone to convert. What need? --time zone!
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+
+//import java.util.Calendar;
+//import java.util.GregorianCalendar;
 import java.util.TimeZone;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
 //Parse json
-import java.util.HashMap;
-import java.lang.String;
-import java.util.List;
-import net.sf.json.JSON;
-
-import javax.lang.model.element.Element;
+import org.json.*;
+import org.json.JSONException;
 
 import CS509.client.Interfaces.ILocalTime;
-import CS509.client.airport.Airport;
-import CS509.client.airport.AirportNotFoundException;
-import CS509.client.flight.Flight;
+//import CS509.client.airport.Airport;
+//import CS509.client.airport.AirportNotFoundException;
 
 public class LocalTime implements ILocalTime
 {
-	private double mlat;
-	private double mlng;
-	private String mgmt;
-	private String mcode;
-	private String mtimezone;
-	private String TimeFlight, TimeDepart, TimeArrival;
-	private final String mUrlBase = "https://maps.googleapis.com/maps/api/timezone/json?location="+mlat+","+mlng+"&timestamp=1331161200&key=AIzaSyCzTeXN4-RjWcDUxRWDZpTltUdROU51oUc";
 	
-	public String TimeConvert (String timezone) {
-		
-		mtimezone = timezone;
+//Use timezone and date to get the local time	
+	public String TimeConvert (String timezone, String date) {
 		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss a" );
-		
-		String dateInString = "22-01-2015 10:15:55 AM";
-		Date date = formatter.parse(dateInString);
-		TimeZone tz = TimeZone.getDefault();
-		
 		SimpleDateFormat sdfLocal = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss a");
-		TimeZone tzLocal = TimeZone.getTimeZone(mtimezone);
+		TimeZone tzLocal = TimeZone.getTimeZone(timezone);
 		sdfLocal.setTimeZone(tzLocal);
 		
 		String sDateLocal = sdfLocal.format(date);
-		Date dateLocal = formatter.parse(sDateLocal);
-		System.out.println("Date:" + formatter.format(dateLocal));
-		}
-	public String getTimeZone (double lat, double lng) {
-		
-		URL url;
-		HttpURLConnection connection;
-		BufferedReader reader;
-		String line;
-		StringBuffer result = new StringBuffer();
-		
-		
-		
-		return mtimezone;
-	}
-		
-		
-	
-	//Here is to get the date and time. From flight we can get date, time.
-	Calendar 
-	
-	public LocalTime()
-	{
-		Airport airport = new Airport();
-		
-		Flight flight = new Flight();
-		String name;
-		String code;
-		double latitude;
-		double longitude;
-		Airport airportSpecific = new Airport.getSpecificAirport(code);
-		Element elementAirport = (Element) nodeAirport;
-		Element elementLat, elementLng;
-		elementLat = = (Element)elementAirport.getElementsByTagName("Latitude").item(0);
-		latitude = Double.parseDouble(getCharacterDataFromElement(elementLat));
-		elementLng = (Element)elementAirport.getElementsByTagName("Longitude").item(0);
-		longitude = Double.parseDouble(getCharacterDataFromElement(elementLng));
-		
-		airport.name(name);
-		airport.code(code);
-		airport.latitude(latitude);
-		airport.longitude(longitude);
-		mlat = 90.0;
-		mlng = 180.0;
-		mgmt = "";
-	}
-	
-	public LocalTime(double lat, double lng, String gmt){
-	    this.mlat = lat;
-	    this.mlng = lng;
-	    this.mgmt = gmt;
-	}
-	void Lat(double lat){
-		if(lat < -180.0 || lat > 180.0){
-			throw new AirportNotFoundException("Airport not exist");
-		}
-		this.mlat = lat;
-	}
-	void lng(double lng){
-		if(lng < -90.0 || lng > 90.0){
-			throw new AirportNotFoundException("Airport not exist");
-		}
-		this.mlng = lng;
-	}	
-	void getGMT(String gmt){
-		String TimeFlight, TimeDepart, TimeArrival;
-		Flight flight = new Flight();
-	    this.TimeFlight = flight.getmFlightTime();
-	    this.TimeDepart = flight.getmTimeDepart();
-	    this.TimeArrival = flight.getmTimeArrival();
-	    
-	}
-	GET https://maps.googleapis.com/maps/api/timezone/json?location="+lat+","+lng+"&timestamp=1331161200&key=AIzaSyCzTeXN4-RjWcDUxRWDZpTltUdROU51oUc
-		X-JavaScript-User-Agent: Google APIs Explorer
-	void convert(String gmt){
-	    double lngD = mlng - 
-	}	
-		
-		
-		
-		
-		
-		
-		
-		URL timeZoneUrl;
-		HttpURLConnection TZconnection;
-		BufferedReader reader;
-		String ine;
-		StringBuffer timeZone = new StringBuffer();
+		Date dateLocal;
 		try {
-			timeZoneUrl = new URL()
+			dateLocal = formatter.parse(sDateLocal);
+			System.out.println("Date:" + formatter.format(dateLocal));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		
-		
-		
-		this.getmTimeDepart();
-	}
+		return null;
+		}
+//Use Google API to get the timezone.
+	public String getTimeZone (double lat, double lng) {
 
-	public String getLocalTime(float lat, float lng, String gmt)
-	{
+		HttpURLConnection connection;
+		String LocalTimeZone = "";
+			try {
+				URL url = new URL("https://maps.googleapis.com/maps/api/timezone/json?location="+lat+","+lng+"&timestamp=1331161200&key=AIzaSyCzTeXN4-RjWcDUxRWDZpTltUdROU51oUc");
+				connection = (HttpURLConnection) url.openConnection();
+				connection.setRequestMethod("GET");
+				connection.setDoInput(true);
+				connection.setRequestProperty("Content-type", "application/x-java-serialized-object");
+				InputStream is = connection.getInputStream();
+				BufferedReader rd = new BufferedReader(new InputStreamReader(is));
+				StringBuilder response = new StringBuilder();
+				String line;
+				while((line = rd.readLine())!= null){
+					response.append(line);
+					response.append("\r");
+				}
+				rd.close();
+				JSONObject jsonObject1 = new JSONObject(response);
+				LocalTimeZone = jsonObject1.getString("timeZoneName");
+	            System.out.println("Local Time Zone:" + LocalTimeZone);
+            } catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+            } catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+            } catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+            }
+			return LocalTimeZone;
+    }
+	public String getLocalTime(double lat, double lng, String gmt)
+	{   
+        String timezone = getTimeZone(lat,lng);
+        String timeLocal = TimeConvert(timezone,gmt);
+        System.out.println(timeLocal);
+        return null;
+	}
+	@Override
+	public String getLocalTime(float lat, float lng, String gmt) {
+		// TODO Auto-generated method stub
 		return null;
 	}
+
 }
