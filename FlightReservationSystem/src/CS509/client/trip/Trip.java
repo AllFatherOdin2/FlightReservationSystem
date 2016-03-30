@@ -11,13 +11,17 @@ public abstract class Trip implements ITrip
 	@Override
 	public String getDepartureAirportCode() {
 		// TODO Auto-generated method stub
-		return null;
+		return this.departureAirportCode;
 	}
 
 	@Override
 	public String getArrivalAirportCode() {
 		// TODO Auto-generated method stub
-		return null;
+		return this.arrivalAirportCode;
+	}
+	
+	public void setArrivalAirportCode(){
+		
 	}
 
 	@Override
