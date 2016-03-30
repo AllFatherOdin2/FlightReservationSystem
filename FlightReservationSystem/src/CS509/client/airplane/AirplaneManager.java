@@ -11,8 +11,10 @@ import java.util.Map;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.w3c.dom.CharacterData;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import CS509.client.flight.Flight;
@@ -50,12 +52,12 @@ public class AirplaneManager {
 		
 		for (int i = 0; i < nodesPlanes.getLength(); i++) {
 			Element elementPlane = (Element) nodesPlanes.item(i);
-			Airplane flight = buildPlane (elementPlane);
+			Airplane plane = buildPlane (elementPlane);
 			
-			/*if (flight.isValid()) {
-				this.add(flight);
+			if (plane.isValid()) {
+				airplanes.put(plane.getmModel(), plane);
 				collectionUpdated = true;
-			}*/
+			}
 		}
 		
 		return collectionUpdated;
@@ -79,15 +81,47 @@ public class AirplaneManager {
 	}
 
 
-	private Airplane buildPlane(Element elementPlane) {
+	private Airplane buildPlane(Node nodePlane) {
 		/**
 		 * Airplane will be instantiated after attributes are parsed
 		 */
 		Airplane airplane = null;
-		return null;
+		String manufacturer;
+		String model;
+		int seatsFirstClass;
+		int seatsCoach;
+		
+		Element elementPlane = (Element) nodePlane;
+		manufacturer = elementPlane.getAttributeNode("Manufacturer").getValue();
+		model = elementPlane.getAttributeNode("Model").getValue();
+		
+		Element elementFirstClass;
+		Element elementCoach;
+		
+		elementFirstClass = (Element) elementPlane.getElementsByTagName("FirstClassSeats").item(0);
+		elementCoach = (Element) elementPlane.getElementsByTagName("CoachSeats").item(0);
+		seatsFirstClass = Integer.parseInt(getCharacterDataFromElement(elementFirstClass));
+		seatsCoach = Integer.parseInt(getCharacterDataFromElement(elementCoach));
+		
+		airplane = new Airplane(manufacturer, model, seatsFirstClass, seatsCoach);
+		
+		return airplane;
 	}
 
-	
+	/**
+	 * Retrieve character data from an element if it exists
+	 * 
+	 * @param e is the DOM Element to retrieve character data from
+	 * @return the character data as String [possibly empty String]
+	 */
+	private static String getCharacterDataFromElement (Element e) {
+		Node child = e.getFirstChild();
+	    if (child instanceof CharacterData) {
+	        CharacterData cd = (CharacterData) child;
+	        return cd.getData();
+	      }
+	      return "";
+	}
 	
 	
 }
