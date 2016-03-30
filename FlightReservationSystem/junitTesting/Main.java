@@ -2,7 +2,7 @@
 import java.util.Scanner;
 
 import CS509.client.airport.AirportManager;
-import CS509.client.dao.ServerInterface;
+import CS509.client.dao.Server;
 import CS509.client.flight.Flight;
 import CS509.client.flight.FlightManager;
 
@@ -14,7 +14,7 @@ public class Main {
 	/**
 	 * Main file, asks user for flight location and date.
 	 * Sanity checks inputs for correctness
-	 * Queries database as needed and continues taking inputs from user as needed
+	 * Queries database as needed and continutes taking inputs from user as needed
 	 * 
 	 * @param args -> empty
 	 */
@@ -23,7 +23,7 @@ public class Main {
 		String departAirport = getDepartAirport();
 		String arriveAirport = getArriveAirport();
 		String departDate = getDepartDate();
-		ServerInterface serverInterface = new ServerInterface();
+		Server serverInterface = new Server();
 		
 		//Create airportManager using xmlString from query factory that gets all airports
 		AirportManager airportManger = new AirportManager();
@@ -47,13 +47,13 @@ public class Main {
 		*/
 		
 		for (Flight flight : flightManager) {
-			//if(arriveAirport.compareTo(flight.getmCodeArrival()) == 0){
+			if(arriveAirport.compareTo(flight.getmCodeArrival()) == 0){
 				System.out.println();
 				System.out.println(flight.getmNumber());
 				System.out.println("Depart Time: " + flight.getmTimeDepart() + " from " + flight.getmCodeDepart());
 				System.out.println("Arrive Time: " + flight.getmTimeArrival() + " to " + flight.getmCodeArrival());
 			
-			//}
+			}
 		}
 	}
 	

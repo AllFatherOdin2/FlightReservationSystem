@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import CS509.client.Interfaces.IServer;
 import CS509.client.util.QueryFactory;
 
 
@@ -23,7 +24,7 @@ import CS509.client.util.QueryFactory;
  * @since 2016-02-24
  *
  */
-public class ServerInterface {
+public class Server implements IServer {
 	private final String mUrlBase = "http://cs509.cs.wpi.edu:8181/CS509.server/ReservationSystem";
 
 	/**
@@ -59,7 +60,7 @@ public class ServerInterface {
 			if ((responseCode >= 200) && (responseCode <= 299)) {
 				InputStream inputStream = connection.getInputStream();
 				String encoding = connection.getContentEncoding();
-				encoding = (encoding == null ? "URF-8" : encoding);
+				encoding = (encoding == null ? "UTF-8" : encoding);
 
 				reader = new BufferedReader(new InputStreamReader(inputStream));
 				while ((line = reader.readLine()) != null) {
@@ -101,7 +102,7 @@ public class ServerInterface {
 			if ((responseCode >= 200) && (responseCode <= 299)) {
 				InputStream inputStream = connection.getInputStream();
 				String encoding = connection.getContentEncoding();
-				encoding = (encoding == null ? "URF-8" : encoding);
+				encoding = (encoding == null ? "UTF-8" : encoding);
 
 				reader = new BufferedReader(new InputStreamReader(inputStream));
 				while ((line = reader.readLine()) != null) {
