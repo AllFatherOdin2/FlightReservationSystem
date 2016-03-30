@@ -32,4 +32,5 @@ public class Airplane {
 		mFirstClassSeats = fcSeats;
 		mCoachSeats = cSeats;
 	}
+	
 }
