@@ -26,7 +26,12 @@ import CS509.client.util.QueryFactory;
  */
 public class Server implements IServer {
 	private final String mUrlBase = "http://cs509.cs.wpi.edu:8181/CS509.server/ReservationSystem";
-
+	private String team;
+	
+	public Server(String team){
+		this.team = team;
+	}
+	
 	/**
 	 * Return an XML list of all the airports
 	 * 
@@ -35,7 +40,7 @@ public class Server implements IServer {
 	 * @param team identifies the ticket agency requesting the information
 	 * @return xml string listing all airports
 	 */
-	public String getAirports (String team) {
+	public String getAirports () {
 
 		URL url;
 		HttpURLConnection connection;
@@ -77,7 +82,7 @@ public class Server implements IServer {
 		return result.toString();
 	}
 	
-	public String getFlights (String team, String airportCode, String day) {
+	public String getFlights (String airportCode, String day) {
 		
 		URL url;
 		HttpURLConnection connection;
@@ -119,7 +124,7 @@ public class Server implements IServer {
 		return result.toString();
 	}
 	
-	public String getAirplanes (String team) {
+	public String getAirplanes () {
 		
 		URL url;
 		HttpURLConnection connection;
@@ -163,7 +168,7 @@ public class Server implements IServer {
 		return result.toString();
 	}
 	
-	public boolean lock (String team) {
+	public boolean lock () {
 		URL url;
 		HttpURLConnection connection;
 
@@ -204,7 +209,7 @@ public class Server implements IServer {
 		return true;
 	}
 
-	public boolean unlock (String team) {
+	public boolean unlock () {
 		URL url;
 		HttpURLConnection connection;
 		
@@ -256,7 +261,7 @@ public class Server implements IServer {
 	 * @param flightNumber
 	 * @return true if SUCCESS code returned from server
 	 */
-	public boolean buyTickets(String team, String flightNumber, boolean isCoach){
+	public boolean buyTickets(String flightNumber, boolean isCoach){
 		String xmlReservation;
 		if(isCoach){
 			xmlReservation = "<Flights>"

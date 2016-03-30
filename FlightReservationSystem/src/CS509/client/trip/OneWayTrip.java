@@ -1,19 +1,15 @@
 package CS509.client.trip;
 
-import CS509.client.Interfaces.ITrip;
+import CS509.client.Interfaces.IAirportManager;
+import CS509.client.Interfaces.IFlightManager;
+import CS509.client.airport.AirportManager;
+import CS509.client.flight.FlightManager;
 
-public class OneWayTrip implements ITrip
+public class OneWayTrip extends Trip
 {
-	@Override
-	public String getDepartureAirportCode() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getArrivalAirportCode() {
-		// TODO Auto-generated method stub
-		return null;
+	
+	public OneWayTrip(IAirportManager airportManager, IFlightManager flightManager) {
+		super(airportManager, flightManager);
 	}
 
 	@Override
@@ -21,4 +17,5 @@ public class OneWayTrip implements ITrip
 		// TODO Auto-generated method stub
 		
 	}
+
 }

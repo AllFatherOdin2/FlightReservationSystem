@@ -1,10 +1,19 @@
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
+import CS509.client.Interfaces.IServiceLocator;
+import CS509.client.Interfaces.ITrip;
+import CS509.client.Interfaces.ITripFactory;
+import CS509.client.Interfaces.ITripFactory.TripType;
+import CS509.client.airport.Airport;
 import CS509.client.airport.AirportManager;
 import CS509.client.dao.Server;
 import CS509.client.flight.Flight;
 import CS509.client.flight.FlightManager;
+import CS509.client.servicelocator.ServiceLocator;
+import CS509.client.trip.OneWayTrip;
+import CS509.client.trip.TripFactory;
 
 
 public class Main {
@@ -19,32 +28,33 @@ public class Main {
 	 * @param args -> empty
 	 */
 	public static void main(String[] args){
+		IServiceLocator serviceLocator = new ServiceLocator();
 		//Get input from users regarding departure airport and date
-		String departAirport = getDepartAirport();
-		String arriveAirport = getArriveAirport();
-		String departDate = getDepartDate();
-		Server serverInterface = new Server();
+		TripType tripType = TripType.OneWay;
+		String departureAirportCode = getDepartAirport();
+		String arrivalAirportCode = getArriveAirport();
+		String depatureDate = getDepartDate();
+
+		ITripFactory tripFactory = serviceLocator.getTripManager();
 		
-		//Create airportManager using xmlString from query factory that gets all airports
-		AirportManager airportManger = new AirportManager();
-		String xmlString = serverInterface.getAirports(agencyTicketString);
-		airportManger.addAll(xmlString);
+		ITrip trip = tripFactory.getNewTrip(tripType);
+		trip.setDepartureAirportCode(departureAirportCode);
+		trip.setDepatureDate(depatureDate);
+		trip.setArrivalAirportCode(arrivalAirportCode);
 		
+		trip.PlanTrip();
+		tripFactory.addAll();
+
+
+		/*
 		//Create flightManager using xmlstring from query factory using user inputs
 		FlightManager flightManager = new FlightManager();
-		xmlString = serverInterface.getFlights(agencyTicketString, departAirport, departDate);
+		xmlString = serverInterface.getFlights(agencyTicketString, arrivalAirportCode, departDate);
 		flightManager.addAll(xmlString);
 		
 		String airplanesString = serverInterface.getAirplanes(agencyTicketString);
 		
 		
-		
-		/*
-		//Lock database for our use
-		serverInterface.lock(agencyTicketString);
-		//unlock database for other teams to use
-		serverInterface.unlock(agencyTicketString);
-		*/
 		
 		for (Flight flight : flightManager) {
 			if(arriveAirport.compareTo(flight.getmCodeArrival()) == 0){
@@ -55,6 +65,7 @@ public class Main {
 			
 			}
 		}
+		*/
 	}
 	
 	private static String getDepartAirport(){

@@ -12,27 +12,28 @@ import CS509.client.trip.TripFactory;
 
 public class ServiceLocator implements IServiceLocator
 {
+	private final String agencyTicketString = "Team07";
 	private IAirportManager airportManager;
 	
 	private IFlightManager flightManager;
 	
-	private ITripFactory tripManager;
+	private ITripFactory tripFactory;
 	
 	private IServer database;
 	
 	public ServiceLocator()
 	{
-		this.database = new Server();
-		//this.airportManager = new AirportManager();
-		//this.flightManager =  new FlightManager();
-		this.tripManager = new TripFactory(this.airportManager, this.flightManager);
+		this.database = new Server(agencyTicketString);
+		this.airportManager = new AirportManager(database);
+		this.flightManager =  new FlightManager();
+		this.tripFactory = new TripFactory(this.airportManager, this.flightManager);
 	}
 	
 	public IAirportManager getAirportManager()
 	{
 		return this.airportManager;
 	}
-
+	
 	@Override
 	public IFlightManager getFlightManager() {
 		// TODO Auto-generated method stub
@@ -40,6 +41,6 @@ public class ServiceLocator implements IServiceLocator
 	}
 	
 	public ITripFactory getTripManager(){
-		return this.tripManager;
+		return this.tripFactory;
 	}
 }

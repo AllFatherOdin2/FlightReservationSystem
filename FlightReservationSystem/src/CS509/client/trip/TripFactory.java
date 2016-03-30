@@ -8,6 +8,7 @@ import CS509.client.Interfaces.IFlight;
 import CS509.client.Interfaces.IFlightManager;
 import CS509.client.Interfaces.ITrip;
 import CS509.client.Interfaces.ITripFactory;
+import CS509.client.dao.Server;
 
 public class TripFactory implements ITripFactory
 {	
@@ -20,6 +21,12 @@ public class TripFactory implements ITripFactory
 		this.airportManager = airportManager;
 		this.flightManager = flightManager;
 	}
+	
+	@Override
+	public void addAll(){
+		Server server = new Server("Team07");
+		flightManager.addAll(server.getFlights("BOS", "2016_05_10"));
+	}
 
 	@Override
 	public ITrip getNewTrip(TripType trip) {
@@ -27,11 +34,16 @@ public class TripFactory implements ITripFactory
 		switch(trip)
 		{
 			case OneWay:
-				return new OneWayTrip();
+				return new OneWayTrip(airportManager, flightManager);
 			case RoundTrip:
-				return new RoundTrip();
+				return new RoundTrip(airportManager, flightManager);
 			default:
 				return null;
 		}
 	}
+	
+	public IFlightManager getFlightManager(){
+		return flightManager;
+	}
+
 }

@@ -1,6 +1,7 @@
 import static org.junit.Assert.*;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Dictionary;
 
 import org.junit.Before;
@@ -8,6 +9,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import CS509.client.Interfaces.IAirport;
+import CS509.client.Interfaces.IAirportManager;
 import CS509.client.airport.Airport;
 import CS509.client.airport.AirportNotFoundException;
 import CS509.client.airport.AirportManager;
@@ -15,6 +18,7 @@ import CS509.client.dao.Server;
 import CS509.client.flight.Flight;
 import CS509.client.flight.FlightManager;
 import CS509.client.flight.FlightNotFoundException;
+import CS509.client.servicelocator.ServiceLocator;
 import CS509.client.util.QueryFactory;
 
 
@@ -23,10 +27,10 @@ public class junitTesting {
     public ExpectedException thrown= ExpectedException.none();
 	
 	static final String agencyTicketString = "Team07";
-	Server serverInterface;
+	ServiceLocator serverLocator;
 	
 	@Before public void initialize(){
-		serverInterface = new Server();
+		serverLocator = new ServiceLocator();
 	}
 	
 	
@@ -34,33 +38,27 @@ public class junitTesting {
 	public void testCodeGetsAirports() throws AirportNotFoundException{
 		
 		//Create airportManager using xmlString from query factory that gets all airports
-		AirportManager airportManger = new AirportManager();
-		String xmlString = serverInterface.getAirports(agencyTicketString);
-		airportManger.addAll(xmlString);
+		IAirportManager airportManger = new AirportManager(null);
 		
-		assertTrue(airportManger.size()>0);
+		assertTrue(((ArrayList<Airport>) airportManger).size()>0);
 	}
 	
 	@Test
 	public void getSpecificAirport() throws AirportNotFoundException{
-		AirportManager airportManger = new AirportManager();
-		String xmlString = serverInterface.getAirports(agencyTicketString);
-		airportManger.addAll(xmlString);
+		IAirportManager airportManger = serverLocator.getAirportManager();
 		
-		Airport airport = airportManger.getSpecificAirport("BOS");
-		assertEquals("BOS", airport.code());		
+		IAirport airport = airportManger.getAirport("BOS");
+		assertEquals("BOS", airport.getCode());		
 	}
 	
 	@Test
 	public void getSpecificAirportFailed() throws AirportNotFoundException{
 		thrown.expect(AirportNotFoundException.class);
-		AirportManager airportManger = new AirportManager();
-		String xmlString = serverInterface.getAirports(agencyTicketString);
-		airportManger.addAll(xmlString);
+		IAirportManager airportManger = serverLocator.getAirportManager();
 		
-		airportManger.getSpecificAirport("XXX");
+		airportManger.getAirport("XXX");
 	}
-	
+	/*
 	@Test
 	public void testCodeGetsFlights() throws ParseException {
 		//Get input from "users" regarding departure airport and date
@@ -208,4 +206,5 @@ public class junitTesting {
 		String xmlAirplanesString = serverInterface.getAirports(agencyTicketString);
 		assertNotNull(xmlAirplanesString);
 	}
+	*/
 }
