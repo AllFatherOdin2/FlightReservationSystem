@@ -6,5 +6,13 @@ public interface ITrip
 	
 	public String getArrivalAirportCode();
 	
+	public void setDepartureAirportCode(String departureAirportCode);
+	
+	public void setArrivalAirportCode(String arrivalAirportCode);
+	
 	public void PlanTrip();
+
+	public String getDepatureDate();
+
+	public void setDepatureDate(String depatureDate);
 }

@@ -6,6 +6,7 @@ package CS509.client.flight;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -18,6 +19,9 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import CS509.client.Interfaces.IAirport;
+import CS509.client.Interfaces.IFlight;
+import CS509.client.Interfaces.IFlightManager;
 import CS509.client.airport.Airport;
 import CS509.client.airport.AirportNotFoundException;
 
@@ -30,10 +34,11 @@ import CS509.client.airport.AirportNotFoundException;
  * @since 2016-02-24
  *
  */
-public class FlightManager extends ArrayList <Flight> {
+public class FlightManager extends ArrayList <Flight> implements IFlightManager{
 
 	private static final long serialVersionUID = 1L;
 
+	@Override
 	public boolean addAll (String xmlFlights) {
 		
 		boolean collectionUpdated = false;
@@ -209,6 +214,13 @@ public class FlightManager extends ArrayList <Flight> {
 			throw new FlightNotFoundException("Flight " + number +" not found by query");
 		
 		return flight;
+	}
+
+	@Override
+	public HashMap<String, IFlight> getFlights(IAirport departureAirport,
+			IAirport arrivalAirport, String date) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

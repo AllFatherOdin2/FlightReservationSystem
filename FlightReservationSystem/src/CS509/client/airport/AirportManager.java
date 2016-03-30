@@ -21,6 +21,8 @@ import org.xml.sax.SAXException;
 
 import CS509.client.Interfaces.IAirport;
 import CS509.client.Interfaces.IAirportManager;
+import CS509.client.Interfaces.IServer;
+import CS509.client.Interfaces.IServiceLocator;
 
 /**
  * This class aggregates a number of Airport. The aggregate is implemented as an ArrayList.
@@ -35,6 +37,11 @@ public class AirportManager extends ArrayList<Airport>
 implements IAirportManager
  {
 	private static final long serialVersionUID = 1L;
+	
+	public AirportManager(IServer database){
+		String xmlString = database.getAirports();
+		this.addAll(xmlString);
+	}
 	
 	/**
 	 * Builds collection of airports from airports described in XML
@@ -177,7 +184,7 @@ implements IAirportManager
 		int counter = 0;
 		int found = 0;
 		for (Airport a : this){
-			if (airport == null && a.code().compareToIgnoreCase(code) == 0){
+			if (airport == null && a.getCode().compareToIgnoreCase(code) == 0){
 				airport = a;
 				found = counter;
 			} else if (airport != null) {
@@ -198,7 +205,7 @@ implements IAirportManager
 	}
 
 	@Override
-	public IAirport GetAirport(String airportCode) {
+	public IAirport getAirport(String airportCode) {
 		// TODO Auto-generated method stub
 		return null;
 	}

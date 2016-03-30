@@ -119,7 +119,7 @@ public class Airport implements IAirport
 	 * 
 	 * @return The 3 letter airport code
 	 */
-	public String code () {
+	public String getCode () {
 		return mCode;
 	}
 	

@@ -1,20 +1,13 @@
 package CS509.client.trip;
 
-import CS509.client.Interfaces.ITrip;
+import CS509.client.Interfaces.IAirportManager;
+import CS509.client.Interfaces.IFlightManager;
 
-public class RoundTrip implements ITrip
+public class RoundTrip extends Trip
 {
 
-	@Override
-	public String getDepartureAirportCode() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getArrivalAirportCode() {
-		// TODO Auto-generated method stub
-		return null;
+	public RoundTrip(IAirportManager airportManager, IFlightManager flightManager) {
+		super(airportManager, flightManager);
 	}
 
 	@Override

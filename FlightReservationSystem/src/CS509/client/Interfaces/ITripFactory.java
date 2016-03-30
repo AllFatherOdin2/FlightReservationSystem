@@ -9,4 +9,6 @@ public interface ITripFactory
 	}
 	
 	public ITrip getNewTrip(TripType trip);
+
+	public void addAll();
 }
