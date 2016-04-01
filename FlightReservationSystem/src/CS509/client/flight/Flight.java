@@ -6,6 +6,8 @@ package CS509.client.flight;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import CS509.client.Interfaces.IFlight;
+
 /**
  * This class holds values pertaining to a single flight from one airport to another. 
  * Class member attributes are the same as defined by the CS509 server API and store 
@@ -17,7 +19,7 @@ import java.util.Date;
  * @since 2016-02-24
  *
  */
-public class Flight {
+public class Flight implements IFlight {
 
 	/**
 	 * Member attributes describing a flight
