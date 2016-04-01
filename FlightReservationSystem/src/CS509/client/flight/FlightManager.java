@@ -6,6 +6,7 @@ package CS509.client.flight;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -34,9 +35,10 @@ import CS509.client.airport.AirportNotFoundException;
  * @since 2016-02-24
  *
  */
-public class FlightManager extends ArrayList <Flight> implements IFlightManager{
+public class FlightManager implements IFlightManager{
 
 	private static final long serialVersionUID = 1L;
+	private HashMap<String,IFlight> flightMap;
 
 	@Override
 	public boolean addAll (String xmlFlights) {
@@ -53,7 +55,8 @@ public class FlightManager extends ArrayList <Flight> implements IFlightManager{
 			Flight flight = buildFlight (elementFlight);
 			
 			if (flight.isValid()) {
-				this.add(flight);
+				//this.add(flight);
+				flightMap.put(flight.getmNumber(), flight);
 				collectionUpdated = true;
 			}
 		}
@@ -188,22 +191,25 @@ public class FlightManager extends ArrayList <Flight> implements IFlightManager{
 	 * Searches through list and returns a specific flight based on the flight number which should be unique
 	 * 
 	 * @param number Unique identifier for flights
-	 * @return Flight that the user is searching for
+	 * @return IFlight that the user is searching for
 	 * @throws FlightNotFoundException Thrown if the flight is not returned by the query.
 	 */
-	public Flight getSpecificFlight(String number) throws FlightNotFoundException{
-		Flight flight = null;
+	public IFlight getSpecificFlight(String number) throws FlightNotFoundException{
+		IFlight flight = null;
 		int counter = 0;
 		int found = 0;
-		for (Flight a : this){
+		ArrayList<IFlight> flightCollection = (ArrayList<IFlight>) flightMap.values();
+		for (IFlight a : flightCollection){
 			if (flight == null && a.getmNumber().compareToIgnoreCase(number) == 0){
 				flight = a;
 				found = counter;
 			} else if (flight != null) {
 				//should only occur if a flight is duplicated somehow.
-				//TODO: Test to see if this can even happen
-				if(this.get(found).equals(this.get(counter))){
-					this.remove(a);
+				//because we are using a HashMap, this should no longer even be possible
+				//TODO: Test to see if this can even happen, or if we even want to keep this functionality.
+				if(flightCollection.get(counter).equals(flightCollection.get(found))){
+					flightCollection.remove(counter);
+					flightMap.remove(a.getmNumber());
 				}
 			} else {
 				throw new FlightNotFoundException("Flight " + number +" not found by query");
@@ -216,11 +222,66 @@ public class FlightManager extends ArrayList <Flight> implements IFlightManager{
 		return flight;
 	}
 
+
+	/**
+	 * Finds all flights that take off from a given airport and land at another given airport on a given date
+	 * 
+	 * @param departureAirport Airport flight will be leaving from
+	 * @param arrivalAirport Airport flight will be landing at
+	 * @param date Date that flight will be leaving at. Must be in "yyyy mmm dd " format, space delimited, and month values are chars
+	 * 
+	 * @return Hashmap containing all flights matching the requested parameters
+	 */
 	@Override
-	public HashMap<String, IFlight> getFlights(IAirport departureAirport,
-			IAirport arrivalAirport, String date) {
-		// TODO Auto-generated method stub
-		return null;
+	public HashMap<String, IFlight> getFlights(IAirport departureAirport, IAirport arrivalAirport, String date) {
+		HashMap<String, IFlight> returnMap = new HashMap<String, IFlight>();
+		
+		ArrayList<IFlight> flightList = (ArrayList<IFlight>) flightMap.values();
+		for(IFlight f : flightList){
+			try {
+				String parsedDate = parseFullDate(f.getmTimeDepart());
+			
+				if (f.getmCodeDepart().compareTo(departureAirport.getCode()) == 0 &&
+						f.getmCodeArrival().compareTo(arrivalAirport.getCode()) == 0 &&
+						date.compareTo(parsedDate) == 0){
+					returnMap.put(f.getmNumber(), f);
+				}
+			} catch (InvalidFlightException e) {
+				
+				e.printStackTrace();
+			}
+		}
+		
+		return returnMap;
+	}
+	
+	
+	/**
+	 * Takes a string containing a date from an XML document, and returns it. 
+	 * All XML dates should be in "yyyy mmm dd hh:mm:ss a" format
+	 * 
+	 * @param xmlDate Date to parse
+	 * @return Parsed date
+	 * @throws InvalidFlightException Thrown if a date is malformed, and cannot be used in our code.
+	 */
+	private String parseFullDate(String xmlDate) throws InvalidFlightException{
+		String parsedDate = "";
+		if(xmlDate.length() > 11){
+			parsedDate = xmlDate.substring(0, 10);
+		} else if (xmlDate.length() < 11){
+			throw new InvalidFlightException("Invalid Date Format");
+		} else {
+			parsedDate = xmlDate;
+		}
+		
+		/*
+		 * This code is only to be used if we decide to modify the date further. If we do not, then it should never be uncommented
+		 * 
+		String year = parsedDate.substring(0,3);
+		String month = parsedDate.substring(5,7);
+		String day = parsedDate.substring(9,10);
+		*/
+		return parsedDate;
 	}
 
 }
