@@ -6,6 +6,7 @@ package CS509.client.airport;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -21,6 +22,7 @@ import org.xml.sax.SAXException;
 
 import CS509.client.Interfaces.IAirport;
 import CS509.client.Interfaces.IAirportManager;
+import CS509.client.Interfaces.IFlight;
 import CS509.client.Interfaces.IServer;
 import CS509.client.Interfaces.IServiceLocator;
 
@@ -33,10 +35,9 @@ import CS509.client.Interfaces.IServiceLocator;
   * @author blake
  *
  */
-public class AirportManager extends ArrayList<Airport>
-implements IAirportManager
- {
+public class AirportManager implements IAirportManager {
 	private static final long serialVersionUID = 1L;
+	private HashMap<String,IAirport> airportMap;
 	
 	public AirportManager(IServer database){
 		String xmlString = database.getAirports();
@@ -71,7 +72,7 @@ implements IAirportManager
 			Airport airport = buildAirport (elementAirport);
 			
 			if (airport.isValid()) {
-				this.add(airport);
+				airportMap.put(airport.getCode(), airport);
 				collectionUpdated = true;
 			}
 		}
@@ -179,34 +180,14 @@ implements IAirportManager
 	 * @return Airport that user is looking for
 	 * @throws AirportNotFoundException Thrown if the airport doesn't exist or is not returned by the server
 	 */
-	public Airport getSpecificAirport(String code) throws AirportNotFoundException{
-		Airport airport = null;
-		int counter = 0;
-		int found = 0;
-		for (Airport a : this){
-			if (airport == null && a.getCode().compareToIgnoreCase(code) == 0){
-				airport = a;
-				found = counter;
-			} else if (airport != null) {
-				//should only occur if an airport is duplicated somehow.
-				//TODO: Test to see if this can even happen
-				if(this.get(found).equals(this.get(counter))){
-					this.remove(a);
-				}
-			} 
-			
-			counter++;
-		}
-		
+	@Override
+	public IAirport getAirport(String code) throws AirportNotFoundException{
+		IAirport airport = airportMap.get(code);
+				
 		if(airport == null)
 			throw new AirportNotFoundException("Airport " + code +" not found by query");
 		
 		return airport;
 	}
 
-	@Override
-	public IAirport getAirport(String airportCode) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }
