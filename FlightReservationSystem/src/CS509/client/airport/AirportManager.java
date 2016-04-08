@@ -41,6 +41,7 @@ public class AirportManager implements IAirportManager {
 	
 	public AirportManager(IServer database){
 		String xmlString = database.getAirports();
+		airportMap = new HashMap<String,IAirport>();
 		this.addAll(xmlString);
 	}
 	

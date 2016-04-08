@@ -25,7 +25,7 @@ public class ServiceLocator implements IServiceLocator
 	{
 		this.database = new Server(agencyTicketString);
 		this.airportManager = new AirportManager(database);
-		this.flightManager =  new FlightManager();
+		this.flightManager =  new FlightManager(database);
 		this.tripFactory = new TripFactory(this.airportManager, this.flightManager);
 	}
 	

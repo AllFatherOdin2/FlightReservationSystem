@@ -3,6 +3,7 @@
  */
 package CS509.client.flight;
 
+import java.awt.print.Printable;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ import org.xml.sax.SAXException;
 import CS509.client.Interfaces.IAirport;
 import CS509.client.Interfaces.IFlight;
 import CS509.client.Interfaces.IFlightManager;
+import CS509.client.Interfaces.IServer;
 import CS509.client.airport.Airport;
 import CS509.client.airport.AirportNotFoundException;
 
@@ -39,9 +41,21 @@ public class FlightManager implements IFlightManager{
 
 	private static final long serialVersionUID = 1L;
 	private HashMap<String,IFlight> flightMap;
+	private IServer database;
 
+	public FlightManager(IServer database) {
+		this.flightMap = new HashMap<String,IFlight>();
+		this.database = database;
+	}
+	
 	@Override
-	public boolean addAll (String xmlFlights) {
+	public boolean addAll(String code, String day){
+		String xmlFlights = database.getFlights(code, day);
+		
+		return addAll(xmlFlights);
+	}
+	
+	private boolean addAll (String xmlFlights) {
 		
 		boolean collectionUpdated = false;
 		
@@ -194,11 +208,22 @@ public class FlightManager implements IFlightManager{
 	 * @return IFlight that the user is searching for
 	 * @throws FlightNotFoundException Thrown if the flight is not returned by the query.
 	 */
+	@Override
 	public IFlight getSpecificFlight(String number) throws FlightNotFoundException{
+		IFlight flight = flightMap.get(number);
+		
+		if(flight == null){
+			throw new FlightNotFoundException();
+		}
+		
+		
+		return flight;
+		
+		/*
 		IFlight flight = null;
 		int counter = 0;
 		int found = 0;
-		ArrayList<IFlight> flightCollection = (ArrayList<IFlight>) flightMap.values();
+		ArrayList<IFlight> flightCollection =  new ArrayList<>(flightMap.values());
 		for (IFlight a : flightCollection){
 			if (flight == null && a.getmNumber().compareToIgnoreCase(number) == 0){
 				flight = a;
@@ -220,6 +245,7 @@ public class FlightManager implements IFlightManager{
 			throw new FlightNotFoundException("Flight " + number +" not found by query");
 		
 		return flight;
+		*/
 	}
 
 
@@ -236,19 +262,14 @@ public class FlightManager implements IFlightManager{
 	public HashMap<String, IFlight> getFlights(IAirport departureAirport, IAirport arrivalAirport, String date) {
 		HashMap<String, IFlight> returnMap = new HashMap<String, IFlight>();
 		
-		ArrayList<IFlight> flightList = (ArrayList<IFlight>) flightMap.values();
-		for(IFlight f : flightList){
-			try {
-				String parsedDate = parseFullDate(f.getmTimeDepart());
-			
-				if (f.getmCodeDepart().compareTo(departureAirport.getCode()) == 0 &&
-						f.getmCodeArrival().compareTo(arrivalAirport.getCode()) == 0 &&
-						date.compareTo(parsedDate) == 0){
-					returnMap.put(f.getmNumber(), f);
-				}
-			} catch (InvalidFlightException e) {
-				
-				e.printStackTrace();
+		//ArrayList<IFlight> flightList = (ArrayList<IFlight>) flightMap.values();
+		/*
+		 * TODO: Need to add functionality of sorting by date and time 
+		 */
+		for(IFlight f : flightMap.values()){
+			if (f.getmCodeDepart().compareTo(departureAirport.getCode()) == 0 &&
+					f.getmCodeArrival().compareTo(arrivalAirport.getCode()) == 0){
+				returnMap.put(f.getmNumber(), f);
 			}
 		}
 		

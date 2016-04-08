@@ -1,8 +1,8 @@
 import static org.junit.Assert.*;
 
-import java.text.ParseException;
+import java.awt.List;
 import java.util.ArrayList;
-import java.util.Dictionary;
+import java.util.HashMap;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -11,15 +11,12 @@ import org.junit.rules.ExpectedException;
 
 import CS509.client.Interfaces.IAirport;
 import CS509.client.Interfaces.IAirportManager;
-import CS509.client.airport.Airport;
+import CS509.client.Interfaces.IFlight;
+import CS509.client.Interfaces.IFlightManager;
+import CS509.client.Interfaces.IServiceLocator;
 import CS509.client.airport.AirportNotFoundException;
-import CS509.client.airport.AirportManager;
-import CS509.client.dao.Server;
-import CS509.client.flight.Flight;
-import CS509.client.flight.FlightManager;
 import CS509.client.flight.FlightNotFoundException;
 import CS509.client.servicelocator.ServiceLocator;
-import CS509.client.util.QueryFactory;
 
 
 public class junitTesting {
@@ -27,112 +24,110 @@ public class junitTesting {
     public ExpectedException thrown= ExpectedException.none();
 	
 	static final String agencyTicketString = "Team07";
-	ServiceLocator serverLocator;
+	IServiceLocator serviceLocator;
 	
 	@Before public void initialize(){
-		serverLocator = new ServiceLocator();
-	}
-	
-	
-	@Test
-	public void testCodeGetsAirports() throws AirportNotFoundException{
-		
-		//Create airportManager using xmlString from query factory that gets all airports
-		IAirportManager airportManger = new AirportManager(null);
-		
-		assertTrue(((ArrayList<Airport>) airportManger).size()>0);
+		serviceLocator = new ServiceLocator();
 	}
 	
 	@Test
 	public void getSpecificAirport() throws AirportNotFoundException{
-		IAirportManager airportManger = serverLocator.getAirportManager();
+		IAirportManager airportManger = serviceLocator.getAirportManager();
 		
 		IAirport airport = airportManger.getAirport("BOS");
-		assertEquals("BOS", airport.getCode());		
+		assertNotNull(airport);
+		assertEquals("BOS", airport.getCode());
 	}
 	
 	@Test
 	public void getSpecificAirportFailed() throws AirportNotFoundException{
 		thrown.expect(AirportNotFoundException.class);
-		IAirportManager airportManger = serverLocator.getAirportManager();
+		IAirportManager airportManger = serviceLocator.getAirportManager();
 		
 		airportManger.getAirport("XXX");
 	}
-	/*
+	
 	@Test
-	public void testCodeGetsFlights() throws ParseException {
+	public void testCodeGetsFlights() throws AirportNotFoundException {
 		//Get input from "users" regarding departure airport and date
 		String departAirport = "BOS";
+		String arriveAirport = "ATL";
 		String departDate = "2016_05_10";
 		
 		//Create flightManager using xmlstring from query factory using user inputs
-		FlightManager flightManager = new FlightManager();
-		String xmlString = serverInterface.getFlights(agencyTicketString, departAirport, departDate);
+		IFlightManager flightManager = serviceLocator.getFlightManager();
+		flightManager.addAll(departAirport, departDate);
 		
-		flightManager.addAll(xmlString);
+		IAirportManager airportManger = serviceLocator.getAirportManager();
+
+		IAirport departureAirport = airportManger.getAirport(departAirport);
+		IAirport arrivalAirport = airportManger.getAirport(arriveAirport);
 		
-		assertTrue(flightManager.size()>0);
+		HashMap<String, IFlight> flights = flightManager.getFlights(departureAirport, arrivalAirport, departDate);
+		
+		assertTrue(flights.size() > 0);
 	}
 
+	
 	@Test
-	public void testCodeGetsSpecificFlight() throws ParseException, FlightNotFoundException {
+	public void testCodeGetsSpecificFlight() throws FlightNotFoundException, AirportNotFoundException {
 		//Get input from "users" regarding departure airport and date
 		String departAirport = "BOS";
+		String arriveAirport = "ATL";
 		String departDate = "2016_05_10";
-		String flightNumberString = "2807";
 		
 		//Create flightManager using xmlstring from query factory using user inputs
-		FlightManager flightManager = new FlightManager();
-		String xmlString = serverInterface.getFlights(agencyTicketString, departAirport, departDate);
+		IFlightManager flightManager = serviceLocator.getFlightManager();
+		flightManager.addAll(departAirport, departDate);
 		
-		flightManager.addAll(xmlString);
-		
-		Flight flight = flightManager.getSpecificFlight(flightNumberString);
+		IAirportManager airportManger = serviceLocator.getAirportManager();
 
-		assertEquals(flightNumberString, flight.getmNumber());
-		assertEquals(departAirport, flight.getmCodeDepart());
+		IAirport departureAirport = airportManger.getAirport(departAirport);
+		IAirport arrivalAirport = airportManger.getAirport(arriveAirport);
 		
-		flight.setmAirplane("B2");
-		assertEquals("B2", flight.getmAirplane());
-		flight.setmFlightTime("Test Time");
-		assertEquals("Test Time",flight.getmFlightTime());
-		flight.setmNumber("9999");
-		assertEquals("9999", flight.getmNumber());
-		flight.setmCodeDepart("XXX");
-		assertEquals("XXX", flight.getmCodeDepart());
-		flight.setmTimeDepart("Test Time");
-		assertEquals("Test Time", flight.getmTimeDepart());
-		flight.setmCodeArrival("XXX");
-		assertEquals("XXX", flight.getmCodeArrival());
-		flight.setmTimeArrival("Test Time");
-		assertEquals("Test Time", flight.getmTimeArrival());
-		flight.setmPriceFirstclass("$9.95");
-		assertEquals("$9.95", flight.getmPriceFirstclass());
-		flight.setmPriceCoach("$4.95");
-		assertEquals("$4.95", flight.getmPriceCoach());
-		flight.setmSeatsFirstclass(10);
-		assertEquals(10, flight.getmSeatsFirstclass());
-		flight.setmSeatsCoach(10);
-		assertEquals(10, flight.getmSeatsCoach());
+		//Used to get semi random flight
+		HashMap<String, IFlight> flights = flightManager.getFlights(departureAirport, arrivalAirport, departDate);
+
+		assertTrue(flights.size() > 0);
+		ArrayList<IFlight> flightsList = new ArrayList<>(flights.values());
+		assertTrue(flightsList.size() > 0);
+		
+		int position = (int)flightsList.size()/2;
+		IFlight flight = flightsList.get(position);
+		String numberString = flight.getmNumber();
+		
+		IFlight gottenFlight = flightManager.getSpecificFlight(numberString);
+
+		assertEquals(gottenFlight.getmAirplane(), flight.getmAirplane());
+		assertEquals(gottenFlight.getmFlightTime(), flight.getmFlightTime());
+		assertEquals(gottenFlight.getmNumber(), flight.getmNumber());
+		assertEquals(gottenFlight.getmCodeDepart(), flight.getmCodeDepart());
+		assertEquals(gottenFlight.getmTimeDepart(), flight.getmTimeDepart());
+		assertEquals(gottenFlight.getmCodeArrival(), flight.getmCodeArrival());
+		assertEquals(gottenFlight.getmTimeArrival(), flight.getmTimeArrival());
+		assertEquals(gottenFlight.getmPriceFirstclass(), flight.getmPriceFirstclass());
+		assertEquals(gottenFlight.getmSeatsFirstclass(), flight.getmSeatsFirstclass());
+		assertEquals(gottenFlight.getmPriceCoach(), flight.getmPriceCoach());
+		assertEquals(gottenFlight.getmSeatsCoach(), flight.getmSeatsCoach());
 	}
+	
 	
 
 	@Test
-	public void testCodeGetsSpecificFlightFailed() throws ParseException, FlightNotFoundException {
+	public void testCodeGetsSpecificFlightFailed() throws FlightNotFoundException, AirportNotFoundException {
 		thrown.expect(FlightNotFoundException.class);
 		//Get input from "users" regarding departure airport and date
 		String departAirport = "BOS";
 		String departDate = "2016_05_10";
 		
 		//Create flightManager using xmlstring from query factory using user inputs
-		FlightManager flightManager = new FlightManager();
-		String xmlString = serverInterface.getFlights(agencyTicketString, departAirport, departDate);
+		IFlightManager flightManager = serviceLocator.getFlightManager();
+		flightManager.addAll(departAirport, departDate);
 		
-		flightManager.addAll(xmlString);
-
-		Flight flight = flightManager.getSpecificFlight("invalid flight");
+		flightManager.getSpecificFlight("HelloWorld");
 	}
 	
+	/*
 	@Test
 	public void testReserveCoachSeat() throws ParseException, FlightNotFoundException {
 		//Get input from "users" regarding departure airport and date

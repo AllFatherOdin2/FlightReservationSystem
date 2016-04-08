@@ -24,8 +24,8 @@ public class TripFactory implements ITripFactory
 	
 	@Override
 	public void addAll(){
-		Server server = new Server("Team07");
-		flightManager.addAll(server.getFlights("BOS", "2016_05_10"));
+		//Server server = new Server("Team07");
+		flightManager.addAll("BOS", "2016_05_10");
 	}
 
 	@Override

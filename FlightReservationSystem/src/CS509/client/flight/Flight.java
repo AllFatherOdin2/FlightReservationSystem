@@ -36,6 +36,7 @@ public class Flight implements IFlight {
 	private String mPriceCoach;
 	private int mSeatsCoach;
 	
+	/*
 	public Flight () {
 	    mAirplane = "";
 	    mFlightTime = "";
@@ -49,6 +50,7 @@ public class Flight implements IFlight {
 		mPriceCoach = "";
 		mSeatsCoach = 0;
 	}
+	*/
 	
 	public Flight (
 			String airplane,
@@ -138,24 +140,10 @@ public class Flight implements IFlight {
 	}
 
 	/**
-	 * @param mAirplane the mAirplane to set
-	 */
-	public void setmAirplane(String mAirplane) {
-		this.mAirplane = mAirplane;
-	}
-
-	/**
 	 * @return the mFlightTime
 	 */
 	public String getmFlightTime() {
 		return mFlightTime;
-	}
-
-	/**
-	 * @param mFlightTime the mFlightTime to set
-	 */
-	public void setmFlightTime(String mFlightTime) {
-		this.mFlightTime = mFlightTime;
 	}
 
 	/**
@@ -166,38 +154,18 @@ public class Flight implements IFlight {
 	}
 
 	/**
-	 * @param mNumber the mNumber to set
-	 */
-	public void setmNumber(String mNumber) {
-		this.mNumber = mNumber;
-	}
-
-	/**
 	 * @return the mCodeDepart
 	 */
 	public String getmCodeDepart() {
 		return mCodeDepart;
 	}
 
-	/**
-	 * @param mCodeDepart the mCodeDepart to set
-	 */
-	public void setmCodeDepart(String mCodeDepart) {
-		this.mCodeDepart = mCodeDepart;
-	}
 
 	/**
 	 * @return the mTimeDepart
 	 */
 	public String getmTimeDepart() {
 		return mTimeDepart;
-	}
-
-	/**
-	 * @param mTimeDepart the mTimeDepart to set
-	 */
-	public void setmTimeDepart(String mTimeDepart) {
-		this.mTimeDepart = mTimeDepart;
 	}
 
 	/**
@@ -208,24 +176,10 @@ public class Flight implements IFlight {
 	}
 
 	/**
-	 * @param mCodeArrival the mCodeArrival to set
-	 */
-	public void setmCodeArrival(String mCodeArrival) {
-		this.mCodeArrival = mCodeArrival;
-	}
-
-	/**
 	 * @return the mTimeArrival
 	 */
 	public String getmTimeArrival() {
 		return mTimeArrival;
-	}
-
-	/**
-	 * @param mTimeArrival the mTimeArrival to set
-	 */
-	public void setmTimeArrival(String mTimeArrival) {
-		this.mTimeArrival = mTimeArrival;
 	}
 
 	/**
@@ -236,24 +190,10 @@ public class Flight implements IFlight {
 	}
 
 	/**
-	 * @param mPriceFirstclass the mPriceFirstclass to set
-	 */
-	public void setmPriceFirstclass(String mPriceFirstclass) {
-		this.mPriceFirstclass = mPriceFirstclass;
-	}
-
-	/**
 	 * @return the mSeatsFirstclass
 	 */
 	public int getmSeatsFirstclass() {
 		return mSeatsFirstclass;
-	}
-
-	/**
-	 * @param mSeatsFirstclass the mSeatsFirstclass to set
-	 */
-	public void setmSeatsFirstclass(int mSeatsFirstclass) {
-		this.mSeatsFirstclass = mSeatsFirstclass;
 	}
 
 	/**
@@ -264,24 +204,10 @@ public class Flight implements IFlight {
 	}
 
 	/**
-	 * @param mPriceCoach the mPriceEconomy to set
-	 */
-	public void setmPriceCoach(String mPriceCoach) {
-		this.mPriceCoach = mPriceCoach;
-	}
-
-	/**
 	 * @return the mSeatsEconomy
 	 */
 	public int getmSeatsCoach() {
 		return mSeatsCoach;
-	}
-
-	/**
-	 * @param mSeatsCoach the mSeatsEconomy to set
-	 */
-	public void setmSeatsCoach(int mSeatsCoach) {
-		this.mSeatsCoach = mSeatsCoach;
 	}	
 }
  

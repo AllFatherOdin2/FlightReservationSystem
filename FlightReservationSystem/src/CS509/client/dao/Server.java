@@ -82,6 +82,7 @@ public class Server implements IServer {
 		return result.toString();
 	}
 	
+	@Override
 	public String getFlights (String airportCode, String day) {
 		
 		URL url;
