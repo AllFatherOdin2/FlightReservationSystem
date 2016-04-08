@@ -170,6 +170,7 @@ public class Server implements IServer {
 		return result.toString();
 	}
 	
+	@Override
 	public boolean lock () {
 		URL url;
 		HttpURLConnection connection;
@@ -211,6 +212,7 @@ public class Server implements IServer {
 		return true;
 	}
 
+	@Override
 	public boolean unlock () {
 		URL url;
 		HttpURLConnection connection;

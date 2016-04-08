@@ -1,9 +1,10 @@
 import static org.junit.Assert.*;
 
-import java.awt.List;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -13,11 +14,14 @@ import CS509.client.Interfaces.IAirport;
 import CS509.client.Interfaces.IAirportManager;
 import CS509.client.Interfaces.IFlight;
 import CS509.client.Interfaces.IFlightManager;
+import CS509.client.Interfaces.IServer;
 import CS509.client.Interfaces.IServiceLocator;
 import CS509.client.airplane.Airplane;
 import CS509.client.airplane.AirplaneManager;
 import CS509.client.airplane.AirplaneNotFoundException;
+import CS509.client.airport.Airport;
 import CS509.client.airport.AirportNotFoundException;
+import CS509.client.dao.Server;
 import CS509.client.flight.FlightNotFoundException;
 import CS509.client.servicelocator.ServiceLocator;
 
@@ -28,10 +32,28 @@ public class junitTesting {
 	
 	static final String agencyTicketString = "Team07";
 	IServiceLocator serviceLocator;
+	static IServer server;
 	
 	@Before public void initialize(){
 		serviceLocator = new ServiceLocator();
+		server = new Server(agencyTicketString);
 	}
+	
+	@AfterClass public static void cleanup(){
+		server.unlock();
+	}
+	
+	@Test
+	public void testLockDatabase(){
+		assertTrue(server.lock());
+	}
+	
+	@Test
+	public void testUnlockDatabase(){
+		server.lock();
+		assertTrue(server.unlock());
+	}
+	
 	
 	@Test
 	public void testGetSpecificAirport() throws AirportNotFoundException{
@@ -40,6 +62,20 @@ public class junitTesting {
 		IAirport airport = airportManger.getAirport("BOS");
 		assertNotNull(airport);
 		assertEquals("BOS", airport.getCode());
+		assertEquals("Logan International", airport.getName());
+		assertEquals(42, (int)airport.getLatitude());
+		assertEquals(-71, (int)airport.getLongitude());
+		assertTrue(airport.equals(airportManger.getAirport("BOS")));
+	}
+	
+	@Test
+	public void testAirportEqualsReturnsFalse() throws AirportNotFoundException{
+		IAirportManager airportManger = serviceLocator.getAirportManager();
+		
+		IAirport airport = airportManger.getAirport("ATL");
+		assertFalse(airport.equals(null));
+		assertFalse(airport.equals("Not an Airport"));
+		assertFalse(airport.equals(airportManger.getAirport("BOS")));
 	}
 	
 	@Test

@@ -101,7 +101,8 @@ public class Airport implements IAirport
 	 * 
 	 * @return Airport name
 	 */
-	public String name () {
+	@Override
+	public String getName () {
 		return mName;
 	}
 	
@@ -119,6 +120,7 @@ public class Airport implements IAirport
 	 * 
 	 * @return The 3 letter airport code
 	 */
+	@Override
 	public String getCode () {
 		return mCode;
 	}
@@ -137,7 +139,8 @@ public class Airport implements IAirport
 	 * 
 	 * @return The north/south coordinate of the airport 
 	 */
-	public double latitude () {
+	@Override
+	public double getLatitude () {
 		return mLatitude;
 	}
 	
@@ -155,7 +158,8 @@ public class Airport implements IAirport
 	 * 
 	 * @return The east/west coordinate of the airport
 	 */
-	public double longitude () {
+	@Override
+	public double getLongitude () {
 		return mLongitude;
 	}
 
@@ -170,9 +174,6 @@ public class Airport implements IAirport
 	 */
 	@Override
 	public boolean equals (Object obj) {
-		// every object is equal to itself
-		if (obj == this)
-			return true;
 		
 		// null not equal to anything
 		if (obj == null)

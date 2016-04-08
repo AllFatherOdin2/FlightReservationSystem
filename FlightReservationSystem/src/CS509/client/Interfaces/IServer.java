@@ -7,4 +7,8 @@ public interface IServer
 	String getFlights(String airportCode, String day);
 
 	String getAirplanes();
+
+	boolean unlock();
+	
+	boolean lock();
 }
