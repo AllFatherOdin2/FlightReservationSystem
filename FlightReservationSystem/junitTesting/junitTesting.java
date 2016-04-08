@@ -14,6 +14,9 @@ import CS509.client.Interfaces.IAirportManager;
 import CS509.client.Interfaces.IFlight;
 import CS509.client.Interfaces.IFlightManager;
 import CS509.client.Interfaces.IServiceLocator;
+import CS509.client.airplane.Airplane;
+import CS509.client.airplane.AirplaneManager;
+import CS509.client.airplane.AirplaneNotFoundException;
 import CS509.client.airport.AirportNotFoundException;
 import CS509.client.flight.FlightNotFoundException;
 import CS509.client.servicelocator.ServiceLocator;
@@ -111,8 +114,6 @@ public class junitTesting {
 		assertEquals(gottenFlight.getmSeatsCoach(), flight.getmSeatsCoach());
 	}
 	
-	
-
 	@Test
 	public void testCodeGetsSpecificFlightFailed() throws FlightNotFoundException, AirportNotFoundException {
 		thrown.expect(FlightNotFoundException.class);
@@ -126,6 +127,34 @@ public class junitTesting {
 		
 		flightManager.getSpecificFlight("HelloWorld");
 	}
+	
+	@Test
+	public void testCodeGetsAirplanes() throws FlightNotFoundException, AirportNotFoundException {
+		AirplaneManager airplaneManager = serviceLocator.getAirplaneManager();
+
+		assertTrue(airplaneManager.getAirplanes().size() > 0);
+	}
+	
+	@Test
+	public void getSpecificPlane() throws AirplaneNotFoundException{
+		AirplaneManager airplaneManager = serviceLocator.getAirplaneManager();
+		
+		Airplane airplane = airplaneManager.getSpecificAirplane("Airbus", "A310");
+
+		assertEquals(airplane.getmManufacturer(), "Airbus");
+		assertEquals(airplane.getmModel(), "A310");
+		assertEquals(airplane.getmFirstClassSeats(), 24);
+		assertEquals(airplane.getmCoachSeats(), 200);
+	}
+	
+	@Test
+	public void getSpecificPlaneFails() throws AirplaneNotFoundException{
+		thrown.expect(FlightNotFoundException.class);
+		AirplaneManager airplaneManager = serviceLocator.getAirplaneManager();
+		
+		Airplane airplane = airplaneManager.getSpecificAirplane("HelloWorldeBus", "XXXX");
+	}
+	
 	
 	/*
 	@Test

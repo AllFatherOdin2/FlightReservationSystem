@@ -5,4 +5,6 @@ public interface IServer
 	String getAirports();
 
 	String getFlights(String airportCode, String day);
+
+	String getAirplanes();
 }
