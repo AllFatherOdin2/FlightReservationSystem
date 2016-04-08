@@ -34,7 +34,7 @@ public class junitTesting {
 	}
 	
 	@Test
-	public void getSpecificAirport() throws AirportNotFoundException{
+	public void testGetSpecificAirport() throws AirportNotFoundException{
 		IAirportManager airportManger = serviceLocator.getAirportManager();
 		
 		IAirport airport = airportManger.getAirport("BOS");
@@ -43,7 +43,7 @@ public class junitTesting {
 	}
 	
 	@Test
-	public void getSpecificAirportFailed() throws AirportNotFoundException{
+	public void testGetSpecificAirportFailed() throws AirportNotFoundException{
 		thrown.expect(AirportNotFoundException.class);
 		IAirportManager airportManger = serviceLocator.getAirportManager();
 		
@@ -51,7 +51,7 @@ public class junitTesting {
 	}
 	
 	@Test
-	public void testCodeGetsFlights() throws AirportNotFoundException {
+	public void testGetsFlights() throws AirportNotFoundException {
 		//Get input from "users" regarding departure airport and date
 		String departAirport = "BOS";
 		String arriveAirport = "ATL";
@@ -73,7 +73,7 @@ public class junitTesting {
 
 	
 	@Test
-	public void testCodeGetsSpecificFlight() throws FlightNotFoundException, AirportNotFoundException {
+	public void testGetsSpecificFlight() throws FlightNotFoundException, AirportNotFoundException {
 		//Get input from "users" regarding departure airport and date
 		String departAirport = "BOS";
 		String arriveAirport = "ATL";
@@ -115,7 +115,7 @@ public class junitTesting {
 	}
 	
 	@Test
-	public void testCodeGetsSpecificFlightFailed() throws FlightNotFoundException, AirportNotFoundException {
+	public void testGetsSpecificFlightFailed() throws FlightNotFoundException, AirportNotFoundException {
 		thrown.expect(FlightNotFoundException.class);
 		//Get input from "users" regarding departure airport and date
 		String departAirport = "BOS";
@@ -129,14 +129,14 @@ public class junitTesting {
 	}
 	
 	@Test
-	public void testCodeGetsAirplanes() throws FlightNotFoundException, AirportNotFoundException {
+	public void testGetsAirplanes() throws FlightNotFoundException, AirportNotFoundException {
 		AirplaneManager airplaneManager = serviceLocator.getAirplaneManager();
 
 		assertTrue(airplaneManager.getAirplanes().size() > 0);
 	}
 	
 	@Test
-	public void getSpecificPlane() throws AirplaneNotFoundException{
+	public void testGetSpecificPlane() throws AirplaneNotFoundException{
 		AirplaneManager airplaneManager = serviceLocator.getAirplaneManager();
 		
 		Airplane airplane = airplaneManager.getSpecificAirplane("Airbus", "A310");
@@ -148,13 +148,12 @@ public class junitTesting {
 	}
 	
 	@Test
-	public void getSpecificPlaneFails() throws AirplaneNotFoundException{
+	public void testGetSpecificPlaneFails() throws AirplaneNotFoundException{
 		thrown.expect(AirplaneNotFoundException.class);
 		AirplaneManager airplaneManager = serviceLocator.getAirplaneManager();
 		
-		airplaneManager.getSpecificAirplane("HelloWorldeBus", "XXXX");
+		airplaneManager.getSpecificAirplane("HelloWorldBus", "XXXX");
 	}
-	
 	
 	/*
 	@Test
@@ -190,7 +189,8 @@ public class junitTesting {
 		assertEquals(coachBefore + 1, flight.getmSeatsCoach());
 		assertEquals(firstClassBefore, flight.getmSeatsFirstclass());
 	}
-
+	
+	/*
 	@Test
 	public void testReserveFirstClassSeat() throws ParseException, FlightNotFoundException {
 		//Get input from "users" regarding departure airport and date
