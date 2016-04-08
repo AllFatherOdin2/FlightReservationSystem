@@ -149,10 +149,10 @@ public class junitTesting {
 	
 	@Test
 	public void getSpecificPlaneFails() throws AirplaneNotFoundException{
-		thrown.expect(FlightNotFoundException.class);
+		thrown.expect(AirplaneNotFoundException.class);
 		AirplaneManager airplaneManager = serviceLocator.getAirplaneManager();
 		
-		Airplane airplane = airplaneManager.getSpecificAirplane("HelloWorldeBus", "XXXX");
+		airplaneManager.getSpecificAirplane("HelloWorldeBus", "XXXX");
 	}
 	
 	
