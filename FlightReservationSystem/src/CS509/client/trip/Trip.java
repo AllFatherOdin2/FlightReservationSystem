@@ -1,6 +1,10 @@
 package CS509.client.trip;
 
+import java.util.HashMap;
+import java.util.List;
+
 import CS509.client.Interfaces.IAirportManager;
+import CS509.client.Interfaces.IFlight;
 import CS509.client.Interfaces.IFlightManager;
 import CS509.client.Interfaces.ITrip;
 import CS509.client.airport.AirportManager;
@@ -8,18 +12,20 @@ import CS509.client.flight.FlightManager;
 
 public abstract class Trip implements ITrip
 {
-	private String departureAirportCode;
+	protected String departureAirportCode;
 	
-	private String arrivalAirportCode;
+	protected String arrivalAirportCode;
 
-	private String depatureDate;
+	protected String depatureDate;
 	
-	private IAirportManager airportManager;
-	private IFlightManager flightManager;
+	protected IAirportManager airportManager;
+	protected IFlightManager flightManager;
+	protected HashMap<String, HashMap<String,IFlight>> tripLegs;
 	
 	public Trip(IAirportManager airportManager, IFlightManager flightManager) {
 		this.airportManager = airportManager;
 		this.flightManager = flightManager;
+		this.tripLegs = new HashMap<String, HashMap<String, IFlight>>();
 	}
 	
 	@Override
@@ -54,4 +60,8 @@ public abstract class Trip implements ITrip
 	public void setDepatureDate(String depatureDate) {
 		this.depatureDate = depatureDate;
 	}	
+	
+	public HashMap<String, IFlight> GetFlightsFromTrip(String searchedDate){
+		return this.tripLegs.get(searchedDate);
+	}
 }
