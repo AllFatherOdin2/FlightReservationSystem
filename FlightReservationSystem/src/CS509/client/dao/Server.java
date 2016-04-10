@@ -27,6 +27,7 @@ import CS509.client.util.QueryFactory;
 public class Server implements IServer {
 	private final String mUrlBase = "http://cs509.cs.wpi.edu:8181/CS509.server/ReservationSystem";
 	private String team;
+	private boolean debug = false;
 	
 	public Server(String team){
 		this.team = team;
@@ -191,8 +192,10 @@ public class Server implements IServer {
 			writer.close();
 			
 			int responseCode = connection.getResponseCode();
-			System.out.println("\nSending 'POST' to lock database");
-			System.out.println(("\nResponse Code : " + responseCode));
+			if(debug){
+				System.out.println("\nSending 'POST' to lock database");
+				System.out.println(("\nResponse Code : " + responseCode));
+			}
 			
 			BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 			String line;
@@ -203,7 +206,9 @@ public class Server implements IServer {
 			}
 			in.close();
 			
-			System.out.println(response.toString());
+			if(debug){
+				System.out.println(response.toString());
+			}
 		}
 		catch (Exception ex) {
 			ex.printStackTrace();
@@ -233,8 +238,10 @@ public class Server implements IServer {
 			writer.close();
 		    
 			int responseCode = connection.getResponseCode();
-			System.out.println("\nSending 'POST' to unlock database");
-			System.out.println(("\nResponse Code : " + responseCode));
+			if(debug){
+				System.out.println("\nSending 'POST' to unlock database");
+				System.out.println(("\nResponse Code : " + responseCode));
+			}
 
 			if ((responseCode >= 200) && (responseCode <= 299)) {
 				BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
@@ -246,7 +253,9 @@ public class Server implements IServer {
 				}
 				in.close();
 
-				System.out.println(response.toString());
+				if(debug){
+					System.out.println(response.toString());
+				}
 			}
 		}
 		catch (IOException ex) {
@@ -297,8 +306,10 @@ public class Server implements IServer {
 
 			String params = QueryFactory.reserve(team, xmlReservation);
 
-			System.out.println("\nSending 'POST' to ReserveFlights");
-			System.out.println("\nSending " + params);
+			if(debug){
+				System.out.println("\nSending 'POST' to ReserveFlights");
+				System.out.println("\nSending " + params);
+			}
 			
 			connection.setDoOutput(true);
 			connection.setDoInput(true);
@@ -309,9 +320,10 @@ public class Server implements IServer {
 			writer.close();
 			
 			int responseCode = connection.getResponseCode();
-			System.out.println("\nSending 'POST' to ReserveFlights");
-			System.out.println(("\nResponse Code : " + responseCode));
-
+			if(debug){
+				System.out.println("\nSending 'POST' to ReserveFlights");
+				System.out.println(("\nResponse Code : " + responseCode));
+			}
 			if ((responseCode >= 200) && (responseCode <= 299)) {
 				BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 				String line;
@@ -321,8 +333,6 @@ public class Server implements IServer {
 					response.append(line);
 				}
 				in.close();
-
-				System.out.println(response.toString());
 				return true;
 			} else {
 				BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));

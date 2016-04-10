@@ -305,4 +305,7 @@ public class FlightManager implements IFlightManager{
 		return parsedDate;
 	}
 
+	public void removeAllFlights(){
+		flightMap = new HashMap<String,IFlight>();
+	}
 }

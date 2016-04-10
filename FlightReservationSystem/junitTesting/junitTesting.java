@@ -22,6 +22,8 @@ import CS509.client.airplane.AirplaneNotFoundException;
 import CS509.client.airport.Airport;
 import CS509.client.airport.AirportNotFoundException;
 import CS509.client.dao.Server;
+import CS509.client.flight.Flight;
+import CS509.client.flight.FlightManager;
 import CS509.client.flight.FlightNotFoundException;
 import CS509.client.servicelocator.ServiceLocator;
 
@@ -191,36 +193,35 @@ public class junitTesting {
 		airplaneManager.getSpecificAirplane("HelloWorldBus", "XXXX");
 	}
 	
-	/*
+	
 	@Test
-	public void testReserveCoachSeat() throws ParseException, FlightNotFoundException {
+	public void testReserveCoachSeat() throws FlightNotFoundException {
 		//Get input from "users" regarding departure airport and date
 		String departAirport = "BOS";
 		String departDate = "2016_05_10";
-
+		Server serverInterface = (Server)server;
+		
 		//This test would fail if someone reserved a flight between us getting and reserving
-		serverInterface.lock(agencyTicketString);
+		serverInterface.lock();
 		
 		//Create flightManager using xmlstring from query factory using user inputs
-		FlightManager flightManager = new FlightManager();
-		String xmlString = serverInterface.getFlights(agencyTicketString, departAirport, departDate);
+		FlightManager flightManager = (FlightManager)serviceLocator.getFlightManager();
 		
-		flightManager.addAll(xmlString);
+		flightManager.addAll(departAirport,departDate);
 
-		Flight flight = flightManager.getSpecificFlight("2807");
+		Flight flight = (Flight) flightManager.getSpecificFlight("2809");
 		int coachBefore = flight.getmSeatsCoach();
+		System.out.println(coachBefore);
 		int firstClassBefore = flight.getmSeatsFirstclass();
 		
-		serverInterface.buyTickets(agencyTicketString, "2807", true); 
+		serverInterface.buyTickets("2807", true); 
 		
 		//get updated info
-		flightManager = new FlightManager();
-		xmlString = serverInterface.getFlights(agencyTicketString, departAirport, departDate);
+		serverInterface.unlock();
 		
-		serverInterface.unlock(agencyTicketString);
-		
-		flightManager.addAll(xmlString);
-		flight = flightManager.getSpecificFlight("2807");
+		flightManager.removeAllFlights();
+		flightManager.addAll(departAirport,departDate);
+		flight = (Flight) flightManager.getSpecificFlight("2809");
 
 		assertEquals(coachBefore + 1, flight.getmSeatsCoach());
 		assertEquals(firstClassBefore, flight.getmSeatsFirstclass());
