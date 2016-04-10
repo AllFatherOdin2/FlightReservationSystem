@@ -26,6 +26,7 @@ import CS509.client.flight.Flight;
 import CS509.client.flight.FlightManager;
 import CS509.client.flight.FlightNotFoundException;
 import CS509.client.servicelocator.ServiceLocator;
+import CS509.client.util.LocalTime;
 
 
 public class junitTesting {
@@ -223,6 +224,24 @@ public class junitTesting {
 
 		assertEquals(coachBefore + 1, flight.getmSeatsCoach());
 		assertEquals(firstClassBefore, flight.getmSeatsFirstclass());
+	}
+	
+	@Test
+	public void testReserveCoachSeatFail() throws FlightNotFoundException {		
+		//This test would fail if someone reserved a flight between us getting and reserving
+		server.lock();
+		boolean test = server.buyTickets("0000", true);
+	
+		assertFalse(test); 
+		
+		//get updated info
+		server.unlock();
+	}
+	
+	@Test
+	public void testGetLocalTime(){
+		LocalTime time = new LocalTime();
+		assertEquals("GMT-10", time.getTimeZone("HNL"));
 	}
 	
 	/*

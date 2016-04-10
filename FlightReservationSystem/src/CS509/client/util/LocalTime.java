@@ -36,7 +36,6 @@ public class LocalTime implements ILocalTime
         return DateLocalF;
     }
     public String getTimeZone (String code) {
-        String mcode = "AUS";
         HashMap <String, String> map = new HashMap<>();
         map.put("AUS","GMT-5");
         map.put("MCI","GMT-5");
@@ -90,7 +89,7 @@ public class LocalTime implements ILocalTime
         map.put("PHX","GMT-7");
         map.put("HNL","GMT-10");
         map.put("ANC","GMT-8");
-        return map.get(mcode);
+        return map.get(code);
         
     }
 
