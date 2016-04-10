@@ -27,7 +27,7 @@ import CS509.client.util.QueryFactory;
 public class Server implements IServer {
 	private final String mUrlBase = "http://cs509.cs.wpi.edu:8181/CS509.server/ReservationSystem";
 	private String team;
-	private boolean debug = true;
+	private boolean debug = false;
 	
 	public Server(String team){
 		this.team = team;
