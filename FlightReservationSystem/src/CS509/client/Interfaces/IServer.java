@@ -11,4 +11,6 @@ public interface IServer
 	boolean unlock();
 	
 	boolean lock();
+
+	boolean buyTickets(String team, boolean isCoach);
 }

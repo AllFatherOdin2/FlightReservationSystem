@@ -199,10 +199,9 @@ public class junitTesting {
 		//Get input from "users" regarding departure airport and date
 		String departAirport = "BOS";
 		String departDate = "2016_05_10";
-		Server serverInterface = (Server)server;
 		
 		//This test would fail if someone reserved a flight between us getting and reserving
-		serverInterface.lock();
+		server.lock();
 		
 		//Create flightManager using xmlstring from query factory using user inputs
 		FlightManager flightManager = (FlightManager)serviceLocator.getFlightManager();
@@ -211,13 +210,12 @@ public class junitTesting {
 
 		Flight flight = (Flight) flightManager.getSpecificFlight("2809");
 		int coachBefore = flight.getmSeatsCoach();
-		System.out.println(coachBefore);
 		int firstClassBefore = flight.getmSeatsFirstclass();
 		
-		serverInterface.buyTickets("2807", true); 
+		assertTrue(server.buyTickets("2809", true)); 
 		
 		//get updated info
-		serverInterface.unlock();
+		server.unlock();
 		
 		flightManager.removeAllFlights();
 		flightManager.addAll(departAirport,departDate);

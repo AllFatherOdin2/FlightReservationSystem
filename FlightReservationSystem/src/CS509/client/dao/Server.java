@@ -274,6 +274,7 @@ public class Server implements IServer {
 	 * @param flightNumber
 	 * @return true if SUCCESS code returned from server
 	 */
+	@Override
 	public boolean buyTickets(String flightNumber, boolean isCoach){
 		String xmlReservation;
 		if(isCoach){
@@ -345,6 +346,8 @@ public class Server implements IServer {
 				in.close();
 
 				System.out.println(response.toString());
+				System.out.println("Sending 'POST' to ReserveFlights");
+				System.out.println("Response Code : " + responseCode);
 				return false;
 			}
 		}
