@@ -3,11 +3,8 @@
  */
 package CS509.client.flight;
 
-import java.awt.print.Printable;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -25,8 +22,6 @@ import CS509.client.Interfaces.IAirport;
 import CS509.client.Interfaces.IFlight;
 import CS509.client.Interfaces.IFlightManager;
 import CS509.client.Interfaces.IServer;
-import CS509.client.airport.Airport;
-import CS509.client.airport.AirportNotFoundException;
 
 /**
  * This class holds values pertaining to an aggregate flights. The aggregate is implemented

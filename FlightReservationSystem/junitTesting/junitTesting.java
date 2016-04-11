@@ -202,7 +202,7 @@ public class junitTesting {
 		String departDate = "2016_05_10";
 		
 		//This test would fail if someone reserved a flight between us getting and reserving
-		server.lock();
+		assertTrue(server.lock());
 		
 		//Create flightManager using xmlstring from query factory using user inputs
 		FlightManager flightManager = (FlightManager)serviceLocator.getFlightManager();
@@ -215,12 +215,12 @@ public class junitTesting {
 		
 		assertTrue(server.buyTickets("2809", true)); 
 		
-		//get updated info
-		server.unlock();
 		
 		flightManager.removeAllFlights();
 		flightManager.addAll(departAirport,departDate);
 		flight = (Flight) flightManager.getSpecificFlight("2809");
+		//get updated info
+		assertTrue(server.unlock());
 
 		assertEquals(coachBefore + 1, flight.getmSeatsCoach());
 		assertEquals(firstClassBefore, flight.getmSeatsFirstclass());
@@ -277,12 +277,6 @@ public class junitTesting {
 
 		assertEquals(coachBefore, flight.getmSeatsCoach());
 		assertEquals(firstClassBefore + 1, flight.getmSeatsFirstclass());
-	}
-	
-	@Test
-	public void testServiceGetsAirplanes(){
-		String xmlAirplanesString = serverInterface.getAirports(agencyTicketString);
-		assertNotNull(xmlAirplanesString);
 	}
 	*/
 }
