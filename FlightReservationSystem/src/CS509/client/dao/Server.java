@@ -84,7 +84,7 @@ public class Server implements IServer {
 	}
 	
 	@Override
-	public String getFlights (String airportCode, String day) {
+	public String getFlightsDeparting (String airportCode, String day) {
 		
 		URL url;
 		HttpURLConnection connection;
@@ -97,6 +97,50 @@ public class Server implements IServer {
 			 * Create an HTTP connection to the server for a GET 
 			 */
 			url = new URL(mUrlBase + QueryFactory.getFlightsDeparting(team, airportCode, day));
+			connection = (HttpURLConnection) url.openConnection();
+			connection.setRequestMethod("GET");
+			connection.setRequestProperty("User-Agent", team);
+
+			/**
+			 * If response code of SUCCESS read the XML string returned
+			 * line by line to build the full return string
+			 */
+			int responseCode = connection.getResponseCode();
+			if ((responseCode >= 200) && (responseCode <= 299)) {
+				InputStream inputStream = connection.getInputStream();
+				String encoding = connection.getContentEncoding();
+				encoding = (encoding == null ? "UTF-8" : encoding);
+
+				reader = new BufferedReader(new InputStreamReader(inputStream));
+				while ((line = reader.readLine()) != null) {
+					result.append(line);
+				}
+				reader.close();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return result.toString();
+	}
+
+	
+	@Override
+	public String getFlightsArriving (String airportCode, String day) {
+		
+		URL url;
+		HttpURLConnection connection;
+		BufferedReader reader;
+		String line;
+		StringBuffer result = new StringBuffer();
+
+		try {
+			/**
+			 * Create an HTTP connection to the server for a GET 
+			 */
+			url = new URL(mUrlBase + QueryFactory.getFlightsArriving(team, airportCode, day));
 			connection = (HttpURLConnection) url.openConnection();
 			connection.setRequestMethod("GET");
 			connection.setRequestProperty("User-Agent", team);

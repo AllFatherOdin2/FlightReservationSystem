@@ -98,7 +98,28 @@ public class junitTesting {
 		
 		//Create flightManager using xmlstring from query factory using user inputs
 		IFlightManager flightManager = serviceLocator.getFlightManager();
-		flightManager.addAll(departAirport, departDate);
+		flightManager.addAll(departAirport, departDate, true);
+		
+		IAirportManager airportManger = serviceLocator.getAirportManager();
+
+		IAirport departureAirport = airportManger.getAirport(departAirport);
+		IAirport arrivalAirport = airportManger.getAirport(arriveAirport);
+		
+		HashMap<String, IFlight> flights = flightManager.getFlights(departureAirport, arrivalAirport, departDate);
+		
+		assertTrue(flights.size() > 0);
+	}
+	
+	@Test
+	public void testGetsFlightsByArrivalDay() throws AirportNotFoundException{
+		//Get input from "users" regarding departure airport and date
+		String departAirport = "BOS";
+		String arriveAirport = "ATL";
+		String departDate = "2016_05_10";
+		
+		//Create flightManager using xmlstring from query factory using user inputs
+		IFlightManager flightManager = serviceLocator.getFlightManager();
+		flightManager.addAll(arriveAirport, departDate, false);
 		
 		IAirportManager airportManger = serviceLocator.getAirportManager();
 
@@ -120,7 +141,7 @@ public class junitTesting {
 		
 		//Create flightManager using xmlstring from query factory using user inputs
 		IFlightManager flightManager = serviceLocator.getFlightManager();
-		flightManager.addAll(departAirport, departDate);
+		flightManager.addAll(departAirport, departDate, true);
 		
 		IAirportManager airportManger = serviceLocator.getAirportManager();
 
@@ -162,7 +183,7 @@ public class junitTesting {
 		
 		//Create flightManager using xmlstring from query factory using user inputs
 		IFlightManager flightManager = serviceLocator.getFlightManager();
-		flightManager.addAll(departAirport, departDate);
+		flightManager.addAll(departAirport, departDate, true);
 		
 		flightManager.getSpecificFlight("HelloWorld");
 	}
@@ -207,7 +228,7 @@ public class junitTesting {
 		//Create flightManager using xmlstring from query factory using user inputs
 		FlightManager flightManager = (FlightManager)serviceLocator.getFlightManager();
 		
-		flightManager.addAll(departAirport,departDate);
+		flightManager.addAll(departAirport,departDate, true);
 
 		Flight flight = (Flight) flightManager.getSpecificFlight("2809");
 		int coachBefore = flight.getmSeatsCoach();
@@ -217,7 +238,7 @@ public class junitTesting {
 		
 		
 		flightManager.removeAllFlights();
-		flightManager.addAll(departAirport,departDate);
+		flightManager.addAll(departAirport,departDate, true);
 		flight = (Flight) flightManager.getSpecificFlight("2809");
 		//get updated info
 		assertTrue(server.unlock());

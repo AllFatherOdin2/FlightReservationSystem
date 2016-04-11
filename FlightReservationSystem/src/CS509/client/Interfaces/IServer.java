@@ -4,7 +4,7 @@ public interface IServer
 {
 	String getAirports();
 
-	String getFlights(String airportCode, String day);
+	String getFlightsDeparting(String airportCode, String day);
 
 	String getAirplanes();
 
@@ -13,4 +13,6 @@ public interface IServer
 	boolean lock();
 
 	boolean buyTickets(String team, boolean isCoach);
+
+	String getFlightsArriving(String airportCode, String day);
 }

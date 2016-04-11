@@ -28,6 +28,8 @@ public class Main {
 	 * @param args -> empty
 	 */
 	public static void main(String[] args){
+
+		/*
 		IServiceLocator serviceLocator = new ServiceLocator();
 		//Get input from users regarding departure airport and date
 		TripType tripType = TripType.OneWay;
@@ -45,8 +47,6 @@ public class Main {
 		trip.PlanTrip();
 		tripFactory.addAll();
 
-
-		/*
 		//Create flightManager using xmlstring from query factory using user inputs
 		FlightManager flightManager = new FlightManager();
 		xmlString = serverInterface.getFlights(agencyTicketString, arrivalAirportCode, departDate);

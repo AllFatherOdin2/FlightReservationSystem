@@ -44,8 +44,13 @@ public class FlightManager implements IFlightManager{
 	}
 	
 	@Override
-	public boolean addAll(String code, String day){
-		String xmlFlights = database.getFlights(code, day);
+	public boolean addAll(String code, String day, boolean isDepartingDay){
+		String xmlFlights = "";
+		if(isDepartingDay)
+			xmlFlights = database.getFlightsDeparting(code, day);
+		else {
+			xmlFlights = database.getFlightsArriving(code, day);
+		}
 		
 		return addAll(xmlFlights);
 	}
