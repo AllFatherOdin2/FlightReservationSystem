@@ -5,7 +5,13 @@ package CS509.client.flight;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -18,10 +24,17 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+
+
+
+
+
+
 import CS509.client.Interfaces.IAirport;
 import CS509.client.Interfaces.IFlight;
 import CS509.client.Interfaces.IFlightManager;
 import CS509.client.Interfaces.IServer;
+import CS509.client.util.Converter;
 
 /**
  * This class holds values pertaining to an aggregate flights. The aggregate is implemented
@@ -37,7 +50,9 @@ public class FlightManager implements IFlightManager{
 	private static final long serialVersionUID = 1L;
 	private HashMap<String,IFlight> flightMap;
 	private IServer database;
-
+	private final int LAYOVER_MIN = 1;
+	private final int LAYOVER_MAX = 3;
+	
 	public FlightManager(IServer database) {
 		this.flightMap = new HashMap<String,IFlight>();
 		this.database = database;
@@ -52,10 +67,10 @@ public class FlightManager implements IFlightManager{
 			xmlFlights = database.getFlightsArriving(code, day);
 		}
 		
-		return addAll(xmlFlights);
+		return addAll(xmlFlights, flightMap);
 	}
 	
-	private boolean addAll (String xmlFlights) {
+	private boolean addAll (String xmlFlights, Map<String, IFlight> fMap) {
 		
 		boolean collectionUpdated = false;
 		
@@ -70,7 +85,7 @@ public class FlightManager implements IFlightManager{
 			
 			if (flight.isValid()) {
 				//this.add(flight);
-				flightMap.put(flight.getmNumber(), flight);
+				fMap.put(flight.getmNumber(), flight);
 				collectionUpdated = true;
 			}
 		}
@@ -304,8 +319,105 @@ public class FlightManager implements IFlightManager{
 		*/
 		return parsedDate;
 	}
-
+	
+	/**
+	 * Simply resets the main hashmap attribute of this class
+	 */
 	public void removeAllFlights(){
 		flightMap = new HashMap<String,IFlight>();
 	}
+	
+		
+	public List<List<IFlight>> getConnectingFlights(String arrivalCode, String day) throws FlightNotFoundException{
+		String xmlFlights = database.getFlightsArriving(arrivalCode, day);
+		HashMap<String,IFlight> arrivalFlights = new HashMap<String,IFlight>();
+		List<List<IFlight>> returnList = new ArrayList<List<IFlight>>();
+		addAll(xmlFlights, arrivalFlights);
+		
+		if(arrivalFlights.size() == 0){
+			throw new FlightNotFoundException("No arrival flights were found/put into the map");
+		}
+		
+		//Case: Direct Flight
+		ArrayList<IFlight> departureList = Converter.convertMapToArray(flightMap);
+		for(IFlight f : departureList){
+			if(f.getmCodeArrival().compareTo(arrivalCode) == 0){
+				ArrayList<IFlight> directFlight = new ArrayList<IFlight>();
+				directFlight.add(f);
+				returnList.add(directFlight);
+			}
+		}
+		//SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss a" );
+		//Case: 1 connection
+		ArrayList<IFlight> arrivalList = Converter.convertMapToArray(arrivalFlights);
+		for(IFlight departFlight : departureList){
+			for(IFlight arriveFlight : arrivalList){
+				if(departFlight.getmCodeArrival().compareTo(arriveFlight.getmCodeDepart()) == 0){
+					try {
+						if(layoverValid(departFlight.getmTimeArrival(), arriveFlight.getmTimeDepart())){
+							ArrayList<IFlight> oneConnectionFlight = new ArrayList<IFlight>();
+							oneConnectionFlight.add(departFlight);
+							oneConnectionFlight.add(arriveFlight);
+							returnList.add(oneConnectionFlight);
+						}
+					} catch (ParseException e) {
+						//Should only ever happen if there is an error in the database
+						e.printStackTrace();
+					}
+					
+				}
+			}
+		}
+		
+		//Case: 2 connections
+		for(IFlight departFlight : departureList){
+			String layoverXMLFlight = database.getFlightsDeparting(departFlight.getmCodeArrival(), day);
+			HashMap<String,IFlight> firstStopFlightMap = new HashMap<String,IFlight>();
+			addAll(layoverXMLFlight,firstStopFlightMap);
+			ArrayList<IFlight> firstStopFlightList = Converter.convertMapToArray(firstStopFlightMap);
+			
+			for(IFlight firstStopFlight: firstStopFlightList){	
+				for(IFlight arriveFlight : arrivalList){
+					if(firstStopFlight.getmCodeArrival().compareTo(arriveFlight.getmCodeDepart()) == 0){
+						try {
+							if(layoverValid(firstStopFlight.getmTimeArrival(), arriveFlight.getmTimeDepart())){
+								ArrayList<IFlight> twoConnectionFlight = new ArrayList<IFlight>();
+								twoConnectionFlight.add(departFlight);
+								twoConnectionFlight.add(firstStopFlight);
+								twoConnectionFlight.add(arriveFlight);
+								returnList.add(twoConnectionFlight);
+							}
+						} catch (ParseException e) {
+							//Should only ever happen if there is an error in the database
+							e.printStackTrace();
+						}
+						
+					}
+				}
+			}
+		}
+		
+		return returnList;
+	}
+
+	private boolean layoverValid(String getmTimeArrival, String getmTimeDepart) throws ParseException {
+		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss a" );
+		Date layoverStart = formatter.parse(getmTimeArrival);
+		Date layoverEnd = formatter.parse(getmTimeDepart);
+		
+		if(layoverStart.after(layoverEnd)){
+			return false;
+		}
+		
+		long layoverDuration = layoverEnd.getTime() - layoverStart.getTime();
+		if(layoverDuration >= (1000*60*60*LAYOVER_MIN) && layoverDuration >= (1000*60*60*LAYOVER_MAX)){
+			return true;
+		}
+		return false;
+	}
+	
+	
+	
+	
+	
 }
