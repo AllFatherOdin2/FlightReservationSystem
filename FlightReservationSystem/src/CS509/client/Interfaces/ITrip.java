@@ -1,18 +1,17 @@
 package CS509.client.Interfaces;
 
+import java.util.HashMap;
+import java.util.Scanner;
+
 public interface ITrip 
 {
 	public String getDepartureAirportCode();
 	
 	public String getArrivalAirportCode();
-	
-	public void setDepartureAirportCode(String departureAirportCode);
-	
-	public void setArrivalAirportCode(String arrivalAirportCode);
-	
-	public void PlanTrip();
 
 	public String getDepatureDate();
-
-	public void setDepatureDate(String depatureDate);
+	
+	public HashMap<String, IFlight> getFlights();
+	
+	public void Plan(IAirportManager airportManager, IFlightManager flightManager);
 }

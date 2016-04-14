@@ -1,5 +1,7 @@
 package CS509.client.Interfaces;
 
+import java.util.Scanner;
+
 public interface ITripFactory 
 {
 	public enum TripType
@@ -8,5 +10,5 @@ public interface ITripFactory
 		RoundTrip,
 	}
 	
-	public ITrip getNewTrip(TripType trip);
+	public ITripManager getNewTrip(int trip, Scanner sc);
 }

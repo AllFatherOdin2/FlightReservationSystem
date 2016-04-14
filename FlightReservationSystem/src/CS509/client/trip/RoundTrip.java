@@ -1,6 +1,7 @@
 package CS509.client.trip;
 
 import java.util.HashMap;
+import java.util.Scanner;
 
 import CS509.client.Interfaces.IAirport;
 import CS509.client.Interfaces.IAirportManager;
@@ -8,31 +9,23 @@ import CS509.client.Interfaces.IFlight;
 import CS509.client.Interfaces.IFlightManager;
 import CS509.client.airport.AirportNotFoundException;
 
-public class RoundTrip extends Trip
+public class RoundTrip extends TripManager
 {
 
-	public RoundTrip(IAirportManager airportManager, IFlightManager flightManager) {
-		super(airportManager, flightManager);
+	public RoundTrip(IAirportManager airportManager, IFlightManager flightManager, Scanner sc) {
+		super(airportManager, flightManager, sc);
 	}
 
 	@Override
-	public void PlanTrip() {
-		// TODO Auto-generated method stub
-		try 
-		{
-			IAirport departureAirport = this.airportManager.getAirport(this.departureAirportCode);
-			IAirport arrivalAirport = this.airportManager.getAirport(this.arrivalAirportCode);
-			
-			HashMap<String, IFlight> flights = this.flightManager.getFlights(departureAirport, arrivalAirport, this.depatureDate);
-			this.tripLegs.put(this.depatureDate, flights);
-			
-			//TODO put the return home code
-			
-		} catch (AirportNotFoundException e) 
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+	public void CollectInfo() {
 
+	}
+	
+	private String ReturnHomeDate(Scanner sc){
+		System.out.println("What date would you like to return home? (yyyy_mm_dd)");
+		String dateString = sc.nextLine().toUpperCase();
+		
+		//TODO implement BACK functionality and error handling
+		return dateString;
+	}
 }
