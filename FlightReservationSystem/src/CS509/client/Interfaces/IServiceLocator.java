@@ -8,7 +8,7 @@ public interface IServiceLocator
 	
 	public IFlightManager getFlightManager();
 	
-	public ITripFactory getTripManager();
+	public ITripManagerFactory getTripManager();
 
 	public AirplaneManager getAirplaneManager();
 }

@@ -4,12 +4,12 @@ import CS509.client.Interfaces.IAirportManager;
 import CS509.client.Interfaces.IFlightManager;
 import CS509.client.Interfaces.IServer;
 import CS509.client.Interfaces.IServiceLocator;
-import CS509.client.Interfaces.ITripFactory;
+import CS509.client.Interfaces.ITripManagerFactory;
 import CS509.client.airplane.AirplaneManager;
 import CS509.client.airport.AirportManager;
 import CS509.client.dao.Server;
 import CS509.client.flight.FlightManager;
-import CS509.client.trip.TripFactory;
+import CS509.client.trip.TripManagerFactory;
 
 public class ServiceLocator implements IServiceLocator
 {
@@ -18,7 +18,7 @@ public class ServiceLocator implements IServiceLocator
 	
 	private IFlightManager flightManager;
 	
-	private ITripFactory tripFactory;
+	private ITripManagerFactory tripFactory;
 	
 	private AirplaneManager airplaneManager;
 	
@@ -30,7 +30,7 @@ public class ServiceLocator implements IServiceLocator
 		this.airportManager = new AirportManager(database);
 		this.flightManager =  new FlightManager(database);
 		this.airplaneManager = new AirplaneManager(database);
-		this.tripFactory = new TripFactory(this.airportManager, this.flightManager);
+		this.tripFactory = new TripManagerFactory(this.airportManager, this.flightManager);
 	}
 	
 	public IAirportManager getAirportManager()
@@ -45,7 +45,7 @@ public class ServiceLocator implements IServiceLocator
 	}
 	
 	@Override
-	public ITripFactory getTripManager(){
+	public ITripManagerFactory getTripManager(){
 		return this.tripFactory;
 	}
 	

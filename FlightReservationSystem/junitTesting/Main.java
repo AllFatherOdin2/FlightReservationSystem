@@ -4,8 +4,8 @@ import java.util.Scanner;
 
 import CS509.client.Interfaces.IServiceLocator;
 import CS509.client.Interfaces.ITrip;
-import CS509.client.Interfaces.ITripFactory;
-import CS509.client.Interfaces.ITripFactory.TripType;
+import CS509.client.Interfaces.ITripManagerFactory;
+import CS509.client.Interfaces.ITripManagerFactory.TripType;
 import CS509.client.Interfaces.ITripManager;
 import CS509.client.airport.Airport;
 import CS509.client.airport.AirportManager;
@@ -13,8 +13,8 @@ import CS509.client.dao.Server;
 import CS509.client.flight.Flight;
 import CS509.client.flight.FlightManager;
 import CS509.client.servicelocator.ServiceLocator;
-import CS509.client.trip.OneWayTrip;
-import CS509.client.trip.TripFactory;
+import CS509.client.trip.OneWayTripManager;
+import CS509.client.trip.TripManagerFactory;
 
 
 public class Main {
