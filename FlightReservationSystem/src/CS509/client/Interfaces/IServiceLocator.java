@@ -11,4 +11,6 @@ public interface IServiceLocator
 	public ITripManagerFactory getTripManager();
 
 	public AirplaneManager getAirplaneManager();
+	
+	public IDisplayManager getDisplayManager();
 }

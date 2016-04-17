@@ -135,7 +135,6 @@ public class AirplaneManager {
 			throw new AirplaneNotFoundException();
 		}
 		
-		return airplane;
-		
+		return airplane;		
 	}
 }

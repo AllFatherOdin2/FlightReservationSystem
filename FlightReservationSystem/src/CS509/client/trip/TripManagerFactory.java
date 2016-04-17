@@ -25,14 +25,14 @@ public class TripManagerFactory implements ITripManagerFactory
 	}
 
 	@Override
-	public ITripManager getNewTrip(int trip, Scanner sc) {
+	public ITripManager getNewTrip(int trip) {
 		// TODO This should load them up using reflection. Makes it far more dynamic. This however suffices for the project
 		switch(trip)
 		{
 			case 1:
-				return new OneWayTripManager(airportManager, flightManager, sc);
+				return new OneWayTripManager(airportManager, flightManager);
 			case 2:
-				return new RoundTripManager(airportManager, flightManager, sc);
+				return new RoundTripManager(airportManager, flightManager);
 			default:
 				System.out.println("Unable to find type of trip");
 				return null;

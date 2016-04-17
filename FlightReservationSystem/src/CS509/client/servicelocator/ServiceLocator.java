@@ -1,10 +1,7 @@
 package CS509.client.servicelocator;
 
-import CS509.client.Interfaces.IAirportManager;
-import CS509.client.Interfaces.IFlightManager;
-import CS509.client.Interfaces.IServer;
-import CS509.client.Interfaces.IServiceLocator;
-import CS509.client.Interfaces.ITripManagerFactory;
+import CS509.client.Display.ScannerDisplayManager;
+import CS509.client.Interfaces.*;
 import CS509.client.airplane.AirplaneManager;
 import CS509.client.airport.AirportManager;
 import CS509.client.dao.Server;
@@ -24,6 +21,8 @@ public class ServiceLocator implements IServiceLocator
 	
 	private IServer database;
 	
+	private IDisplayManager displayManager;
+	
 	public ServiceLocator()
 	{
 		this.database = new Server(agencyTicketString);
@@ -31,6 +30,7 @@ public class ServiceLocator implements IServiceLocator
 		this.flightManager =  new FlightManager(database);
 		this.airplaneManager = new AirplaneManager(database);
 		this.tripFactory = new TripManagerFactory(this.airportManager, this.flightManager);
+		this.displayManager = new ScannerDisplayManager(this.tripFactory);
 	}
 	
 	public IAirportManager getAirportManager()
@@ -52,5 +52,9 @@ public class ServiceLocator implements IServiceLocator
 	@Override
 	public AirplaneManager getAirplaneManager(){
 		return airplaneManager;
+	}
+	
+	public IDisplayManager getDisplayManager(){
+		return this.displayManager;
 	}
 }

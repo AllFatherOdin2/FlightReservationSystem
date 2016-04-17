@@ -2,23 +2,12 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import CS509.client.Interfaces.IServiceLocator;
-import CS509.client.Interfaces.ITrip;
-import CS509.client.Interfaces.ITripManagerFactory;
-import CS509.client.Interfaces.ITripManagerFactory.TripType;
-import CS509.client.Interfaces.ITripManager;
-import CS509.client.airport.Airport;
-import CS509.client.airport.AirportManager;
-import CS509.client.dao.Server;
-import CS509.client.flight.Flight;
-import CS509.client.flight.FlightManager;
+import CS509.client.Interfaces.*;
 import CS509.client.servicelocator.ServiceLocator;
-import CS509.client.trip.OneWayTripManager;
-import CS509.client.trip.TripManagerFactory;
+
 
 
 public class Main {
-	static Scanner sc = new Scanner(System.in);
 	static final String agencyTicketString = "Team07";
 	
 	/**
@@ -29,14 +18,9 @@ public class Main {
 	 * @param args -> empty
 	 */
 	public static void main(String[] args){
-
 		
-		}
-	
-	private static String getTripType(){
-		System.out.println("What type of trip do you want to plan? (Enter corresponding number) \n1. OneWay\n2. RoundTrip");
-		
-		String departureDate = sc.nextLine();		
-		return departureDate;
+		IServiceLocator services = new ServiceLocator();
+		IDisplayManager displayManager = services.getDisplayManager();
+		displayManager.Display();		
 	}
 }

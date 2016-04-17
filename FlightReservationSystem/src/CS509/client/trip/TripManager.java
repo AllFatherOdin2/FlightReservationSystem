@@ -12,13 +12,15 @@ public abstract class TripManager implements ITripManager
 {
 	protected IAirportManager airportManager;
 	protected IFlightManager flightManager;
-	protected Scanner sc;
 	protected List<ITrip> trips;
 	
-	public TripManager(IAirportManager airportManager, IFlightManager flightManager, Scanner sc) {
+	protected final String getDepartureCode = "What airport are you departing from? (Three letter Code)";
+	protected final String getArrivalCode = "What airport are you arriving to? (Three letter Code)";
+	protected final String getDepartureDate = "What date would you like to leave? (yyyy_mm_dd)";
+	
+	public TripManager(IAirportManager airportManager, IFlightManager flightManager) {
 		this.airportManager = airportManager;
 		this.flightManager = flightManager;
-		this.sc = sc;
 		this.trips = new ArrayList<ITrip>();
 	}
 	
@@ -28,31 +30,12 @@ public abstract class TripManager implements ITripManager
 	//// TODO is there a better way of doing this?
 	public void PlanTrip() {
 		// TODO Auto-generated method stub
-		for(Iterator<ITrip> iterate = this.trips.iterator(); iterate.hasNext(); ) {
-		    ITrip trip = iterate.next();
+		for(ITrip trip : this.trips ) {
 		    trip.Plan(this.airportManager, this.flightManager);
 		}						
 	}
 	
-	protected String getDepartAirport(){
-		System.out.println("What airport are you departing from? (Three letter Code)");
-		String departAirport = this.sc.nextLine().toUpperCase();
-		
-		return departAirport;
-	}
-
-	protected String getArriveAirport(){
-		System.out.println("What airport so you wish to arrive at? (Three letter Code)");
-		String arriveAirport = this.sc.nextLine().toUpperCase();
-		
-		return arriveAirport;
-	}
-	
-	protected String getDepartDate(){
-
-		System.out.println("What date would you like to leave? (yyyy_mm_dd)");
-		String departureDate = this.sc.nextLine().toUpperCase();
-		
-		return departureDate;
+	public List<ITrip> getTrips(){
+		return this.trips;
 	}
 }

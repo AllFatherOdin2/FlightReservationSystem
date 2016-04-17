@@ -1,8 +1,12 @@
 package CS509.client.Interfaces;
 
-public interface ITripManager {
+import java.util.List;
 
-	void CollectInfo();
+public interface ITripManager {
+	
+	void CollectInfo(IDisplay display);
 
 	void PlanTrip();
+	
+	List<ITrip> getTrips();
 }

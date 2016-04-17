@@ -10,5 +10,5 @@ public interface ITripManagerFactory
 		RoundTrip,
 	}
 	
-	public ITripManager getNewTrip(int trip, Scanner sc);
+	public ITripManager getNewTrip(int trip);
 }
