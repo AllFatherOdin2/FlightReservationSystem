@@ -30,6 +30,7 @@ import org.xml.sax.SAXException;
 
 
 
+
 import CS509.client.Interfaces.IAirport;
 import CS509.client.Interfaces.IFlight;
 import CS509.client.Interfaces.IFlightManager;
@@ -51,7 +52,7 @@ public class FlightManager implements IFlightManager{
 	private HashMap<String,IFlight> flightMap;
 	private IServer database;
 	private final int LAYOVER_MIN = 1;
-	private final int LAYOVER_MAX = 3;
+	private final int LAYOVER_MAX = 5;
 	
 	public FlightManager(IServer database) {
 		this.flightMap = new HashMap<String,IFlight>();
@@ -328,7 +329,7 @@ public class FlightManager implements IFlightManager{
 	}
 	
 		
-	public List<List<IFlight>> getConnectingFlights(String arrivalCode, String day) throws FlightNotFoundException{
+	public List<List<IFlight>> getConnectingFlights(String arrivalCode, String day, Enum seatingClass) throws FlightNotFoundException{
 		String xmlFlights = database.getFlightsArriving(arrivalCode, day);
 		HashMap<String,IFlight> arrivalFlights = new HashMap<String,IFlight>();
 		List<List<IFlight>> returnList = new ArrayList<List<IFlight>>();
@@ -401,7 +402,7 @@ public class FlightManager implements IFlightManager{
 	}
 
 	private boolean layoverValid(String getmTimeArrival, String getmTimeDepart) throws ParseException {
-		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss a" );
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-dd-MM hh:mm a" );
 		Date layoverStart = formatter.parse(getmTimeArrival);
 		Date layoverEnd = formatter.parse(getmTimeDepart);
 		
@@ -416,7 +417,9 @@ public class FlightManager implements IFlightManager{
 		return false;
 	}
 	
-	
+	/**
+	 * Private helper function to check if flight lands within LAYOVER_MAX hours of midnight
+	 */
 	
 	
 	
