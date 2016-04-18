@@ -266,8 +266,7 @@ public class junitTesting {
 		assertEquals("GMT-10", time.getTimeZone("HNL"));
 	}
 	@Test
-	public void testFlightSortByPrice() throws AirportNotFoundException{
-		//Get input from "users" regarding departure airport and date
+	public void testSortByPrice() throws AirportNotFoundException {
 		String departAirport = "BOS";
 		String arriveAirport = "ATL";
 		String departDate = "2016_05_10";
@@ -283,14 +282,31 @@ public class junitTesting {
 				
 		HashMap<String, IFlight> flights = flightManager.getFlights(departureAirport, arrivalAirport, departDate);
 
-		FlightSort sortedFlight = new FlightSort(flights);
-		assertTrue(sortedFlight.sortByPrice().size()>0);
-		
+		FlightSort sort = new FlightSort(flights);
+		assertTrue(sort.sortByPrice().size()>0);
+		assertEquals(sort.sortByPrice().size(),flights.size());
 	}
 
-	private void assertTrue(boolean b) {
-		// TODO Auto-generated method stub
+	@Test
+	public void testSortByFlightTime() throws AirportNotFoundException {
+		String departAirport = "BOS";
+		String arriveAirport = "ATL";
+		String departDate = "2016_05_10";
 		
+		//Create flightManager using xmlstring from query factory using user inputs
+		IFlightManager flightManager = serviceLocator.getFlightManager();
+		flightManager.addAll(departAirport, departDate, true);
+			
+		IAirportManager airportManger = serviceLocator.getAirportManager();
+
+		IAirport departureAirport = airportManger.getAirport(departAirport);
+		IAirport arrivalAirport = airportManger.getAirport(arriveAirport);
+				
+		HashMap<String, IFlight> flights = flightManager.getFlights(departureAirport, arrivalAirport, departDate);
+        
+		FlightSort sort = new FlightSort(flights);
+		assertTrue(sort.sortByFlightTime().size()>0);
+		assertEquals(sort.sortByPrice().size(),flights.size());
 	}
 	/*
 	@Test
