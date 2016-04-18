@@ -18,8 +18,8 @@ public class LocalTime implements ILocalTime
     
     //Use timezone and date to get the local time
     public String TimeConvert (String timezone, String date) {
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss a" );
-        SimpleDateFormat sdfLocal = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss a");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a" );
+        SimpleDateFormat sdfLocal = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a");
         TimeZone tzLocal = TimeZone.getTimeZone(timezone);
         sdfLocal.setTimeZone(tzLocal);
         String sDateLocal = sdfLocal.format(date);

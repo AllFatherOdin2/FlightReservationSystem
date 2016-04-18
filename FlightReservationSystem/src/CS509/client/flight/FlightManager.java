@@ -45,6 +45,7 @@ import CS509.client.util.Converter;
  * @since 2016-02-24
  *
  */
+
 public class FlightManager implements IFlightManager{
 
 	private static final long serialVersionUID = 1L;
