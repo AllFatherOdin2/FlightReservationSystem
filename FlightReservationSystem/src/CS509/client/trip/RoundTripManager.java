@@ -1,14 +1,6 @@
 package CS509.client.trip;
 
-import java.util.HashMap;
-import java.util.Scanner;
-
-import CS509.client.Interfaces.IAirport;
-import CS509.client.Interfaces.IAirportManager;
-import CS509.client.Interfaces.IDisplay;
-import CS509.client.Interfaces.IFlight;
-import CS509.client.Interfaces.IFlightManager;
-import CS509.client.airport.AirportNotFoundException;
+import CS509.client.Interfaces.*;
 
 public class RoundTripManager extends TripManager
 {
@@ -23,7 +15,7 @@ public class RoundTripManager extends TripManager
 		String departureAirportCode = display.GetUserInput(this.getDepartureCode);
 		String arrivalAirportCode = display.GetUserInput(this.getArrivalCode);
 		String departDate = display.GetUserInput(this.getDepartureDate);
-		String returnDate = display.GetUserInput(this.getDepartureDate);
+		String returnDate = display.GetUserInput(this.getReturnDate);
 		
 		this.trips.add(new Trip(departureAirportCode, arrivalAirportCode, departDate));
 		this.trips.add(new Trip(arrivalAirportCode, departureAirportCode, returnDate));

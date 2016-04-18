@@ -1,7 +1,6 @@
 package CS509.client.Interfaces;
 
 import java.util.HashMap;
-import java.util.Scanner;
 
 public interface ITrip 
 {

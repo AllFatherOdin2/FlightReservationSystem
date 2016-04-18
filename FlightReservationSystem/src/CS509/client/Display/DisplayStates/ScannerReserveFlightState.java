@@ -18,7 +18,7 @@ public class ScannerReserveFlightState extends ScannerBaseState {
 	public IDisplayState Process() {
 		try{
 			
-			//this.flight.Reserve();
+			//this.flight.reserve();
 			this.trip.setReserved(true);
 			return new ScannerDisplayTripsState(this.display, this.factory, this.tripManager);
 			

@@ -1,16 +1,6 @@
 package CS509.client.trip;
 
-import java.util.HashMap;
-import java.util.Scanner;
-
-import CS509.client.Interfaces.IAirport;
-import CS509.client.Interfaces.IAirportManager;
-import CS509.client.Interfaces.IFlight;
-import CS509.client.Interfaces.IFlightManager;
-import CS509.client.Interfaces.ITrip;
-import CS509.client.Interfaces.ITripManagerFactory;
-import CS509.client.Interfaces.ITripManager;
-import CS509.client.dao.Server;
+import CS509.client.Interfaces.*;
 
 public class TripManagerFactory implements ITripManagerFactory
 {	

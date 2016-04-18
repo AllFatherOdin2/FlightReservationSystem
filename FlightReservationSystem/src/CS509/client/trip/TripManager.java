@@ -1,11 +1,7 @@
 package CS509.client.trip;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Scanner;
-
 import CS509.client.Interfaces.*;
 
 public abstract class TripManager implements ITripManager 

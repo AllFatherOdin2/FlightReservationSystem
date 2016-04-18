@@ -1,15 +1,9 @@
-
-import java.util.ArrayList;
-import java.util.Scanner;
-
 import CS509.client.Interfaces.*;
 import CS509.client.servicelocator.ServiceLocator;
 
 
 
-public class Main {
-	static final String agencyTicketString = "Team07";
-	
+public class Main {	
 	/**
 	 * Main file, asks user for flight location and date.
 	 * Sanity checks inputs for correctness

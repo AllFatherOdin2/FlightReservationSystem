@@ -1,7 +1,5 @@
 package CS509.client.Interfaces;
 
-import java.util.Scanner;
-
 public interface ITripManagerFactory 
 {
 	public enum TripType
