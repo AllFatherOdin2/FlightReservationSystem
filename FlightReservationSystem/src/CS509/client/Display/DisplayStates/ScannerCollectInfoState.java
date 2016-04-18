@@ -1,6 +1,5 @@
 package CS509.client.Display.DisplayStates;
 
-import CS509.client.Display.RequestToExitException;
 import CS509.client.Interfaces.*;
 
 public class ScannerCollectInfoState extends ScannerBaseState 
