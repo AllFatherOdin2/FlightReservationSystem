@@ -24,13 +24,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-
-
-
-
-
-
-
 import CS509.client.Interfaces.IAirport;
 import CS509.client.Interfaces.IFlight;
 import CS509.client.Interfaces.IFlightManager;
@@ -90,7 +83,6 @@ public class FlightManager implements IFlightManager{
 				collectionUpdated = true;
 			}
 		}
-		
 		return collectionUpdated;
 	}
 	
@@ -234,34 +226,6 @@ public class FlightManager implements IFlightManager{
 		
 		
 		return flight;
-		
-		/*
-		IFlight flight = null;
-		int counter = 0;
-		int found = 0;
-		ArrayList<IFlight> flightCollection =  new ArrayList<>(flightMap.values());
-		for (IFlight a : flightCollection){
-			if (flight == null && a.getmNumber().compareToIgnoreCase(number) == 0){
-				flight = a;
-				found = counter;
-			} else if (flight != null) {
-				//should only occur if a flight is duplicated somehow.
-				//because we are using a HashMap, this should no longer even be possible
-				//TODO: Test to see if this can even happen, or if we even want to keep this functionality.
-				if(flightCollection.get(counter).equals(flightCollection.get(found))){
-					flightCollection.remove(counter);
-					flightMap.remove(a.getmNumber());
-				}
-			} else {
-				throw new FlightNotFoundException("Flight " + number +" not found by query");
-			}
-			counter++;
-		}
-		if(flight == null)
-			throw new FlightNotFoundException("Flight " + number +" not found by query");
-		
-		return flight;
-		*/
 	}
 
 
@@ -327,13 +291,16 @@ public class FlightManager implements IFlightManager{
 	public void removeAllFlights(){
 		flightMap = new HashMap<String,IFlight>();
 	}
-	
-		
-	public List<List<IFlight>> getConnectingFlights(String arrivalCode, String day, Enum seatingClass) throws FlightNotFoundException{
+
+	@Override
+	public List<List<IFlight>> getConnectingFlights(String arrivalCode, String day) throws FlightNotFoundException{
 		String xmlFlights = database.getFlightsArriving(arrivalCode, day);
+		
+		System.out.println(xmlFlights);
+		
 		HashMap<String,IFlight> arrivalFlights = new HashMap<String,IFlight>();
 		List<List<IFlight>> returnList = new ArrayList<List<IFlight>>();
-		addAll(xmlFlights, arrivalFlights);
+		System.out.println(addAll(xmlFlights, arrivalFlights));
 		
 		if(arrivalFlights.size() == 0){
 			throw new FlightNotFoundException("No arrival flights were found/put into the map");

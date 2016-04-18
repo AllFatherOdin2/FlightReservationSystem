@@ -1,5 +1,6 @@
 import static org.junit.Assert.*;
 
+import java.util.List;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -265,39 +266,19 @@ public class junitTesting {
 		assertEquals("GMT-10", time.getTimeZone("HNL"));
 	}
 	
-	/*
 	@Test
-	public void testReserveFirstClassSeat() throws ParseException, FlightNotFoundException {
+	public void testGetOneWayWithConnectingFlights() throws AirportNotFoundException, FlightNotFoundException{
 		//Get input from "users" regarding departure airport and date
 		String departAirport = "BOS";
+		String arriveAirport = "ATL";
 		String departDate = "2016_05_10";
-
-		//This test would fail if someone reserved a flight between us getting and reserving
-		serverInterface.lock(agencyTicketString);
 		
 		//Create flightManager using xmlstring from query factory using user inputs
-		FlightManager flightManager = new FlightManager();
-		String xmlString = serverInterface.getFlights(agencyTicketString, departAirport, departDate);
+		IFlightManager flightManager = serviceLocator.getFlightManager();
+		flightManager.addAll(departAirport, departDate, true);
 		
-		flightManager.addAll(xmlString);
-
-		Flight flight = flightManager.getSpecificFlight("2807");
-		int coachBefore = flight.getmSeatsCoach();
-		int firstClassBefore = flight.getmSeatsFirstclass();
-		
-		serverInterface.buyTickets(agencyTicketString, "2807", false); 
-		
-		//get updated info
-		flightManager = new FlightManager();
-		xmlString = serverInterface.getFlights(agencyTicketString, departAirport, departDate);
-		
-		serverInterface.unlock(agencyTicketString);
-		
-		flightManager.addAll(xmlString);
-		flight = flightManager.getSpecificFlight("2807");
-
-		assertEquals(coachBefore, flight.getmSeatsCoach());
-		assertEquals(firstClassBefore + 1, flight.getmSeatsFirstclass());
+		List<List<IFlight>> connectingFlights = flightManager.getConnectingFlights(arriveAirport, departDate);
+	
+		System.out.println(connectingFlights.size());
 	}
-	*/
 }
