@@ -26,6 +26,7 @@ import CS509.client.flight.Flight;
 import CS509.client.flight.FlightManager;
 import CS509.client.flight.FlightNotFoundException;
 import CS509.client.servicelocator.ServiceLocator;
+import CS509.client.trip.FlightSort;
 import CS509.client.util.LocalTime;
 
 
@@ -264,7 +265,33 @@ public class junitTesting {
 		LocalTime time = new LocalTime();
 		assertEquals("GMT-10", time.getTimeZone("HNL"));
 	}
-	
+	@Test
+	public void testFlightSortByPrice() throws AirportNotFoundException{
+		//Get input from "users" regarding departure airport and date
+		String departAirport = "BOS";
+		String arriveAirport = "ATL";
+		String departDate = "2016_05_10";
+		
+		//Create flightManager using xmlstring from query factory using user inputs
+		IFlightManager flightManager = serviceLocator.getFlightManager();
+		flightManager.addAll(departAirport, departDate, true);
+			
+		IAirportManager airportManger = serviceLocator.getAirportManager();
+
+		IAirport departureAirport = airportManger.getAirport(departAirport);
+		IAirport arrivalAirport = airportManger.getAirport(arriveAirport);
+				
+		HashMap<String, IFlight> flights = flightManager.getFlights(departureAirport, arrivalAirport, departDate);
+
+		FlightSort sortedFlight = new FlightSort(flights);
+		assertTrue(sortedFlight.sortByPrice().size()>0);
+		
+	}
+
+	private void assertTrue(boolean b) {
+		// TODO Auto-generated method stub
+		
+	}
 	/*
 	@Test
 	public void testReserveFirstClassSeat() throws ParseException, FlightNotFoundException {

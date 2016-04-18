@@ -24,12 +24,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-
-
-
-
-
-
 import CS509.client.Interfaces.IAirport;
 import CS509.client.Interfaces.IFlight;
 import CS509.client.Interfaces.IFlightManager;
@@ -52,7 +46,7 @@ public class FlightManager implements IFlightManager{
 	private HashMap<String,IFlight> flightMap;
 	private IServer database;
 	private final int LAYOVER_MIN = 1;
-	private final int LAYOVER_MAX = 3;
+	private final int LAYOVER_MAX = 5;
 	
 	public FlightManager(IServer database) {
 		this.flightMap = new HashMap<String,IFlight>();
@@ -90,7 +84,6 @@ public class FlightManager implements IFlightManager{
 				collectionUpdated = true;
 			}
 		}
-		
 		return collectionUpdated;
 	}
 	
@@ -234,34 +227,6 @@ public class FlightManager implements IFlightManager{
 		
 		
 		return flight;
-		
-		/*
-		IFlight flight = null;
-		int counter = 0;
-		int found = 0;
-		ArrayList<IFlight> flightCollection =  new ArrayList<>(flightMap.values());
-		for (IFlight a : flightCollection){
-			if (flight == null && a.getmNumber().compareToIgnoreCase(number) == 0){
-				flight = a;
-				found = counter;
-			} else if (flight != null) {
-				//should only occur if a flight is duplicated somehow.
-				//because we are using a HashMap, this should no longer even be possible
-				//TODO: Test to see if this can even happen, or if we even want to keep this functionality.
-				if(flightCollection.get(counter).equals(flightCollection.get(found))){
-					flightCollection.remove(counter);
-					flightMap.remove(a.getmNumber());
-				}
-			} else {
-				throw new FlightNotFoundException("Flight " + number +" not found by query");
-			}
-			counter++;
-		}
-		if(flight == null)
-			throw new FlightNotFoundException("Flight " + number +" not found by query");
-		
-		return flight;
-		*/
 	}
 
 
@@ -327,13 +292,16 @@ public class FlightManager implements IFlightManager{
 	public void removeAllFlights(){
 		flightMap = new HashMap<String,IFlight>();
 	}
-	
-		
+
+	@Override
 	public List<List<IFlight>> getConnectingFlights(String arrivalCode, String day) throws FlightNotFoundException{
 		String xmlFlights = database.getFlightsArriving(arrivalCode, day);
+		
+		System.out.println(xmlFlights);
+		
 		HashMap<String,IFlight> arrivalFlights = new HashMap<String,IFlight>();
 		List<List<IFlight>> returnList = new ArrayList<List<IFlight>>();
-		addAll(xmlFlights, arrivalFlights);
+		System.out.println(addAll(xmlFlights, arrivalFlights));
 		
 		if(arrivalFlights.size() == 0){
 			throw new FlightNotFoundException("No arrival flights were found/put into the map");
@@ -402,7 +370,7 @@ public class FlightManager implements IFlightManager{
 	}
 
 	private boolean layoverValid(String getmTimeArrival, String getmTimeDepart) throws ParseException {
-		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss a" );
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-dd-MM hh:mm a" );
 		Date layoverStart = formatter.parse(getmTimeArrival);
 		Date layoverEnd = formatter.parse(getmTimeDepart);
 		
@@ -417,7 +385,9 @@ public class FlightManager implements IFlightManager{
 		return false;
 	}
 	
-	
+	/**
+	 * Private helper function to check if flight lands within LAYOVER_MAX hours of midnight
+	 */
 	
 	
 	
