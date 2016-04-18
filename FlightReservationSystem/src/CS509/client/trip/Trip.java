@@ -23,10 +23,13 @@ public class Trip implements ITrip
 
 	protected HashMap<String, IFlight> flights;
 	
+	private boolean isReserved;
+	
 	public Trip(String departureCode, String arrivalCode, String departureDate) {
 		this.departureAirportCode = departureCode;
 		this.arrivalAirportCode = arrivalCode;
 		this.depatureDate = departureDate;
+		this.isReserved = false;
 	}
 	
 	@Override
@@ -56,11 +59,22 @@ public class Trip implements ITrip
 			IAirport departureAirport = airportManager.getAirport(this.departureAirportCode);
 		
 			IAirport arrivalAirport = airportManager.getAirport(this.arrivalAirportCode);
-		
+			
+			flightManager.addAll(this.arrivalAirportCode, this.depatureDate, false);
 			this.flights = flightManager.getFlights(departureAirport, arrivalAirport, this.depatureDate);
 		} catch (AirportNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public void setReserved(boolean isReserved) {
+		this.isReserved = isReserved;		
+	}
+
+	@Override
+	public boolean getReserved() {
+		return this.isReserved;
 	}
 }

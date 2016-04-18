@@ -14,4 +14,8 @@ public interface ITrip
 	public HashMap<String, IFlight> getFlights();
 	
 	public void Plan(IAirportManager airportManager, IFlightManager flightManager);
+	
+	public void setReserved(boolean isReserved);
+	
+	public boolean getReserved();
 }

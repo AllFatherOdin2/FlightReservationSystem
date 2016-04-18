@@ -8,7 +8,9 @@ import CS509.client.Interfaces.IFlight;
 
 public class ScannerDisplay implements IDisplay
 {
-	Scanner sc;
+	private final String border = "\n-------------------------------------------------------------------------\n";
+	private Scanner sc;
+	
 	public ScannerDisplay(){
 		sc = new Scanner(System.in);
 	}
@@ -25,12 +27,12 @@ public class ScannerDisplay implements IDisplay
 		System.out.println(message);
 	}
 	
-	private void printFlights(List<IFlight> currentFlights){
-		System.out.println("-------------------------------------------");
+	public void printFlights(List<IFlight> currentFlights){
+		System.out.println(this.border);
 		
 		for(IFlight flight : currentFlights){
 			System.out.println(flight.toString());
-			System.out.println("-------------------------------------------");
+			System.out.println(this.border);
 		}
 	}
 }
