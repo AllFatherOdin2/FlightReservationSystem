@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -385,10 +386,25 @@ public class FlightManager implements IFlightManager{
 		return false;
 	}
 	
+
 	/**
-	 * Private helper function to check if flight lands within LAYOVER_MAX hours of midnight
+	 * Helper function to determine if we need to check flights from the following day or not
+	 * 
+	 * @param flight IFlight that is landing at a particular time (timeArrival)
+	 * @return True if timeArival is within LAYOVER_MAX hours of midnight, else false
+	 * @throws ParseException If the date format is incorrect, this function will fail
 	 */
-	
+	private boolean checkNextDay(IFlight flight) throws ParseException{
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-dd-MM hh:mm a" );
+		Date layoverStart = formatter.parse(flight.getmTimeArrival());
+		
+		Calendar timeArrival = Calendar.getInstance();
+		timeArrival.setTime(layoverStart);
+		if(timeArrival.get(Calendar.HOUR_OF_DAY)+LAYOVER_MAX >= 24){
+			return true;
+		}
+		return false;
+	}
 	
 	
 }
