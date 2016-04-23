@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import CS509.client.Interfaces.IDisplay;
-import CS509.client.Interfaces.IFlight;
+import CS509.client.Interfaces.*;
 
 public class ScannerDisplay implements IDisplay
 {
@@ -27,11 +27,11 @@ public class ScannerDisplay implements IDisplay
 		System.out.println(message);
 	}
 	
-	public void printFlights(List<IFlight> currentFlights){
+	public void printFlights(List<IFlightPlan> currentFlights){
 		System.out.println(this.border);
 		
-		for(IFlight flight : currentFlights){
-			System.out.println(flight.toString());
+		for(IFlightPlan flightPlan : currentFlights){
+			System.out.println(flightPlan.toString());
 			System.out.println(this.border);
 		}
 	}

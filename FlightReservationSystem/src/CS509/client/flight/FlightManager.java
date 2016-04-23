@@ -12,6 +12,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -28,7 +29,7 @@ import org.xml.sax.SAXException;
 import CS509.client.Interfaces.IAirport;
 import CS509.client.Interfaces.IFlight;
 import CS509.client.Interfaces.IFlightManager;
-import CS509.client.Interfaces.IServer;
+import CS509.client.Interfaces.*;
 import CS509.client.util.Converter;
 
 /**
@@ -294,13 +295,14 @@ public class FlightManager implements IFlightManager{
 	}
 
 	@Override
-	public List<List<IFlight>> getConnectingFlights(String arrivalCode, String day) throws FlightNotFoundException{
+	public HashMap<String, IFlightPlan> getConnectingFlights(String arrivalCode, String day) throws FlightNotFoundException{
 		String xmlFlights = database.getFlightsArriving(arrivalCode, day);
 		
 		System.out.println(xmlFlights);
 		
 		HashMap<String,IFlight> arrivalFlights = new HashMap<String,IFlight>();
-		List<List<IFlight>> returnList = new ArrayList<List<IFlight>>();
+		HashMap<String, IFlightPlan> returnList = new HashMap<String, IFlightPlan>();
+		int flightPlanNumber = 1;
 		System.out.println(addAll(xmlFlights, arrivalFlights));
 		
 		if(arrivalFlights.size() == 0){
@@ -313,7 +315,9 @@ public class FlightManager implements IFlightManager{
 			if(f.getmCodeArrival().compareTo(arrivalCode) == 0){
 				ArrayList<IFlight> directFlight = new ArrayList<IFlight>();
 				directFlight.add(f);
-				returnList.add(directFlight);
+				ArrayList<IFlight> flight = new ArrayList<IFlight>(directFlight);
+				IFlightPlan flightPlan = new FlightPlan(flight, flightPlanNumber++);
+				returnList.put(flightPlan.getName(), flightPlan);
 			}
 		}
 		//SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss a" );
@@ -327,13 +331,13 @@ public class FlightManager implements IFlightManager{
 							ArrayList<IFlight> oneConnectionFlight = new ArrayList<IFlight>();
 							oneConnectionFlight.add(departFlight);
 							oneConnectionFlight.add(arriveFlight);
-							returnList.add(oneConnectionFlight);
+							IFlightPlan flightPlan = new FlightPlan(oneConnectionFlight, flightPlanNumber++);
+							returnList.put(flightPlan.getName(), flightPlan);
 						}
 					} catch (ParseException e) {
 						//Should only ever happen if there is an error in the database
 						e.printStackTrace();
 					}
-					
 				}
 			}
 		}
@@ -354,7 +358,8 @@ public class FlightManager implements IFlightManager{
 								twoConnectionFlight.add(departFlight);
 								twoConnectionFlight.add(firstStopFlight);
 								twoConnectionFlight.add(arriveFlight);
-								returnList.add(twoConnectionFlight);
+								IFlightPlan flightPlan = new FlightPlan(twoConnectionFlight, flightPlanNumber++);
+								returnList.put(flightPlan.getName(), flightPlan);
 							}
 						} catch (ParseException e) {
 							//Should only ever happen if there is an error in the database
@@ -369,8 +374,8 @@ public class FlightManager implements IFlightManager{
 		return returnList;
 	}
 
-	private boolean layoverValid(String getmTimeArrival, String getmTimeDepart) throws ParseException {
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-dd-MM hh:mm a" );
+	private boolean layoverValid(String getmTimeArrival, String getmTimeDepart) throws ParseException {	
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy MMM dd hh:mm zzzz");
 		Date layoverStart = formatter.parse(getmTimeArrival);
 		Date layoverEnd = formatter.parse(getmTimeDepart);
 		

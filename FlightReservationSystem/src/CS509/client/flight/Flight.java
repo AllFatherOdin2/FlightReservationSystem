@@ -209,5 +209,26 @@ public class Flight implements IFlight {
 	public int getmSeatsCoach() {
 		return mSeatsCoach;
 	}	
+	
+	@Override
+	public String toString(){
+		String flightInfo = "";
+		
+		flightInfo = flightInfo + "Flight Number: " + this.mNumber + "\n";
+		flightInfo = flightInfo + "Flight Time: " + this.mFlightTime + "\n";
+		flightInfo = flightInfo + "From: " + this.mCodeDepart + " To: " + this.mCodeArrival +"\n";
+		flightInfo = flightInfo + "\n";
+		flightInfo = flightInfo + "Departure Time: " + this.getmTimeDepart() + "\n";
+		flightInfo = flightInfo + "Arrival Time: " + this.getmTimeArrival() + "\n";
+		flightInfo = flightInfo + "\n";
+		flightInfo = flightInfo + "Coach Seats: " + this.mSeatsCoach + "\n";
+		flightInfo = flightInfo + "Coach Price: " + this.mPriceCoach + "\n";
+		flightInfo = flightInfo + "\n";
+		flightInfo = flightInfo + "First Class Seats " + this.mSeatsFirstclass + "\n";
+		flightInfo = flightInfo + "First Class Price: " + this.mPriceFirstclass + "\n";
+		flightInfo = flightInfo + "\n";
+		
+		return flightInfo;
+	}
 }
  

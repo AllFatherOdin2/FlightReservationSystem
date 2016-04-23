@@ -11,7 +11,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import CS509.client.Interfaces.IAirport;
+import CS509.client.Interfaces.*;
 import CS509.client.Interfaces.IAirportManager;
 import CS509.client.Interfaces.IFlight;
 import CS509.client.Interfaces.IFlightManager;
@@ -277,7 +277,7 @@ public class junitTesting {
 		IFlightManager flightManager = serviceLocator.getFlightManager();
 		flightManager.addAll(departAirport, departDate, true);
 		
-		List<List<IFlight>> connectingFlights = flightManager.getConnectingFlights(arriveAirport, departDate);
+		HashMap<String, IFlightPlan> connectingFlights = flightManager.getConnectingFlights(arriveAirport, departDate);
 	
 		System.out.println(connectingFlights.size());
 	}
