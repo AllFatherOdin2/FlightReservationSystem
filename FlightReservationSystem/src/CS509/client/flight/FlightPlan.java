@@ -13,8 +13,8 @@ public class FlightPlan implements IFlightPlan
 	private String fpString = null;
 	
 	private int flightPlanNumber;
-	private float mPriceFirstclass = 0;
-	private float mPriceCoach = 0;
+	private double mPriceFirstclass = 0;
+	private double mPriceCoach = 0;
 	private String totalFlightTime;
 	private String arrivalTime;
 	private String departureTime;
@@ -58,8 +58,8 @@ public class FlightPlan implements IFlightPlan
 			try{
 				
 				for(IFlight flight : this.connectingFlights){
-					this.mPriceFirstclass = this.mPriceFirstclass + Float.parseFloat(flight.getmPriceFirstclass().replace("$", ""));
-					this.mPriceCoach = this.mPriceCoach + Float.parseFloat(flight.getmPriceCoach().replace("$", ""));
+					this.mPriceFirstclass = this.mPriceFirstclass + Double.parseDouble(flight.getmPriceFirstclass().replace("$", ""));
+					this.mPriceCoach = this.mPriceCoach + Double.parseDouble(flight.getmPriceCoach().replace("$", ""));
 					this.arrivalTime = flight.getmTimeArrival();
 				}
 				

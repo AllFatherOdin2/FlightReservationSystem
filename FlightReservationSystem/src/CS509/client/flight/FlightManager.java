@@ -309,12 +309,10 @@ public class FlightManager implements IFlightManager{
 	public HashMap<String, IFlightPlan> getConnectingFlights(String arrivalCode, String day) throws FlightNotFoundException{
 		String xmlFlights = database.getFlightsArriving(arrivalCode, day);
 		
-		System.out.println(xmlFlights);
-		
 		HashMap<String,IFlight> arrivalFlights = new HashMap<String,IFlight>();
 		HashMap<String, IFlightPlan> returnList = new HashMap<String, IFlightPlan>();
 		int flightPlanNumber = 1;
-		System.out.println(addAll(xmlFlights, arrivalFlights));
+		addAll(xmlFlights, arrivalFlights);
 		
 		if(arrivalFlights.size() == 0){
 			throw new FlightNotFoundException("No arrival flights were found/put into the map");
