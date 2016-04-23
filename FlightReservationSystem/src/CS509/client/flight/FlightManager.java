@@ -329,7 +329,7 @@ public class FlightManager implements IFlightManager{
 				returnList.put(flightPlan.getName(), flightPlan);
 			}
 		}
-		//SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss a" );
+
 		//Case: 1 connection
 		ArrayList<IFlight> arrivalList = Converter.convertMapToArray(arrivalFlights);
 		for(IFlight departFlight : departureList){
