@@ -4,7 +4,7 @@ import CS509.client.Interfaces.*;
 
 public class ScannerCollectInfoState extends ScannerBaseState 
 {
-	private final String startMenu = "What type of trip do you want to plan? (Enter corresponding number) \n1. OneWay\n2. RoundTrip";
+	private final String startMenu = "\nWhat type of trip do you want to plan? (Enter corresponding number) \n1. OneWay\n2. RoundTrip";
 
 	public ScannerCollectInfoState(IDisplay display, ITripManagerFactory factory, ITripManager tripManager)
 	{
@@ -25,7 +25,7 @@ public class ScannerCollectInfoState extends ScannerBaseState
 			int trip = Integer.parseInt(tripType);
 			this.tripManager = this.factory.getNewTrip(trip);
 			
-			this.display.DisplayMessage("You have selected a " + this.tripManager.toString() + "!");
+			this.display.DisplayMessage("\nYou have selected a " + this.tripManager.toString() + "!\n");
 			
 			if(this.tripManager != null){
 				this.tripManager.CollectInfo(this.display);

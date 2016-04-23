@@ -222,7 +222,7 @@ public class Flight implements IFlight {
 			flightInfo = flightInfo + "Flight Time: " + this.mFlightTime + "\n";
 			flightInfo = flightInfo + "From: " + this.dAirport.getCode() + " To: " + this.arAirport.getCode() +"\n";
 			flightInfo = flightInfo + "\n";
-			flightInfo = flightInfo + "Departure Time: \n" + "Local Time: " + this.dAirport.getLocalTime(this.mTimeDepart) + "\n";
+			flightInfo = flightInfo + "Departure Time: " + this.dAirport.getLocalTime(this.mTimeDepart) + "\n";
 			flightInfo = flightInfo + "Arrival Time: " + this.arAirport.getLocalTime(this.mTimeArrival) + "\n";
 			flightInfo = flightInfo + "\n";
 			flightInfo = flightInfo + "Coach Seats: " + this.mSeatsCoach + "\n";

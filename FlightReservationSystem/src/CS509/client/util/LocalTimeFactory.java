@@ -13,7 +13,7 @@ public class LocalTimeFactory implements ILocalTimeFactory {
 	}
     
 	public ILocalTime getLocalTime(String airportCode){
-		String offset = this.map.get(airportCode);
+		String offset = this.map.get(airportCode.toUpperCase());
 		
 		return new LocalTime(offset);
 	}

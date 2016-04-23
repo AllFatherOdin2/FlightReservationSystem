@@ -42,6 +42,8 @@ public class FlightPlan implements IFlightPlan
 			this.fpString = this.fpString + "Total Flight Time: " + this.totalFlightTime + "\n";
 			this.fpString = this.fpString + "Total Coach Cost: " + this.mPriceCoach + "\n";
 			this.fpString = this.fpString + "Total First Class Cost: " + this.mPriceFirstclass + "\n";
+			this.fpString = this.fpString + "Trip Start: " + this.departureTime + "\n";
+			this.fpString = this.fpString + "Trip End: " + this.arrivalTime + "\n";
 			
 			this.fpString = this.fpString + "**********************************\n";
 			
@@ -52,30 +54,6 @@ public class FlightPlan implements IFlightPlan
 		}
 		
 		return fpString;		
-	}
-	
-	public void UpdateInfo(IFlight flight)
-	{
-		try{
-			this.mPriceFirstclass = this.mPriceFirstclass + Double.parseDouble(flight.getmPriceFirstclass().replace("$", ""));
-			this.mPriceCoach = this.mPriceCoach + Double.parseDouble(flight.getmPriceCoach().replace("$", ""));
-			this.arrivalTime = flight.getmTimeArrival();
-			
-			this.departureTime = this.connectingFlights.get(0).getmTimeDepart();
-			
-			SimpleDateFormat formatter = new SimpleDateFormat("yyyy MMM dd hh:mm zzzz");
-			
-			SimpleDateFormat timeFormatter = new SimpleDateFormat("hh:mm:ss");
-			Date layoverStart = formatter.parse(this.departureTime);
-			Date layoverEnd = formatter.parse(this.arrivalTime);
-			
-			long layoverDuration = layoverEnd.getTime() - layoverStart.getTime();
-			
-			Date totalTime = new Date(layoverDuration);
-			this.totalFlightTime = timeFormatter.format(totalTime);
-		}catch(Exception e){
-			e.printStackTrace();
-		}
 	}
 	
 	private void loadInfo()
@@ -125,18 +103,18 @@ public class FlightPlan implements IFlightPlan
 	@Override
 	public double getTotalCoachCost() {
 		// TODO Auto-generated method stub
-		return this.getTotalCoachCost();
+		return this.mPriceCoach;
 	}
 
 	@Override
 	public double getTotalFirstClass() {
 		// TODO Auto-generated method stub
-		return this.getTotalFirstClass();
+		return this.mPriceFirstclass;
 	}
 
 	@Override
 	public String getTotalTime() {
 		// TODO Auto-generated method stub
-		return this.getTotalTime();
+		return this.totalFlightTime;
 	}
 }

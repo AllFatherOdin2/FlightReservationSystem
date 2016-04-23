@@ -15,7 +15,7 @@ public class ScannerDisplayFlightsState extends ScannerBaseState {
 
 	private ITrip trip;
 	
-	private final String flightMenu = "Please select an option:\n1. Reserve a Flight\n2. Sort by price \n3. Sort by duration\n4. Sort by arrival time\n5. Sort by departure time";
+	private final String flightMenu = "Please select an option:\n1. Reserve a Flight\n2. Sort by Coach price \n3. Sort by First Class Price\n4. Sort by duration\n5. Sort by arrival time\n6. Sort by departure time";
 	
 	private HashMap<String, IFlightPlan> flightMap;
 	
@@ -49,6 +49,7 @@ public class ScannerDisplayFlightsState extends ScannerBaseState {
 				int selection = Integer.parseInt(menuSelection);
 				
 				//TODO if this was a real project I wouldn't do this
+				String sortSelection = "";
 				switch(selection){
 				
 					case 1:
@@ -57,22 +58,30 @@ public class ScannerDisplayFlightsState extends ScannerBaseState {
 						return new ScannerConfirmReservationState(this.display, this.factory, this.tripManager, this.trip, flight);
 					case 2:
 						this.SortByCoachPrice(flights);
+						sortSelection ="\nSorted by coach price\n";
 						break;
 					case 3:
 						this.SortByFirstClassPrice(flights);
+						sortSelection ="\nSorted by first class price\n";
 						break;
 					case 4:
 						this.SortByTime(flights);
+						sortSelection ="\nSorted by duration\n";
 						break;
 					case 5:
 						this.SortByArrivalTime(flights);
+						sortSelection ="\nSorted by arrival time\n";
 						break;
 					case 6:
 						this.SortByDepartureTime(flights);
+						sortSelection ="\nSorted by departure time\n";
 						break;
 					default:
 						break;
 				}
+				
+				this.display.refreshDisplay();
+				this.display.DisplayMessage(sortSelection);
 			}	
 		}catch(Exception e){
 			this.display.DisplayMessage(this.errorMessage);
@@ -114,22 +123,20 @@ public class ScannerDisplayFlightsState extends ScannerBaseState {
 	    Collections.sort(flights, comparatorPrice);
 	}
 	
-	private void SortByTime(List<IFlightPlan> flights){
-		
-		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+	private void SortByTime(List<IFlightPlan> flights){	
 		Comparator<IFlightPlan> comparatorTime = new Comparator<IFlightPlan>(){
 		    public int compare(IFlightPlan f1, IFlightPlan f2){
-		    	
+		    	SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
 		    	Date d1 = null;
 				try {
-					d1 = sdf.parse(f1.getTotalTime().substring(11));
+					d1 = sdf.parse(f1.getTotalTime());
 				} catch (ParseException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 		    	Date d2 = null;
 				try {
-					d2 = sdf.parse(f2.getTotalTime().substring(11));
+					d2 = sdf.parse(f2.getTotalTime());
 				} catch (ParseException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -144,21 +151,19 @@ public class ScannerDisplayFlightsState extends ScannerBaseState {
 	}
 	
 	private void SortByArrivalTime(List<IFlightPlan> flights){
-		
-		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
 		Comparator<IFlightPlan> comparatorTime = new Comparator<IFlightPlan>(){
 		    public int compare(IFlightPlan f1, IFlightPlan f2){
-		    	
+		    	SimpleDateFormat sdf = new SimpleDateFormat("yyyy MMM dd HH:mm");
 		    	Date d1 = null;
 				try {
-					d1 = sdf.parse(f1.getArrivalTime().substring(11));
+					d1 = sdf.parse(f1.getArrivalTime());
 				} catch (ParseException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 		    	Date d2 = null;
 				try {
-					d2 = sdf.parse(f2.getArrivalTime().substring(11));
+					d2 = sdf.parse(f2.getArrivalTime());
 				} catch (ParseException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -174,20 +179,19 @@ public class ScannerDisplayFlightsState extends ScannerBaseState {
 	
 	private void SortByDepartureTime(List<IFlightPlan> flights){
 		
-		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
 		Comparator<IFlightPlan> comparatorTime = new Comparator<IFlightPlan>(){
 		    public int compare(IFlightPlan f1, IFlightPlan f2){
-		    	
+		    	SimpleDateFormat sdf = new SimpleDateFormat("yyyy MMM dd HH:mm");
 		    	Date d1 = null;
 				try {
-					d1 = sdf.parse(f1.getDepartureTime().substring(11));
+					d1 = sdf.parse(f1.getDepartureTime());
 				} catch (ParseException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 		    	Date d2 = null;
 				try {
-					d2 = sdf.parse(f2.getDepartureTime().substring(11));
+					d2 = sdf.parse(f2.getDepartureTime());
 				} catch (ParseException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
