@@ -7,6 +7,7 @@ import CS509.client.airport.AirportManager;
 import CS509.client.dao.Server;
 import CS509.client.flight.FlightManager;
 import CS509.client.trip.TripManagerFactory;
+import CS509.client.util.LocalTimeFactory;
 
 public class ServiceLocator implements IServiceLocator
 {
@@ -23,11 +24,14 @@ public class ServiceLocator implements IServiceLocator
 	
 	private IDisplayManager displayManager;
 	
+	private ILocalTimeFactory timeFactory;
+	
 	public ServiceLocator()
 	{
 		this.database = new Server(agencyTicketString);
-		this.airportManager = new AirportManager(database);
-		this.flightManager =  new FlightManager(database);
+		this.timeFactory = new LocalTimeFactory();
+		this.airportManager = new AirportManager(database, this.timeFactory);
+		this.flightManager =  new FlightManager(database, this.airportManager);
 		this.airplaneManager = new AirplaneManager(database);
 		this.tripFactory = new TripManagerFactory(this.airportManager, this.flightManager);
 		this.displayManager = new ScannerDisplayManager(this.tripFactory);

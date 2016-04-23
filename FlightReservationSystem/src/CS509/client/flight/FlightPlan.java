@@ -111,10 +111,4 @@ public class FlightPlan implements IFlightPlan
 		// TODO Auto-generated method stub
 		return this.getTotalTime();
 	}
-
-	@Override
-	public void UpdateLocalTimes(IAirportManager airportManager) {
-		// TODO Auto-generated method stub
-		
-	}
 }

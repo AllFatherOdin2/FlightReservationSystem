@@ -46,12 +46,14 @@ public class FlightManager implements IFlightManager{
 	private static final long serialVersionUID = 1L;
 	private HashMap<String,IFlight> flightMap;
 	private IServer database;
+	private IAirportManager airportManager;
 	private final int LAYOVER_MIN = 1;
 	private final int LAYOVER_MAX = 5;
 	
-	public FlightManager(IServer database) {
+	public FlightManager(IServer database, IAirportManager airportManager) {
 		this.flightMap = new HashMap<String,IFlight>();
 		this.database = database;
+		this.airportManager = airportManager;
 	}
 	
 	@Override
@@ -189,9 +191,18 @@ public class FlightManager implements IFlightManager{
 		
 		priceCoach = elementCoach.getAttributeNode("Price").getValue();
 		seatsCoach = Integer.parseInt(getCharacterDataFromElement(elementCoach));
+		IAirport dAirport = null;
+		IAirport arAirport = null;
+		try
+		{	
+			dAirport = this.airportManager.getAirport(codeDepart);
+			arAirport = this.airportManager.getAirport(codeArrival);
+		}catch(Exception e){
+			
+		}
 		
-		flight = new Flight (airplane, flightTime, number, codeDepart, timeDepart, 
-				codeArrival, timeArrival, priceFirstclass, seatsFirstclass, priceCoach, seatsCoach);
+		flight = new Flight (airplane, flightTime, number, dAirport, timeDepart, 
+				arAirport, timeArrival, priceFirstclass, seatsFirstclass, priceCoach, seatsCoach);
 
 		return flight;
 	}

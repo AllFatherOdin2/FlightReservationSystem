@@ -20,11 +20,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import CS509.client.Interfaces.IAirport;
-import CS509.client.Interfaces.IAirportManager;
-import CS509.client.Interfaces.IFlight;
-import CS509.client.Interfaces.IServer;
-import CS509.client.Interfaces.IServiceLocator;
+import CS509.client.Interfaces.*;
 
 /**
  * This class aggregates a number of Airport. The aggregate is implemented as an ArrayList.
@@ -38,8 +34,10 @@ import CS509.client.Interfaces.IServiceLocator;
 public class AirportManager implements IAirportManager {
 	private static final long serialVersionUID = 1L;
 	private HashMap<String,IAirport> airportMap;
+	private ILocalTimeFactory timeFactory;
 	
-	public AirportManager(IServer database){
+	public AirportManager(IServer database, ILocalTimeFactory timeFactory){
+		this.timeFactory = timeFactory;
 		String xmlString = database.getAirports();
 		airportMap = new HashMap<String,IAirport>();
 		this.addAll(xmlString);
@@ -128,7 +126,7 @@ public class AirportManager implements IAirportManager {
 		/**
 		 * Instantiate an empty Airport object
 		 */
-		Airport airport = new Airport();
+		
 
 		String name;
 		String code;
@@ -151,6 +149,8 @@ public class AirportManager implements IAirportManager {
 		/**
 		 * Update the Airport object with values from XML node
 		 */
+		ILocalTime localTime = this.timeFactory.getLocalTime(code);
+		Airport airport = new Airport(localTime);
 		airport.name(name);
 		airport.code(code);
 		airport.latitude(latitude);

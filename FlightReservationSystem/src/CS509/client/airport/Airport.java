@@ -3,7 +3,7 @@
  */
 package CS509.client.airport;
 
-import CS509.client.Interfaces.IAirport;
+import CS509.client.Interfaces.*;
 
 /**
  * This class holds values pertaining to a single Airport. Class member attributes
@@ -35,6 +35,8 @@ public class Airport implements IAirport
 	private double mLatitude;          // Latitude of airport in decimal format
 	private double mLongitude;         // Longitude of the airport in decimal format
 	
+	private ILocalTime localTime;
+	
 	/**
 	 * Default constructor
 	 * 
@@ -44,11 +46,12 @@ public class Airport implements IAirport
 	 * @precondition None
 	 * @postcondition member attributes are initialized to invalid default values
 	 */	
-	public Airport () {
+	public Airport (ILocalTime localTime) {
 		mName = "";
 		mCode = "";
 		mLatitude = Double.MAX_VALUE;
 		mLongitude = Double.MAX_VALUE;
+		this.localTime = localTime;
 	}
 	
 	/**
@@ -225,8 +228,8 @@ public class Airport implements IAirport
 	}
 
 	@Override
-	public String GetLocalTime(String gmtTime) {
+	public String getLocalTime(String gmtTime) {
 		// TODO Auto-generated method stub
-		return null;
+		return this.localTime.getLocalTime(gmtTime);
 	}
 }

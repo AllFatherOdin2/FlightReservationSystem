@@ -13,6 +13,4 @@ public interface IFlightPlan
 	double getTotalFirstClass();
 	
 	String getTotalTime();
-	
-	void UpdateLocalTimes(IAirportManager airportManager);
 }

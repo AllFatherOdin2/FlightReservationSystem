@@ -6,7 +6,7 @@ package CS509.client.flight;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import CS509.client.Interfaces.IFlight;
+import CS509.client.Interfaces.*;
 
 /**
  * This class holds values pertaining to a single flight from one airport to another. 
@@ -27,14 +27,16 @@ public class Flight implements IFlight {
 	private String mAirplane;
 	private String mFlightTime;
 	private String mNumber;
-	private String mCodeDepart;
+	private IAirport dAirport;
 	private String mTimeDepart;
-	private String mCodeArrival;
+	private IAirport arAirport;
 	private String mTimeArrival;
 	private String mPriceFirstclass;
 	private int mSeatsFirstclass;
 	private String mPriceCoach;
 	private int mSeatsCoach;
+	
+	private String flightInfo = null;
 	
 	/*
 	public Flight () {
@@ -56,9 +58,9 @@ public class Flight implements IFlight {
 			String airplane,
 			String flightTime,
 			String number,
-			String codeDepart,
+			IAirport dAirport,
 			String timeDepart,
-			String codeArrival,
+			IAirport arAirport,
 			String timeArrival,
 			String priceFirstclass,
 			int seatsFirstclass,
@@ -68,9 +70,9 @@ public class Flight implements IFlight {
 		mAirplane = airplane;
 		mFlightTime = flightTime;
 		mNumber = number;
-		mCodeDepart = codeDepart;
+		this.dAirport = dAirport;
 		mTimeDepart = timeDepart;
-		mCodeArrival = codeArrival;
+		this.arAirport = arAirport;
 		mTimeArrival = timeArrival;
 		mPriceFirstclass = priceFirstclass;
 		mSeatsFirstclass = seatsFirstclass;
@@ -89,10 +91,10 @@ public class Flight implements IFlight {
 			if (Integer.parseInt(mNumber) <= 0) {
 				return false;
 			}
-			if (mCodeDepart.length() != 3) {
+			if (this.dAirport.getCode().length() != 3) {
 				return false;
 			}
-			if (mCodeArrival.length() != 3) {
+			if (this.arAirport.getCode().length() != 3) {
 				return false;
 			}
 			// verify departure time and arrival time are expected formats
@@ -157,7 +159,7 @@ public class Flight implements IFlight {
 	 * @return the mCodeDepart
 	 */
 	public String getmCodeDepart() {
-		return mCodeDepart;
+		return this.dAirport.getCode();
 	}
 
 
@@ -172,7 +174,7 @@ public class Flight implements IFlight {
 	 * @return the mCodeArrival
 	 */
 	public String getmCodeArrival() {
-		return mCodeArrival;
+		return this.arAirport.getCode();
 	}
 
 	/**
@@ -212,21 +214,22 @@ public class Flight implements IFlight {
 	
 	@Override
 	public String toString(){
-		String flightInfo = "";
 		
-		flightInfo = flightInfo + "Flight Number: " + this.mNumber + "\n";
-		flightInfo = flightInfo + "Flight Time: " + this.mFlightTime + "\n";
-		flightInfo = flightInfo + "From: " + this.mCodeDepart + " To: " + this.mCodeArrival +"\n";
-		flightInfo = flightInfo + "\n";
-		flightInfo = flightInfo + "Departure Time: " + this.getmTimeDepart() + "\n";
-		flightInfo = flightInfo + "Arrival Time: " + this.getmTimeArrival() + "\n";
-		flightInfo = flightInfo + "\n";
-		flightInfo = flightInfo + "Coach Seats: " + this.mSeatsCoach + "\n";
-		flightInfo = flightInfo + "Coach Price: " + this.mPriceCoach + "\n";
-		flightInfo = flightInfo + "\n";
-		flightInfo = flightInfo + "First Class Seats " + this.mSeatsFirstclass + "\n";
-		flightInfo = flightInfo + "First Class Price: " + this.mPriceFirstclass + "\n";
-		flightInfo = flightInfo + "\n";
+		if(this.flightInfo == null){
+			flightInfo = flightInfo + "Flight Number: " + this.mNumber + "\n";
+			flightInfo = flightInfo + "Flight Time: " + this.mFlightTime + "\n";
+			flightInfo = flightInfo + "From: " + this.dAirport.getCode() + " To: " + this.arAirport.getCode() +"\n";
+			flightInfo = flightInfo + "\n";
+			flightInfo = flightInfo + "Departure Time: \n" + "Local Time: " + this.dAirport.getLocalTime(this.mTimeDepart) + "\n";
+			flightInfo = flightInfo + "Arrival Time: " + this.arAirport.getLocalTime(this.mTimeArrival) + "\n";
+			flightInfo = flightInfo + "\n";
+			flightInfo = flightInfo + "Coach Seats: " + this.mSeatsCoach + "\n";
+			flightInfo = flightInfo + "Coach Price: " + this.mPriceCoach + "\n";
+			flightInfo = flightInfo + "\n";
+			flightInfo = flightInfo + "First Class Seats " + this.mSeatsFirstclass + "\n";
+			flightInfo = flightInfo + "First Class Price: " + this.mPriceFirstclass + "\n";
+			flightInfo = flightInfo + "\n";
+		}
 		
 		return flightInfo;
 	}

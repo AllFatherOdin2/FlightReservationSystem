@@ -43,7 +43,7 @@ public class Trip implements ITrip
 	public HashMap<String, IFlightPlan> getFlightPlans() {
 		// TODO Auto-generated method stub
 		return this.flightPlans;
-	}	
+	}
 	
 	@Override
 	public void Plan(IAirportManager airportManager, IFlightManager flightManager){	
@@ -57,9 +57,6 @@ public class Trip implements ITrip
 			try 
 			{
 				this.flightPlans = flightManager.getConnectingFlights(this.arrivalAirportCode, this.depatureDate);
-				for(IFlightPlan flightPlan : this.flightPlans.values()){
-					flightPlan.UpdateLocalTimes(airportManager);
-				}
 			} 
 			catch (FlightNotFoundException e) 
 			{

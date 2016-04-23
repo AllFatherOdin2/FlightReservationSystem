@@ -28,6 +28,7 @@ import CS509.client.flight.FlightManager;
 import CS509.client.flight.FlightNotFoundException;
 import CS509.client.servicelocator.ServiceLocator;
 import CS509.client.util.LocalTime;
+import CS509.client.util.LocalTimeFactory;
 
 
 public class junitTesting {
@@ -262,8 +263,9 @@ public class junitTesting {
 	
 	@Test
 	public void testGetLocalTime(){
-		LocalTime time = new LocalTime();
-		assertEquals("GMT-10", time.getTimeZone("HNL"));
+		LocalTimeFactory timeFactory = new LocalTimeFactory();
+		ILocalTime time = timeFactory.getLocalTime("HNL");
+		assertEquals("GMT-10", time.getOffset());
 	}
 	
 	@Test
