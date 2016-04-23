@@ -215,7 +215,9 @@ public class Flight implements IFlight {
 	@Override
 	public String toString(){
 		
-		if(this.flightInfo == null){
+		if(this.flightInfo == null)
+		{
+			this.flightInfo = "";
 			flightInfo = flightInfo + "Flight Number: " + this.mNumber + "\n";
 			flightInfo = flightInfo + "Flight Time: " + this.mFlightTime + "\n";
 			flightInfo = flightInfo + "From: " + this.dAirport.getCode() + " To: " + this.arAirport.getCode() +"\n";

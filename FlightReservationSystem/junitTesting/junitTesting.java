@@ -283,4 +283,18 @@ public class junitTesting {
 	
 		System.out.println(connectingFlights.size());
 	}
+	
+	@Test
+	public void testGetFlightPlans(){
+		//Get input from "users" regarding departure airport and date
+		String departAirport = "BOS";
+		String arriveAirport = "ATL";
+		String departDate = "2016_05_10";
+		
+		//Create flightManager using xmlstring from query factory using user inputs
+		IFlightManager flightManager = serviceLocator.getFlightManager();
+		HashMap<String, IFlightPlan> flightPlans = flightManager.getFlightPlans(departAirport, arriveAirport, departDate, 2);
+		
+		assertTrue(flightPlans.size() > 0);
+	}
 }

@@ -47,26 +47,8 @@ public class Trip implements ITrip
 	
 	@Override
 	public void Plan(IAirportManager airportManager, IFlightManager flightManager){	
-		try {
-			IAirport departureAirport = airportManager.getAirport(this.departureAirportCode);
-		
-			IAirport arrivalAirport = airportManager.getAirport(this.arrivalAirportCode);
-			
-			flightManager.addAll(this.arrivalAirportCode, this.depatureDate, false);
-			
-			try 
-			{
-				this.flightPlans = flightManager.getConnectingFlights(this.arrivalAirportCode, this.depatureDate);
-			} 
-			catch (FlightNotFoundException e) 
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		} catch (AirportNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
+		this.flightPlans = flightManager.getFlightPlans(departureAirportCode, arrivalAirportCode, depatureDate, 2);	
 	}
 
 	@Override

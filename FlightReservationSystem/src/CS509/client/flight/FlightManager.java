@@ -49,6 +49,7 @@ public class FlightManager implements IFlightManager{
 	private IAirportManager airportManager;
 	private final int LAYOVER_MIN = 1;
 	private final int LAYOVER_MAX = 5;
+	private int currentFlightPlanNumber = 1;
 	
 	public FlightManager(IServer database, IAirportManager airportManager) {
 		this.flightMap = new HashMap<String,IFlight>();
@@ -303,6 +304,81 @@ public class FlightManager implements IFlightManager{
 	 */
 	public void removeAllFlights(){
 		flightMap = new HashMap<String,IFlight>();
+	}
+	
+	public HashMap<String, IFlightPlan> getFlightPlans(String dCode, String aCode, String date, int maxLayovers){
+		
+		int currentLayover = 0;
+		
+		HashMap<String, IFlightPlan> flightPlans = new HashMap<String, IFlightPlan>();
+		FlightBuilder builder = new FlightBuilder(this.database, this.airportManager, aCode, date);
+		
+		List<IFlight> directFlights = builder.goesToDestination(dCode);
+		
+		for(IFlight directFlight : directFlights){	
+			List<IFlight> flights = new ArrayList<IFlight>();
+			flights.add(directFlight);
+			FlightPlan flightPlan = new FlightPlan(flights, this.currentFlightPlanNumber++);
+			flightPlans.put(flightPlan.getName(), flightPlan);
+		}
+		
+		if(maxLayovers != 0){
+			HashMap<String, IFlight> flights = builder.getDepartures(dCode);
+			for(IFlight flight : flights.values())
+			{
+				if(!flight.getmCodeArrival().equals(aCode))
+				{
+					List<IFlight> fpFlights = new ArrayList();
+					fpFlights.add(flight);
+					this.getConnectedFlights(flightPlans, fpFlights, builder, aCode, maxLayovers, currentLayover);
+				}
+			}
+		}
+		
+		return flightPlans;		
+	}
+	
+	private void getConnectedFlights(HashMap<String, IFlightPlan> plans, List<IFlight> connectingFlights, FlightBuilder builder, String aCode, int maxLayovers, int currentLayover)
+	{
+		if( currentLayover < maxLayovers){
+			IFlight flight = connectingFlights.get(currentLayover);
+			
+			List<IFlight> connectedFlights = builder.goesToDestination(flight.getmCodeArrival());
+			if(connectedFlights != null){
+				for(IFlight connectedFlight : connectedFlights){
+					try 
+					{
+						if(this.layoverValid(flight.getmTimeArrival(), connectedFlight.getmTimeDepart())){
+							List<IFlight> fpFlights = new ArrayList(connectingFlights);
+							fpFlights.add(connectedFlight);
+							
+							FlightPlan plan = new FlightPlan(fpFlights, this.currentFlightPlanNumber++);
+							plans.put(plan.getName(), plan);
+						}
+					} catch (ParseException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+			
+			HashMap<String, IFlight> nextFlights = builder.getDepartures(flight.getmCodeArrival());
+			
+			for(IFlight nextFlight : nextFlights.values()){
+				try 
+				{
+					if(this.layoverValid(flight.getmTimeArrival(), nextFlight.getmTimeDepart()) && !nextFlight.getmCodeArrival().equals(aCode)){
+
+						List<IFlight> fpFlights = new ArrayList(connectingFlights);
+						fpFlights.add(nextFlight);
+						this.getConnectedFlights(plans, fpFlights, builder, aCode, maxLayovers, currentLayover + 1);
+					}
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 
 	@Override

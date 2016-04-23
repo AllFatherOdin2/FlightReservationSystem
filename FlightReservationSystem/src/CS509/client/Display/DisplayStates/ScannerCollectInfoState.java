@@ -28,8 +28,8 @@ public class ScannerCollectInfoState extends ScannerBaseState
 			this.display.DisplayMessage("You have selected a " + this.tripManager.toString() + "!");
 			
 			if(this.tripManager != null){
-				//this.display.DisplayMessage(this.border);
 				this.tripManager.CollectInfo(this.display);
+				this.display.DisplayMessage("\nPlanning your trip. Please Wait\n");
 				this.tripManager.PlanTrip();
 			}			
 			

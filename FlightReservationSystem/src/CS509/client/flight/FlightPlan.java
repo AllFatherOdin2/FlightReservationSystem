@@ -25,6 +25,10 @@ public class FlightPlan implements IFlightPlan
 		this.loadInfo();
 	}
 	
+	public FlightPlan(int flightPlanNumber){
+		this.flightPlanNumber = flightPlanNumber;
+	}
+	
 	public String getName(){
 		return this.flightPlanNumber + "";
 	}
@@ -48,7 +52,31 @@ public class FlightPlan implements IFlightPlan
 		}
 		
 		return fpString;		
-	}		
+	}
+	
+	public void UpdateInfo(IFlight flight)
+	{
+		try{
+			this.mPriceFirstclass = this.mPriceFirstclass + Double.parseDouble(flight.getmPriceFirstclass().replace("$", ""));
+			this.mPriceCoach = this.mPriceCoach + Double.parseDouble(flight.getmPriceCoach().replace("$", ""));
+			this.arrivalTime = flight.getmTimeArrival();
+			
+			this.departureTime = this.connectingFlights.get(0).getmTimeDepart();
+			
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy MMM dd hh:mm zzzz");
+			
+			SimpleDateFormat timeFormatter = new SimpleDateFormat("hh:mm:ss");
+			Date layoverStart = formatter.parse(this.departureTime);
+			Date layoverEnd = formatter.parse(this.arrivalTime);
+			
+			long layoverDuration = layoverEnd.getTime() - layoverStart.getTime();
+			
+			Date totalTime = new Date(layoverDuration);
+			this.totalFlightTime = timeFormatter.format(totalTime);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
 	
 	private void loadInfo()
 	{
