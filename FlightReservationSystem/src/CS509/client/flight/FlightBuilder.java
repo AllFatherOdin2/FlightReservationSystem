@@ -21,18 +21,20 @@ public class FlightBuilder
 {
 	private IServer database;
 	private IAirportManager airportManager;
+	private IAirplaneManager airplaneManager;
 	private String date;
 	private String aCode;
 	
 	private HashMap<String, HashMap<String, IFlight>> departures;
 	private HashMap<String, ArrayList<IFlight>> arrivals;
 	
-	public FlightBuilder(IServer database, IAirportManager airportManager, String aCode, String date)
+	public FlightBuilder(IServer database, IAirportManager airportManager, IAirplaneManager airplaneManager, String aCode, String date)
 	{
 		this.database = database;
 		this.date = date;
 		this.airportManager = airportManager;
 		this.aCode = aCode;
+		this.airplaneManager = airplaneManager;
 		
 		this.departures	= new HashMap<String, HashMap<String, IFlight>>();
 		this.arrivals = new HashMap<String, ArrayList<IFlight>>();
@@ -161,15 +163,17 @@ public class FlightBuilder
 		seatsCoach = Integer.parseInt(this.getCharacterDataFromElement(elementCoach));
 		IAirport dAirport = null;
 		IAirport arAirport = null;
+		IAirplane plane = null;
 		try
 		{	
 			dAirport = this.airportManager.getAirport(codeDepart);
 			arAirport = this.airportManager.getAirport(codeArrival);
+			plane = this.airplaneManager.getAirplane(airplane);
 		}catch(Exception e){
 			
 		}
 		
-		flight = new Flight (airplane, flightTime, number, dAirport, timeDepart, 
+		flight = new Flight (plane, flightTime, number, dAirport, timeDepart, 
 				arAirport, timeArrival, priceFirstclass, seatsFirstclass, priceCoach, seatsCoach);
 
 		return flight;

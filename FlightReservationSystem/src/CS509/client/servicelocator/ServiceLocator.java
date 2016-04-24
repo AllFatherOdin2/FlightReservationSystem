@@ -6,6 +6,7 @@ import CS509.client.airplane.AirplaneManager;
 import CS509.client.airport.AirportManager;
 import CS509.client.dao.Server;
 import CS509.client.flight.FlightManager;
+import CS509.client.reservation.ReservationFactory;
 import CS509.client.trip.TripManagerFactory;
 import CS509.client.util.LocalTimeFactory;
 
@@ -18,7 +19,7 @@ public class ServiceLocator implements IServiceLocator
 	
 	private ITripManagerFactory tripFactory;
 	
-	private AirplaneManager airplaneManager;
+	private IAirplaneManager airplaneManager;
 	
 	private IServer database;
 	
@@ -26,15 +27,18 @@ public class ServiceLocator implements IServiceLocator
 	
 	private ILocalTimeFactory timeFactory;
 	
+	private IReservationFactory reservationFactory;
+	
 	public ServiceLocator()
 	{
 		this.database = new Server(agencyTicketString);
 		this.timeFactory = new LocalTimeFactory();
-		this.airportManager = new AirportManager(database, this.timeFactory);
-		this.flightManager =  new FlightManager(database, this.airportManager);
+		this.reservationFactory = new ReservationFactory();
 		this.airplaneManager = new AirplaneManager(database);
+		this.airportManager = new AirportManager(database, this.timeFactory);
+		this.flightManager =  new FlightManager(database, this.airportManager, this.airplaneManager);
 		this.tripFactory = new TripManagerFactory(this.airportManager, this.flightManager);
-		this.displayManager = new ScannerDisplayManager(this.tripFactory);
+		this.displayManager = new ScannerDisplayManager(this);
 	}
 	
 	public IAirportManager getAirportManager()
@@ -54,11 +58,19 @@ public class ServiceLocator implements IServiceLocator
 	}
 	
 	@Override
-	public AirplaneManager getAirplaneManager(){
+	public IAirplaneManager getAirplaneManager(){
 		return airplaneManager;
 	}
 	
 	public IDisplayManager getDisplayManager(){
 		return this.displayManager;
+	}
+	
+	public IReservationFactory getReservationFactory(){
+		return this.reservationFactory;
+	}
+	
+	public IServer getDatabase(){
+		return this.database;
 	}
 }

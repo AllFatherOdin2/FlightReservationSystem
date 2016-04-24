@@ -18,6 +18,8 @@ public class FlightPlan implements IFlightPlan
 	private String totalFlightTime;
 	private String arrivalTime;
 	private String departureTime;
+	private boolean canReserveCoach = true;
+	private boolean canReserveFirstClass = true;
 	
 	public FlightPlan(List<IFlight> connectingFlights, int flightPlanNumber){
 		this.connectingFlights = connectingFlights;
@@ -31,6 +33,18 @@ public class FlightPlan implements IFlightPlan
 	
 	public String getName(){
 		return this.flightPlanNumber + "";
+	}
+	
+	public List<IFlight> getFlights(){
+		return this.connectingFlights;
+	}
+	
+	public boolean canReserveCoach(){
+		return this.canReserveCoach;
+	}
+	
+	public boolean canReserveFirstClass(){
+		return this.canReserveFirstClass;
 	}
 	
 	@Override
@@ -67,6 +81,9 @@ public class FlightPlan implements IFlightPlan
 					this.mPriceFirstclass = this.mPriceFirstclass + Double.parseDouble(flight.getmPriceFirstclass().replace("$", ""));
 					this.mPriceCoach = this.mPriceCoach + Double.parseDouble(flight.getmPriceCoach().replace("$", ""));
 					this.arrivalTime = flight.getmTimeArrival();
+					
+					this.canReserveCoach = this.canReserveCoach && flight.canReserveCoach();
+					this.canReserveFirstClass = this.canReserveFirstClass && flight.canReserveFirstClass();
 				}
 				
 				

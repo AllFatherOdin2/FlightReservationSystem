@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.junit.After;
+import org.junit.*;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Rule;
@@ -192,29 +192,29 @@ public class junitTesting {
 	
 	@Test
 	public void testGetsAirplanes() throws FlightNotFoundException, AirportNotFoundException {
-		AirplaneManager airplaneManager = serviceLocator.getAirplaneManager();
+		IAirplaneManager airplaneManager = serviceLocator.getAirplaneManager();
 
 		assertTrue(airplaneManager.getAirplanes().size() > 0);
 	}
 	
 	@Test
 	public void testGetSpecificPlane() throws AirplaneNotFoundException{
-		AirplaneManager airplaneManager = serviceLocator.getAirplaneManager();
+		IAirplaneManager airplaneManager = serviceLocator.getAirplaneManager();
 		
-		Airplane airplane = airplaneManager.getSpecificAirplane("Airbus", "A310");
+		IAirplane airplane = airplaneManager.getAirplane("A310");
 
 		assertEquals(airplane.getmManufacturer(), "Airbus");
-		assertEquals(airplane.getmModel(), "A310");
+		assertEquals(airplane.getModel(), "A310");
 		assertEquals(airplane.getmFirstClassSeats(), 24);
 		assertEquals(airplane.getmCoachSeats(), 200);
 	}
 	
 	@Test
-	public void testGetSpecificPlaneFails() throws AirplaneNotFoundException{
-		thrown.expect(AirplaneNotFoundException.class);
-		AirplaneManager airplaneManager = serviceLocator.getAirplaneManager();
+	public void testGetSpecificPlaneFails(){
+		IAirplaneManager airplaneManager = serviceLocator.getAirplaneManager();
 		
-		airplaneManager.getSpecificAirplane("HelloWorldBus", "XXXX");
+		IAirplane airplane = airplaneManager.getAirplane("XXXX");
+		assertNull(airplane);
 	}
 	
 	
@@ -235,9 +235,8 @@ public class junitTesting {
 		Flight flight = (Flight) flightManager.getSpecificFlight("2809");
 		int coachBefore = flight.getmSeatsCoach();
 		int firstClassBefore = flight.getmSeatsFirstclass();
-		
-		assertTrue(server.buyTickets("2809", true)); 
-		
+			
+		flight.reserveCoach(server); 		
 		
 		flightManager.removeAllFlights();
 		flightManager.addAll(departAirport,departDate, true);
@@ -250,16 +249,46 @@ public class junitTesting {
 	}
 	
 	@Test
-	public void testReserveCoachSeatFail() throws FlightNotFoundException {		
+	public void testReserveFirstClassSeat() throws FlightNotFoundException {
+		//Get input from "users" regarding departure airport and date
+		String departAirport = "BOS";
+		String departDate = "2016_05_10";
+		
 		//This test would fail if someone reserved a flight between us getting and reserving
-		server.lock();
-		boolean test = server.buyTickets("0000", true);
+		assertTrue(server.lock());
+		
+		//Create flightManager using xmlstring from query factory using user inputs
+		FlightManager flightManager = (FlightManager)serviceLocator.getFlightManager();
+		
+		flightManager.addAll(departAirport,departDate, true);
+
+		Flight flight = (Flight) flightManager.getSpecificFlight("2809");
+		int coachBefore = flight.getmSeatsCoach();
+		int firstClassBefore = flight.getmSeatsFirstclass();
+			
+		flight.reserveFirstClass(server); 		
+		
+		flightManager.removeAllFlights();
+		flightManager.addAll(departAirport,departDate, true);
+		flight = (Flight) flightManager.getSpecificFlight("2809");
+		//get updated info
+		assertTrue(server.unlock());
+
+		assertEquals(coachBefore, flight.getmSeatsCoach());
+		assertEquals(firstClassBefore + 1, flight.getmSeatsFirstclass());
+	}
 	
-		assertFalse(test); 
+	//@Test
+	//public void testReserveCoachSeatFail() throws FlightNotFoundException {		
+		//This test would fail if someone reserved a flight between us getting and reserving
+	//	server.lock();
+	//	boolean test = server.buyTickets("0000", true);
+	
+	//	assertFalse(test); 
 		
 		//get updated info
-		server.unlock();
-	}
+	//	server.unlock();
+	//}
 	
 	@Test
 	public void testGetLocalTime(){

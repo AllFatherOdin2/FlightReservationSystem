@@ -8,15 +8,15 @@ public class ScannerDisplayManager implements IDisplayManager
 {
 	private IDisplay display;
 	
-	private ITripManagerFactory factory;
+	private IServiceLocator services;
 	
 	private IDisplayState displayState;
 	
-	public ScannerDisplayManager(ITripManagerFactory factory)
+	public ScannerDisplayManager(IServiceLocator services)
 	{
 		this.display = new ScannerDisplay();
-		this.factory = factory;
-		this.displayState = new ScannerWelcomeState(this.display, this.factory, null);
+		this.services = services;
+		this.displayState = new ScannerWelcomeState(this.display, this.services, null);
 	}
 	
 	public void Display(){

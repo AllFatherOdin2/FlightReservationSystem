@@ -3,11 +3,13 @@
  */
 package CS509.client.airplane;
 
+import CS509.client.Interfaces.*;
+
 /**
  * @author David
  *
  */
-public class Airplane {
+public class Airplane implements IAirplane {
 	private String mManufacturer;
 	private String mModel;
 	private int	mFirstClassSeats;
@@ -55,7 +57,7 @@ public class Airplane {
 	/**
 	 * @return the mModel
 	 */
-	public String getmModel() {
+	public String getModel() {
 		return mModel;
 	}
 

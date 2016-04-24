@@ -17,15 +17,13 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
-import CS509.client.Interfaces.IServer;
-import CS509.client.dao.Server;
-import CS509.client.servicelocator.ServiceLocator;
+import CS509.client.Interfaces.*;
 
 /**
  * @author David
  *
  */
-public class AirplaneManager {
+public class AirplaneManager implements IAirplaneManager {
 	HashMap<String,Airplane> airplanes;
 	
 	/**
@@ -51,7 +49,7 @@ public class AirplaneManager {
 			Airplane plane = buildPlane (elementPlane);
 			
 			if (plane.isValid()) {
-				airplanes.put(plane.getmModel(), plane);
+				airplanes.put(plane.getModel(), plane);
 				collectionUpdated = true;
 			}
 		}
@@ -127,13 +125,13 @@ public class AirplaneManager {
 	}
 	
 
-	public Airplane getSpecificAirplane(String Manufactor, String model) throws AirplaneNotFoundException{
-		//TODO: not sure how just one string is strong enough reference
+	public IAirplane getAirplane(String model) {
+		//TODO: not sure how just one string is strong enough reference -> not sure if keeping throws AirplaneNotFoundException
 		Airplane airplane = airplanes.get(model);
 		
-		if(airplane == null){
-			throw new AirplaneNotFoundException();
-		}
+		//if(airplane == null){
+		//	throw new AirplaneNotFoundException();
+		//}
 		
 		return airplane;		
 	}

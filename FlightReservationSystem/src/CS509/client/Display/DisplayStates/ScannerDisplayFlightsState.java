@@ -15,12 +15,12 @@ public class ScannerDisplayFlightsState extends ScannerBaseState {
 
 	private ITrip trip;
 	
-	private final String flightMenu = "Please select an option:\n1. Reserve a Flight\n2. Sort by Coach price \n3. Sort by First Class Price\n4. Sort by duration\n5. Sort by arrival time\n6. Sort by departure time";
+	private final String flightMenu = "Please select an option:\n1. Reserve a Flight Plan\n2. Sort by Coach price \n3. Sort by First Class Price\n4. Sort by duration\n5. Sort by arrival time\n6. Sort by departure time";
 	
 	private HashMap<String, IFlightPlan> flightMap;
 	
-	public ScannerDisplayFlightsState(IDisplay display, ITripManagerFactory factory, ITripManager tripManager, ITrip trip) {
-		super(display, factory, tripManager);
+	public ScannerDisplayFlightsState(IDisplay display, IServiceLocator services, ITripManager tripManager, ITrip trip) {
+		super(display, services, tripManager);
 		this.trip = trip;
 		this.flightMap = trip.getFlightPlans();
 	}
@@ -36,14 +36,14 @@ public class ScannerDisplayFlightsState extends ScannerBaseState {
 				if(flights.isEmpty()){
 					this.display.DisplayMessage("There are no flights for this day; continuing onto other legs of your trip");
 					this.trip.setReserved(true);
-					return new ScannerDisplayTripsState(this.display,this.factory,this.tripManager);
+					return new ScannerDisplayTripsState(this.display,this.services,this.tripManager);
 				}
 				
 				this.display.printFlights(flights);
 				String menuSelection = this.display.GetUserInput(this.flightMenu);
 				
 				if(this.CheckExit(menuSelection)){
-					return new ScannerExitState(this.display);
+					return new ScannerExitState(this.display, this.services, null);
 				}
 				
 				int selection = Integer.parseInt(menuSelection);
@@ -53,9 +53,9 @@ public class ScannerDisplayFlightsState extends ScannerBaseState {
 				switch(selection){
 				
 					case 1:
-						String flightNumber = this.display.GetUserInput("Enter number of the flight you want to reserve: ");
+						String flightNumber = this.display.GetUserInput("Enter number of the flight plan you want to reserve: ");
 						IFlightPlan flight = this.flightMap.get(flightNumber);
-						return new ScannerConfirmReservationState(this.display, this.factory, this.tripManager, this.trip, flight);
+						return new ScannerCreateReservationState(this.display, this.services, this.tripManager, this.trip, flight);
 					case 2:
 						this.SortByCoachPrice(flights);
 						sortSelection ="\nSorted by coach price\n";
@@ -85,7 +85,7 @@ public class ScannerDisplayFlightsState extends ScannerBaseState {
 			}	
 		}catch(Exception e){
 			this.display.DisplayMessage(this.errorMessage);
-			return new ScannerDisplayFlightsState(this.display, this.factory, this.tripManager, this.trip);
+			return new ScannerDisplayFlightsState(this.display, this.services, this.tripManager, this.trip);
 		}
 	}
 

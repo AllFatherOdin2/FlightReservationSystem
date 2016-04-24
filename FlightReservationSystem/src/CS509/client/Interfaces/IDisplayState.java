@@ -9,6 +9,7 @@ public interface IDisplayState {
 		DisplayTrip,
 		DisplayFlights,
 		ConfirmReservation,
+		CreateReservation,
 		ReserveFlight,
 		PlanAnotherTrip,
 		Exit

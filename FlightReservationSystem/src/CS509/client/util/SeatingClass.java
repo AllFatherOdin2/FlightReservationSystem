@@ -13,7 +13,8 @@ import java.util.Map;
 public enum SeatingClass {
 	COACH(1),
 	FIRSTCLASS(2),
-	NOOPINION(3);
+	CoachPriority(3),
+	FirstClassPriority(4);
 	
 	private int seatingNum;
 	private static Map<Integer,SeatingClass> map = new HashMap<Integer,SeatingClass>();

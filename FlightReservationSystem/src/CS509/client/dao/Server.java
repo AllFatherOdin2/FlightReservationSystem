@@ -319,20 +319,11 @@ public class Server implements IServer {
 	 * @return true if SUCCESS code returned from server
 	 */
 	@Override
-	public boolean buyTickets(String flightNumber, boolean isCoach){
-		String xmlReservation;
-		if(isCoach){
-			xmlReservation = "<Flights>"
-					+ "<Flight number=\"" + flightNumber + "\" seating=\"Coach\"/>"
-					+ "</Flights>";
-		} else{
-			xmlReservation = "<Flights>"
-					+ "<Flight number=\"" + flightNumber + "\" seating=\"FirstClass\"/>"
-					+ "</Flights>";
-		}
-		
-		
-		return buyTickets(team, xmlReservation);
+	public boolean buyTickets(String reservation){
+		this.lock();
+		boolean success = buyTickets(team, reservation);
+		this.unlock();
+		return success;
 	}
 	
 	/**
