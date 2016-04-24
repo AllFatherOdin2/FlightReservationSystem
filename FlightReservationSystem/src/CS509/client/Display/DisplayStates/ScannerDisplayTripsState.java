@@ -4,19 +4,19 @@ import CS509.client.Interfaces.*;
 
 public class ScannerDisplayTripsState extends ScannerBaseState {
 
-	public ScannerDisplayTripsState(IDisplay display, ITripManagerFactory factory, ITripManager tripManager) {
-		super(display, factory, tripManager);
+	public ScannerDisplayTripsState(IDisplay display, IServiceLocator services, ITripManager tripManager) {
+		super(display, services, tripManager);
 	}
 	
 	@Override
 	public IDisplayState Process() {
 		for(ITrip trip : this.tripManager.getTrips()){
 			if(!trip.getReserved()){
-				return new ScannerDisplayFlightsState(this.display, this.factory, this.tripManager, trip);
+				return new ScannerDisplayFlightsState(this.display, this.services, this.tripManager, trip);
 			}
 		}
 		
-		return new ScannerPlanAnotherTripState(this.display, this.factory, this.tripManager);
+		return new ScannerPlanAnotherTripState(this.display, this.services, this.tripManager);
 	}
 	
 	public DisplayState getCurrentState(){

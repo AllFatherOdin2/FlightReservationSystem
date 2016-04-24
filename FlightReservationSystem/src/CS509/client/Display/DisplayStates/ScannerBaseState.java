@@ -7,13 +7,15 @@ public abstract class ScannerBaseState implements IDisplayState {
 	protected IDisplay display;
 	protected ITripManagerFactory factory;
 	protected ITripManager tripManager;
+	protected IServiceLocator services;
 	
 	protected final String errorMessage = "Unable to process selection; please try again\n";
 	private final String exitProgram = "q";
 	
-	public ScannerBaseState(IDisplay display, ITripManagerFactory factory, ITripManager tripManager){
+	public ScannerBaseState(IDisplay display, IServiceLocator services, ITripManager tripManager){
 		this.display = display;
-		this.factory = factory;
+		this.services = services;
+		this.factory = services.getTripManager();
 		this.tripManager = tripManager;
 	}
 	

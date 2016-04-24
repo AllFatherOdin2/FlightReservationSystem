@@ -1,7 +1,5 @@
 package CS509.client.Interfaces;
 
-import CS509.client.airplane.AirplaneManager;
-
 public interface IServiceLocator 
 {
 	public IAirportManager getAirportManager();
@@ -10,7 +8,11 @@ public interface IServiceLocator
 	
 	public ITripManagerFactory getTripManager();
 
-	public AirplaneManager getAirplaneManager();
+	public IAirplaneManager getAirplaneManager();
 	
 	public IDisplayManager getDisplayManager();
+	
+	public IReservationFactory getReservationFactory();
+	
+	public IServer getDatabase();
 }

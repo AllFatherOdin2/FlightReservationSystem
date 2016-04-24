@@ -3,13 +3,9 @@ package CS509.client.Display.DisplayStates;
 import CS509.client.Interfaces.*;
 
 public class ScannerExitState extends ScannerBaseState {
-
-	public ScannerExitState(IDisplay display){
-		super(display, null, null);
-	}
 	
-	public ScannerExitState(IDisplay display, ITripManagerFactory factory, ITripManager tripManager) {
-		super(display, factory, tripManager);
+	public ScannerExitState(IDisplay display, IServiceLocator services, ITripManager tripManager) {
+		super(display, services, tripManager);
 		// TODO Auto-generated constructor stub
 	}
 

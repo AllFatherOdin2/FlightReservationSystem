@@ -48,14 +48,16 @@ public class FlightManager implements IFlightManager{
 	private HashMap<String,IFlight> flightMap;
 	private IServer database;
 	private IAirportManager airportManager;
+	private IAirplaneManager airplaneManager;
 	private final int LAYOVER_MIN = 1;
 	private final int LAYOVER_MAX = 5;
 	private int currentFlightPlanNumber = 1;
 	
-	public FlightManager(IServer database, IAirportManager airportManager) {
+	public FlightManager(IServer database, IAirportManager airportManager, IAirplaneManager airplaneManager) {
 		this.flightMap = new HashMap<String,IFlight>();
 		this.database = database;
 		this.airportManager = airportManager;
+		this.airplaneManager = airplaneManager;
 	}
 	
 	@Override
@@ -195,15 +197,17 @@ public class FlightManager implements IFlightManager{
 		seatsCoach = Integer.parseInt(getCharacterDataFromElement(elementCoach));
 		IAirport dAirport = null;
 		IAirport arAirport = null;
+		IAirplane plane = null;
 		try
 		{	
 			dAirport = this.airportManager.getAirport(codeDepart);
 			arAirport = this.airportManager.getAirport(codeArrival);
+			plane = this.airplaneManager.getAirplane(airplane);
 		}catch(Exception e){
 			
 		}
 		
-		flight = new Flight (airplane, flightTime, number, dAirport, timeDepart, 
+		flight = new Flight (plane, flightTime, number, dAirport, timeDepart, 
 				arAirport, timeArrival, priceFirstclass, seatsFirstclass, priceCoach, seatsCoach);
 
 		return flight;
@@ -312,7 +316,7 @@ public class FlightManager implements IFlightManager{
 		int currentLayover = 0;
 		
 		HashMap<String, IFlightPlan> flightPlans = new HashMap<String, IFlightPlan>();
-		FlightBuilder builder = new FlightBuilder(this.database, this.airportManager, aCode, date);
+		FlightBuilder builder = new FlightBuilder(this.database, this.airportManager, this.airplaneManager, aCode, date);
 		
 		List<IFlight> directFlights = builder.goesToDestination(dCode);
 		

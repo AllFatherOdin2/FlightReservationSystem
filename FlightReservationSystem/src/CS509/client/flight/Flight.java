@@ -24,7 +24,7 @@ public class Flight implements IFlight {
 	/**
 	 * Member attributes describing a flight
 	 */
-	private String mAirplane;
+	private IAirplane mAirplane;
 	private String mFlightTime;
 	private String mNumber;
 	private IAirport dAirport;
@@ -55,7 +55,7 @@ public class Flight implements IFlight {
 	*/
 	
 	public Flight (
-			String airplane,
+			IAirplane airplane,
 			String flightTime,
 			String number,
 			IAirport dAirport,
@@ -82,7 +82,7 @@ public class Flight implements IFlight {
 
 	public boolean isValid() {
 		try {
-			if ((mAirplane == null) || (mAirplane.length() == 0)) {
+			if ((mAirplane == null) || (mAirplane.getModel().length() == 0)) {
 				return false;
 			}
 			if (Integer.parseInt(mFlightTime) <= 0) {
@@ -138,7 +138,7 @@ public class Flight implements IFlight {
 	 * @return the mAirplane
 	 */
 	public String getmAirplane() {
-		return mAirplane;
+		return this.mAirplane.getModel();
 	}
 
 	/**
@@ -211,6 +211,32 @@ public class Flight implements IFlight {
 	public int getmSeatsCoach() {
 		return mSeatsCoach;
 	}	
+	
+	public boolean canReserveCoach(){
+		return this.mSeatsCoach < this.mAirplane.getmCoachSeats();
+	}
+	
+	public boolean canReserveFirstClass(){
+		return this.mSeatsFirstclass < this.mAirplane.getmFirstClassSeats();
+	}
+	
+	public void reserveCoach(IServer database){
+		String xmlReservation = "<Flights>"
+				+ "<Flight number=\"" + this.mNumber + "\" seating=\"Coach\"/>"
+				+ "</Flights>";
+		if(database.buyTickets(xmlReservation)){
+			this.mSeatsCoach++;
+		}
+	}
+	
+	public void reserveFirstClass(IServer database){
+		String xmlReservation = "<Flights>"
+				+ "<Flight number=\"" + this.mNumber + "\" seating=\"FirstClass\"/>"
+				+ "</Flights>";
+		if(database.buyTickets(xmlReservation)){
+			this.mSeatsFirstclass++;
+		}
+	}
 	
 	@Override
 	public String toString(){

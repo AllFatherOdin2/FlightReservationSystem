@@ -14,4 +14,9 @@ public interface IFlight
 	public String getmPriceCoach();
 	public int getmSeatsCoach();
 	
+	public boolean canReserveCoach();
+	public boolean canReserveFirstClass();
+	
+	public void reserveCoach(IServer database);
+	public void reserveFirstClass(IServer database);
 }

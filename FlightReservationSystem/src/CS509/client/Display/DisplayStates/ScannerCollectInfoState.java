@@ -6,9 +6,9 @@ public class ScannerCollectInfoState extends ScannerBaseState
 {
 	private final String startMenu = "\nWhat type of trip do you want to plan? (Enter corresponding number) \n1. OneWay\n2. RoundTrip";
 
-	public ScannerCollectInfoState(IDisplay display, ITripManagerFactory factory, ITripManager tripManager)
+	public ScannerCollectInfoState(IDisplay display, IServiceLocator services, ITripManager tripManager)
 	{
-		super(display, factory, tripManager);
+		super(display, services, tripManager);
 	}
 	
 	@Override
@@ -19,7 +19,7 @@ public class ScannerCollectInfoState extends ScannerBaseState
 			String tripType = this.display.GetUserInput(this.startMenu);
 			
 			if(this.CheckExit(tripType)){
-				return new ScannerExitState(this.display);
+				return new ScannerExitState(this.display, this.services, null);
 			}
 				
 			int trip = Integer.parseInt(tripType);
@@ -33,12 +33,12 @@ public class ScannerCollectInfoState extends ScannerBaseState
 				this.tripManager.PlanTrip();
 			}			
 			
-			return new ScannerDisplayTripsState(this.display, this.factory, this.tripManager);
+			return new ScannerDisplayTripsState(this.display, this.services, this.tripManager);
 		}
 		catch(Exception e)
 		{			
 			this.display.DisplayMessage(this.errorMessage);	
-			return new ScannerCollectInfoState(this.display, this.factory, this.tripManager);
+			return new ScannerCollectInfoState(this.display, this.services, this.tripManager);
 		}
 	}	
 	

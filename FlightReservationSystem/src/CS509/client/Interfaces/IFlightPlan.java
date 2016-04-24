@@ -1,5 +1,7 @@
 package CS509.client.Interfaces;
 
+import java.util.List;
+
 public interface IFlightPlan 
 {
 	String getName();
@@ -13,4 +15,10 @@ public interface IFlightPlan
 	double getTotalFirstClass();
 	
 	String getTotalTime();
+	
+	List<IFlight> getFlights();
+	
+	boolean canReserveCoach();
+	
+	boolean canReserveFirstClass();
 }

@@ -12,7 +12,7 @@ public interface IServer
 	
 	boolean lock();
 
-	boolean buyTickets(String team, boolean isCoach);
+	boolean buyTickets(String reservation);
 
 	String getFlightsArriving(String airportCode, String day);
 }
