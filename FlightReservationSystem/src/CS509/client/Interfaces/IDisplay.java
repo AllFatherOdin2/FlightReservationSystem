@@ -8,5 +8,7 @@ public interface IDisplay
 	
 	public void DisplayMessage(String message);
 	
-	public void printFlights(List<IFlight> currentFlights);
+	public void printFlights(List<IFlightPlan> currentFlights);
+	
+	public void refreshDisplay();
 }

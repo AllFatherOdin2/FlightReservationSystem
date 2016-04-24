@@ -10,7 +10,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import CS509.client.Interfaces.IAirport;
+import CS509.client.Interfaces.*;
 import CS509.client.Interfaces.IAirportManager;
 import CS509.client.Interfaces.IFlight;
 import CS509.client.Interfaces.IFlightManager;
@@ -28,6 +28,7 @@ import CS509.client.flight.FlightNotFoundException;
 import CS509.client.servicelocator.ServiceLocator;
 import CS509.client.trip.FlightSort;
 import CS509.client.util.LocalTime;
+import CS509.client.util.LocalTimeFactory;
 
 
 public class junitTesting {
@@ -262,8 +263,9 @@ public class junitTesting {
 	
 	@Test
 	public void testGetLocalTime(){
-		LocalTime time = new LocalTime();
-		assertEquals("GMT-10", time.getTimeZone("HNL"));
+		LocalTimeFactory timeFactory = new LocalTimeFactory();
+		ILocalTime time = timeFactory.getLocalTime("HNL");
+		assertEquals("GMT-10", time.getOffset());
 	}
 	@Test
 	public void testSortByPrice() throws AirportNotFoundException {
@@ -293,6 +295,7 @@ public class junitTesting {
 		String arriveAirport = "ATL";
 		String departDate = "2016_05_10";
 		
+<<<<<<< HEAD
 		//Create flightManager using xmlstring from query factory using user inputs
 		IFlightManager flightManager = serviceLocator.getFlightManager();
 		flightManager.addAll(departAirport, departDate, true);
@@ -343,4 +346,24 @@ public class junitTesting {
 		assertEquals(firstClassBefore + 1, flight.getmSeatsFirstclass());
 	}
 	*/
+=======
+		HashMap<String, IFlightPlan> connectingFlights = flightManager.getConnectingFlights(arriveAirport, departDate);
+	
+		System.out.println(connectingFlights.size());
+	}
+	
+	@Test
+	public void testGetFlightPlans(){
+		//Get input from "users" regarding departure airport and date
+		String departAirport = "BOS";
+		String arriveAirport = "ATL";
+		String departDate = "2016_05_10";
+		
+		//Create flightManager using xmlstring from query factory using user inputs
+		IFlightManager flightManager = serviceLocator.getFlightManager();
+		HashMap<String, IFlightPlan> flightPlans = flightManager.getFlightPlans(departAirport, arriveAirport, departDate, 2);
+		
+		assertTrue(flightPlans.size() > 0);
+	}
+>>>>>>> origin/master
 }

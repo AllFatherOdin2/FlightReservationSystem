@@ -1,10 +1,7 @@
 package CS509.client.Display;
 
-import java.util.List;
-import java.util.Scanner;
-
-import CS509.client.Interfaces.IDisplay;
-import CS509.client.Interfaces.IFlight;
+import java.util.*;
+import CS509.client.Interfaces.*;
 
 public class ScannerDisplay implements IDisplay
 {
@@ -27,12 +24,21 @@ public class ScannerDisplay implements IDisplay
 		System.out.println(message);
 	}
 	
-	public void printFlights(List<IFlight> currentFlights){
+	public void printFlights(List<IFlightPlan> currentFlights){
 		System.out.println(this.border);
 		
-		for(IFlight flight : currentFlights){
-			System.out.println(flight.toString());
+		for(IFlightPlan flightPlan : currentFlights){
+			System.out.println(flightPlan.toString());
 			System.out.println(this.border);
 		}
+	}
+
+	@Override
+	public void refreshDisplay() {
+		char c = '\n';
+		int length = 25;
+		char[] chars = new char[length];
+		Arrays.fill(chars, c);
+		System.out.print(String.valueOf(chars));
 	}
 }

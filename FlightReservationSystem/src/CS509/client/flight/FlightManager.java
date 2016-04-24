@@ -12,6 +12,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -28,7 +29,7 @@ import org.xml.sax.SAXException;
 import CS509.client.Interfaces.IAirport;
 import CS509.client.Interfaces.IFlight;
 import CS509.client.Interfaces.IFlightManager;
-import CS509.client.Interfaces.IServer;
+import CS509.client.Interfaces.*;
 import CS509.client.util.Converter;
 
 /**
@@ -46,12 +47,15 @@ public class FlightManager implements IFlightManager{
 	private static final long serialVersionUID = 1L;
 	private HashMap<String,IFlight> flightMap;
 	private IServer database;
+	private IAirportManager airportManager;
 	private final int LAYOVER_MIN = 1;
 	private final int LAYOVER_MAX = 5;
+	private int currentFlightPlanNumber = 1;
 	
-	public FlightManager(IServer database) {
+	public FlightManager(IServer database, IAirportManager airportManager) {
 		this.flightMap = new HashMap<String,IFlight>();
 		this.database = database;
+		this.airportManager = airportManager;
 	}
 	
 	@Override
@@ -189,9 +193,18 @@ public class FlightManager implements IFlightManager{
 		
 		priceCoach = elementCoach.getAttributeNode("Price").getValue();
 		seatsCoach = Integer.parseInt(getCharacterDataFromElement(elementCoach));
+		IAirport dAirport = null;
+		IAirport arAirport = null;
+		try
+		{	
+			dAirport = this.airportManager.getAirport(codeDepart);
+			arAirport = this.airportManager.getAirport(codeArrival);
+		}catch(Exception e){
+			
+		}
 		
-		flight = new Flight (airplane, flightTime, number, codeDepart, timeDepart, 
-				codeArrival, timeArrival, priceFirstclass, seatsFirstclass, priceCoach, seatsCoach);
+		flight = new Flight (airplane, flightTime, number, dAirport, timeDepart, 
+				arAirport, timeArrival, priceFirstclass, seatsFirstclass, priceCoach, seatsCoach);
 
 		return flight;
 	}
@@ -293,16 +306,90 @@ public class FlightManager implements IFlightManager{
 	public void removeAllFlights(){
 		flightMap = new HashMap<String,IFlight>();
 	}
+	
+	public HashMap<String, IFlightPlan> getFlightPlans(String dCode, String aCode, String date, int maxLayovers){
+		
+		int currentLayover = 0;
+		
+		HashMap<String, IFlightPlan> flightPlans = new HashMap<String, IFlightPlan>();
+		FlightBuilder builder = new FlightBuilder(this.database, this.airportManager, aCode, date);
+		
+		List<IFlight> directFlights = builder.goesToDestination(dCode);
+		
+		for(IFlight directFlight : directFlights){	
+			List<IFlight> flights = new ArrayList<IFlight>();
+			flights.add(directFlight);
+			FlightPlan flightPlan = new FlightPlan(flights, this.currentFlightPlanNumber++);
+			flightPlans.put(flightPlan.getName(), flightPlan);
+		}
+		
+		if(maxLayovers != 0){
+			HashMap<String, IFlight> flights = builder.getDepartures(dCode);
+			for(IFlight flight : flights.values())
+			{
+				if(!flight.getmCodeArrival().equals(aCode))
+				{
+					List<IFlight> fpFlights = new ArrayList();
+					fpFlights.add(flight);
+					this.getConnectedFlights(flightPlans, fpFlights, builder, aCode, maxLayovers, currentLayover);
+				}
+			}
+		}
+		
+		return flightPlans;		
+	}
+	
+	private void getConnectedFlights(HashMap<String, IFlightPlan> plans, List<IFlight> connectingFlights, FlightBuilder builder, String aCode, int maxLayovers, int currentLayover)
+	{
+		if( currentLayover < maxLayovers){
+			IFlight flight = connectingFlights.get(currentLayover);
+			
+			List<IFlight> connectedFlights = builder.goesToDestination(flight.getmCodeArrival());
+			if(connectedFlights != null){
+				for(IFlight connectedFlight : connectedFlights){
+					try 
+					{
+						if(this.layoverValid(flight.getmTimeArrival(), connectedFlight.getmTimeDepart())){
+							List<IFlight> fpFlights = new ArrayList(connectingFlights);
+							fpFlights.add(connectedFlight);
+							
+							FlightPlan plan = new FlightPlan(fpFlights, this.currentFlightPlanNumber++);
+							plans.put(plan.getName(), plan);
+						}
+					} catch (ParseException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+			
+			HashMap<String, IFlight> nextFlights = builder.getDepartures(flight.getmCodeArrival());
+			
+			for(IFlight nextFlight : nextFlights.values()){
+				try 
+				{
+					if(this.layoverValid(flight.getmTimeArrival(), nextFlight.getmTimeDepart()) && !nextFlight.getmCodeArrival().equals(aCode)){
+
+						List<IFlight> fpFlights = new ArrayList(connectingFlights);
+						fpFlights.add(nextFlight);
+						this.getConnectedFlights(plans, fpFlights, builder, aCode, maxLayovers, currentLayover + 1);
+					}
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 
 	@Override
-	public List<List<IFlight>> getConnectingFlights(String arrivalCode, String day) throws FlightNotFoundException{
+	public HashMap<String, IFlightPlan> getConnectingFlights(String arrivalCode, String day) throws FlightNotFoundException{
 		String xmlFlights = database.getFlightsArriving(arrivalCode, day);
 		
-		System.out.println(xmlFlights);
-		
 		HashMap<String,IFlight> arrivalFlights = new HashMap<String,IFlight>();
-		List<List<IFlight>> returnList = new ArrayList<List<IFlight>>();
-		System.out.println(addAll(xmlFlights, arrivalFlights));
+		HashMap<String, IFlightPlan> returnList = new HashMap<String, IFlightPlan>();
+		int flightPlanNumber = 1;
+		addAll(xmlFlights, arrivalFlights);
 		
 		if(arrivalFlights.size() == 0){
 			throw new FlightNotFoundException("No arrival flights were found/put into the map");
@@ -314,10 +401,12 @@ public class FlightManager implements IFlightManager{
 			if(f.getmCodeArrival().compareTo(arrivalCode) == 0){
 				ArrayList<IFlight> directFlight = new ArrayList<IFlight>();
 				directFlight.add(f);
-				returnList.add(directFlight);
+				ArrayList<IFlight> flight = new ArrayList<IFlight>(directFlight);
+				IFlightPlan flightPlan = new FlightPlan(flight, flightPlanNumber++);
+				returnList.put(flightPlan.getName(), flightPlan);
 			}
 		}
-		//SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss a" );
+
 		//Case: 1 connection
 		ArrayList<IFlight> arrivalList = Converter.convertMapToArray(arrivalFlights);
 		for(IFlight departFlight : departureList){
@@ -328,13 +417,13 @@ public class FlightManager implements IFlightManager{
 							ArrayList<IFlight> oneConnectionFlight = new ArrayList<IFlight>();
 							oneConnectionFlight.add(departFlight);
 							oneConnectionFlight.add(arriveFlight);
-							returnList.add(oneConnectionFlight);
+							IFlightPlan flightPlan = new FlightPlan(oneConnectionFlight, flightPlanNumber++);
+							returnList.put(flightPlan.getName(), flightPlan);
 						}
 					} catch (ParseException e) {
 						//Should only ever happen if there is an error in the database
 						e.printStackTrace();
 					}
-					
 				}
 			}
 		}
@@ -355,7 +444,8 @@ public class FlightManager implements IFlightManager{
 								twoConnectionFlight.add(departFlight);
 								twoConnectionFlight.add(firstStopFlight);
 								twoConnectionFlight.add(arriveFlight);
-								returnList.add(twoConnectionFlight);
+								IFlightPlan flightPlan = new FlightPlan(twoConnectionFlight, flightPlanNumber++);
+								returnList.put(flightPlan.getName(), flightPlan);
 							}
 						} catch (ParseException e) {
 							//Should only ever happen if there is an error in the database
@@ -370,8 +460,8 @@ public class FlightManager implements IFlightManager{
 		return returnList;
 	}
 
-	private boolean layoverValid(String getmTimeArrival, String getmTimeDepart) throws ParseException {
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-dd-MM hh:mm a" );
+	private boolean layoverValid(String getmTimeArrival, String getmTimeDepart) throws ParseException {	
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy MMM dd hh:mm zzzz");
 		Date layoverStart = formatter.parse(getmTimeArrival);
 		Date layoverEnd = formatter.parse(getmTimeDepart);
 		

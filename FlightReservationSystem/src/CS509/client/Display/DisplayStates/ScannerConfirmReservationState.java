@@ -7,24 +7,24 @@ public class ScannerConfirmReservationState extends ScannerBaseState {
 	private final String confirmReservation = "Are you sure you want to reserve Flight ";
 	private final String menu = "1. Yes\n2. No";
 	private ITrip trip;
-	private IFlight flight;
+	private IFlightPlan flightPlan;
 	
-	public ScannerConfirmReservationState(IDisplay display, ITripManagerFactory factory, ITripManager tripManager, ITrip trip, IFlight flight) {
+	public ScannerConfirmReservationState(IDisplay display, ITripManagerFactory factory, ITripManager tripManager, ITrip trip, IFlightPlan flight) {
 		super(display, factory, tripManager);
 		this.trip = trip;
-		this.flight = flight;
+		this.flightPlan = flight;
 	}
 
 	@Override
 	public IDisplayState Process() {
 		
 		try{
-			if(this.flight == null){
+			if(this.flightPlan == null){
 				this.display.DisplayMessage(this.errorMessage);
 				return new ScannerDisplayFlightsState(this.display,this.factory,this.tripManager, this.trip);
 			}
 			
-			this.display.DisplayMessage(this.confirmReservation + this.flight.getmNumber());
+			this.display.DisplayMessage(this.confirmReservation + this.flightPlan.getName());
 			
 			String menuSelection = this.display.GetUserInput(this.menu);
 			
@@ -37,7 +37,7 @@ public class ScannerConfirmReservationState extends ScannerBaseState {
 			switch(selection){
 				case 1: //Yes case
 					this.display.DisplayMessage("Reserving flight");
-					return new ScannerReserveFlightState(this.display,this.factory,this.tripManager,this.trip,this.flight);
+					return new ScannerReserveFlightState(this.display,this.factory,this.tripManager,this.trip, this.flightPlan);
 				case 2: //No case
 					this.display.DisplayMessage("Returning to display screen");
 					return new ScannerDisplayFlightsState(this.display, this.factory, this.tripManager, this.trip);

@@ -3,6 +3,7 @@ package CS509.client.trip;
 import java.util.HashMap;
 import CS509.client.Interfaces.*;
 import CS509.client.airport.AirportNotFoundException;
+import CS509.client.flight.FlightNotFoundException;
 
 public class Trip implements ITrip
 {
@@ -12,7 +13,7 @@ public class Trip implements ITrip
 
 	protected String depatureDate;
 
-	protected HashMap<String, IFlight> flights;
+	protected HashMap<String, IFlightPlan> flightPlans;
 	
 	private boolean isReserved;
 	
@@ -39,24 +40,15 @@ public class Trip implements ITrip
 	}	
 
 	@Override
-	public HashMap<String, IFlight> getFlights() {
+	public HashMap<String, IFlightPlan> getFlightPlans() {
 		// TODO Auto-generated method stub
-		return this.flights;
-	}	
+		return this.flightPlans;
+	}
 	
 	@Override
 	public void Plan(IAirportManager airportManager, IFlightManager flightManager){	
-		try {
-			IAirport departureAirport = airportManager.getAirport(this.departureAirportCode);
-		
-			IAirport arrivalAirport = airportManager.getAirport(this.arrivalAirportCode);
-			
-			flightManager.addAll(this.arrivalAirportCode, this.depatureDate, false);
-			this.flights = flightManager.getFlights(departureAirport, arrivalAirport, this.depatureDate);
-		} catch (AirportNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
+		this.flightPlans = flightManager.getFlightPlans(departureAirportCode, arrivalAirportCode, depatureDate, 2);	
 	}
 
 	@Override

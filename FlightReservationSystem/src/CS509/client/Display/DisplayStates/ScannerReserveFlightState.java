@@ -5,13 +5,13 @@ import CS509.client.Interfaces.*;
 public class ScannerReserveFlightState extends ScannerBaseState {
 
 	private ITrip trip;
-	private IFlight flight;
+	private IFlightPlan flightPlan;
 	
-	public ScannerReserveFlightState(IDisplay display, ITripManagerFactory factory, ITripManager tripManager, ITrip trip, IFlight flight) {
+	public ScannerReserveFlightState(IDisplay display, ITripManagerFactory factory, ITripManager tripManager, ITrip trip, IFlightPlan flight) {
 		super(display, factory, tripManager);
 		// TODO Auto-generated constructor stub
 		this.trip = trip;
-		this.flight = flight;
+		this.flightPlan = flight;
 	}
 
 	@Override

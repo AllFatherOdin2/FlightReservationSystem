@@ -10,7 +10,7 @@ public interface ITrip
 
 	public String getDepatureDate();
 	
-	public HashMap<String, IFlight> getFlights();
+	public HashMap<String, IFlightPlan> getFlightPlans();
 	
 	public void Plan(IAirportManager airportManager, IFlightManager flightManager);
 	
