@@ -1,5 +1,6 @@
 import static org.junit.Assert.*;
 
+import java.util.List;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -26,7 +27,6 @@ import CS509.client.flight.Flight;
 import CS509.client.flight.FlightManager;
 import CS509.client.flight.FlightNotFoundException;
 import CS509.client.servicelocator.ServiceLocator;
-import CS509.client.trip.FlightSort;
 import CS509.client.util.LocalTime;
 import CS509.client.util.LocalTimeFactory;
 
@@ -296,8 +296,10 @@ public class junitTesting {
 		ILocalTime time = timeFactory.getLocalTime("HNL");
 		assertEquals("GMT-10", time.getOffset());
 	}
+	
 	@Test
-	public void testSortByPrice() throws AirportNotFoundException {
+	public void testGetOneWayWithConnectingFlights() throws AirportNotFoundException, FlightNotFoundException{
+		//Get input from "users" regarding departure airport and date
 		String departAirport = "BOS";
 		String arriveAirport = "ATL";
 		String departDate = "2016_05_10";
@@ -305,24 +307,23 @@ public class junitTesting {
 		//Create flightManager using xmlstring from query factory using user inputs
 		IFlightManager flightManager = serviceLocator.getFlightManager();
 		flightManager.addAll(departAirport, departDate, true);
-			
-		IAirportManager airportManger = serviceLocator.getAirportManager();
-
-		IAirport departureAirport = airportManger.getAirport(departAirport);
-		IAirport arrivalAirport = airportManger.getAirport(arriveAirport);
-				
-		HashMap<String, IFlight> flights = flightManager.getFlights(departureAirport, arrivalAirport, departDate);
-
-		FlightSort sort = new FlightSort(flights);
-		assertTrue(sort.sortByPrice().size()>0);
-		assertEquals(sort.sortByPrice().size(),flights.size());
+		
+		HashMap<String, IFlightPlan> connectingFlights = flightManager.getConnectingFlights(arriveAirport, departDate);
+	
+		System.out.println(connectingFlights.size());
 	}
-
+	
 	@Test
-	public void testSortByFlightTime() throws AirportNotFoundException {
+	public void testGetFlightPlans(){
+		//Get input from "users" regarding departure airport and date
 		String departAirport = "BOS";
 		String arriveAirport = "ATL";
 		String departDate = "2016_05_10";
 		
+		//Create flightManager using xmlstring from query factory using user inputs
+		IFlightManager flightManager = serviceLocator.getFlightManager();
+		HashMap<String, IFlightPlan> flightPlans = flightManager.getFlightPlans(departAirport, arriveAirport, departDate, 2);
+		
+		assertTrue(flightPlans.size() > 0);
 	}
 }
