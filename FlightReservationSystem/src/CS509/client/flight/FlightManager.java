@@ -488,7 +488,7 @@ public class FlightManager implements IFlightManager{
 	 * @throws ParseException If the date format is incorrect, this function will fail
 	 */
 	private boolean checkNextDay(IFlight flight) throws ParseException{
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-dd-MM hh:mm a" );
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy MMM dd hh:mm zzzz" );
 		Date layoverStart = formatter.parse(flight.getmTimeArrival());
 		
 		Calendar timeArrival = Calendar.getInstance();
