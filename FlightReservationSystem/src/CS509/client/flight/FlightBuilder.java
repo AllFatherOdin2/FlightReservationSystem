@@ -274,6 +274,7 @@ public class FlightBuilder
 			} else {
 				toReturn = toReturn + dayArray[i];
 			}
+			
 		}
 		*/
 		
