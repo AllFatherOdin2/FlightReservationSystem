@@ -255,8 +255,9 @@ public class FlightBuilder
 	 * @return String representing day after the current day
 	 */
 	private String getNextDay(String currentDay){
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy MMM dd hh:mm zzzz");
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd");
 		Date currentDate = new Date();
+		
 		try {
 			currentDate = formatter.parse(currentDay);
 		} catch (ParseException e) {
@@ -264,22 +265,7 @@ public class FlightBuilder
 		}
 		currentDate.setTime(currentDate.getTime()+86400000);
 		String nextDate = formatter.format(currentDate);
-		
-		/*
-		String[] dayArray = currentDay.split(" ");
-		int day = Integer.parseInt(dayArray[2]) + 1;
-		
-		String toReturn = "";
-		for(int i = 0; i < dayArray.length; i++){
-			if (i == 2){
-				toReturn = toReturn + day;
-			} else {
-				toReturn = toReturn + dayArray[i];
-			}
-			
-		}
-		*/
-		
+				
 		return nextDate;
 	}
 }
