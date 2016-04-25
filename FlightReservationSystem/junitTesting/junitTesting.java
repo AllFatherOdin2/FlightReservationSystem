@@ -318,7 +318,8 @@ public class junitTesting {
 		//Get input from "users" regarding departure airport and date
 		String departAirport = "BOS";
 		String arriveAirport = "ATL";
-		String departDate = "2016_05_10";
+		//String departDate = "2016_05_10";
+		String departDate = "2016 MAY 10";
 		
 		//Create flightManager using xmlstring from query factory using user inputs
 		IFlightManager flightManager = serviceLocator.getFlightManager();

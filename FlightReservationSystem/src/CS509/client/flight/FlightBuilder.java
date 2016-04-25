@@ -52,7 +52,9 @@ public class FlightBuilder
 	
 	public List<IFlight> goesToDestination(String dCode){
 		if(this.arrivals.size() == 0){
-			this.addArrivals();
+			this.addArrivals(this.date);
+			String currentDate = this.getNextDay(this.date);
+			this.addArrivals(currentDate);
 		}
 		
 		List<IFlight> flights = this.arrivals.get(dCode);
@@ -63,8 +65,8 @@ public class FlightBuilder
 		return flights;
 	}
 	
-	private void addArrivals(){
-		String xmlFlights = database.getFlightsArriving(this.aCode, this.date);
+	private void addArrivals(String currentDate){
+		String xmlFlights = database.getFlightsArriving(this.aCode, currentDate);
 		// Load the XML string into a DOM tree for ease of processing
 		// then iterate over all nodes adding each flight to our collection
 		Document docFlights = buildDomDoc (xmlFlights);
