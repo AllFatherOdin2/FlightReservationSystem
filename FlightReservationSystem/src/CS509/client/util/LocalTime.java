@@ -26,7 +26,6 @@ public class LocalTime implements ILocalTime
     }
     
     //Use timezone and date to get the local time
-<<<<<<< HEAD
     public String TimeConvert (String timezone, String date) {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a" );
         SimpleDateFormat sdfLocal = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a");
@@ -42,23 +41,14 @@ public class LocalTime implements ILocalTime
         } catch (ParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-=======
-    public String getLocalTime (String date) {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy MMM dd hh:mm zzzz" );
-        SimpleDateFormat sdfLocal = new SimpleDateFormat("yyyy MMM dd hh:mm zzzz");
-        TimeZone tzLocal = TimeZone.getTimeZone(this.timeOffset);
-        Date dateLocal = null;
-        String sDateLocal = null;
-        
-        try{
-        	dateLocal = formatter.parse(date);
-        	sdfLocal.setTimeZone(tzLocal);
-            sDateLocal = sdfLocal.format(dateLocal);
-        }catch(Exception e){
-        	e.printStackTrace();
->>>>>>> origin/master
         }
         
         return sDateLocal;
     }
+
+	@Override
+	public String getLocalTime(String date) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
