@@ -15,26 +15,5 @@ public class Converter {
 		return returnList;
 		
 	}
-	
-	/**
-	 * Given a day string, gets the string for the following day
-	 * 
-	 * @param currentDay String representing current day
-	 * @return String representing day after the current day
-	 */
-	public static String getNextDay(String currentDay){
-		String[] dayArray = currentDay.split(" ");
-		int day = Integer.parseInt(dayArray[2]) + 1;
-		String toReturn = "";
-		for(int i = 0; i < dayArray.length; i++){
-			if (i == 2){
-				toReturn = toReturn + day;
-			} else {
-				toReturn = toReturn + dayArray[i];
-			}
-		}
-		
-		return toReturn;
-	}
 
 }

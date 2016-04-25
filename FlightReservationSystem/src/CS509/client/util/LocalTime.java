@@ -46,9 +46,4 @@ public class LocalTime implements ILocalTime
         return sDateLocal;
     }
 
-	@Override
-	public String getLocalTime(String date) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }
