@@ -6,7 +6,6 @@ package CS509.client.util;
 import java.util.TimeZone;
 import java.util.Date;
 import java.text.SimpleDateFormat;
-import java.text.ParseException;
 
 import CS509.client.Interfaces.ILocalTime;
 //import CS509.client.airport.Airport;
@@ -15,7 +14,7 @@ import CS509.client.Interfaces.ILocalTime;
 public class LocalTime implements ILocalTime
 {
 	private String timeOffset;
-	
+
     public LocalTime(String timeOffset)
     {
     	this.timeOffset = timeOffset;
@@ -27,21 +26,19 @@ public class LocalTime implements ILocalTime
     
     //Use timezone and date to get the local time
     public String getLocalTime (String date) {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy MMM dd hh:mm zzzz" );
-        SimpleDateFormat sdfLocal = new SimpleDateFormat("yyyy MMM dd hh:mm zzzz");
-        TimeZone tzLocal = TimeZone.getTimeZone(this.timeOffset);
-        Date dateLocal = null;
-        String sDateLocal = null;
-        
+    	Date TimeTemp = new Date();
+    	String lcTime = new String();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy MMM dd kk:mm zzz" );
+        formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
         try{
-        	dateLocal = formatter.parse(date);
-        	sdfLocal.setTimeZone(tzLocal);
-            sDateLocal = sdfLocal.format(dateLocal);
+        	TimeTemp = formatter.parse(date);
+        	formatter.setTimeZone(TimeZone.getTimeZone(this.timeOffset));
+            
         }catch(Exception e){
         	e.printStackTrace();
         }
-        
-        return sDateLocal;
+        lcTime = formatter.format(TimeTemp);
+        return formatter.format(lcTime);
     }
     
 }
