@@ -320,10 +320,12 @@ public class FlightManager implements IFlightManager{
 		List<IFlight> directFlights = builder.goesToDestination(dCode);
 		
 		for(IFlight directFlight : directFlights){	
-			List<IFlight> flights = new ArrayList<IFlight>();
-			flights.add(directFlight);
-			FlightPlan flightPlan = new FlightPlan(flights, this.currentFlightPlanNumber++);
-			flightPlans.put(flightPlan.getName(), flightPlan);
+			if(this.validDirectFlight(directFlight, date)){
+				List<IFlight> flights = new ArrayList<IFlight>();
+				flights.add(directFlight);
+				FlightPlan flightPlan = new FlightPlan(flights, this.currentFlightPlanNumber++);
+				flightPlans.put(flightPlan.getName(), flightPlan);
+			}
 		}
 		
 		if(maxLayovers != 0){
@@ -334,7 +336,7 @@ public class FlightManager implements IFlightManager{
 				{
 					List<IFlight> fpFlights = new ArrayList();
 					fpFlights.add(flight);
-					this.getConnectedFlights(flightPlans, fpFlights, builder, aCode, maxLayovers, currentLayover);
+					this.getConnectedFlights(flightPlans, fpFlights, builder, dCode, aCode, maxLayovers, currentLayover);
 				}
 			}
 		}
@@ -342,7 +344,7 @@ public class FlightManager implements IFlightManager{
 		return flightPlans;		
 	}
 	
-	private void getConnectedFlights(HashMap<String, IFlightPlan> plans, List<IFlight> connectingFlights, FlightBuilder builder, String aCode, int maxLayovers, int currentLayover)
+	private void getConnectedFlights(HashMap<String, IFlightPlan> plans, List<IFlight> connectingFlights, FlightBuilder builder, String dCode, String aCode, int maxLayovers, int currentLayover)
 	{
 		if( currentLayover < maxLayovers){
 			IFlight flight = connectingFlights.get(currentLayover);
@@ -371,11 +373,11 @@ public class FlightManager implements IFlightManager{
 			for(IFlight nextFlight : nextFlights.values()){
 				try 
 				{
-					if(this.layoverValid(flight.getmTimeArrival(), nextFlight.getmTimeDepart()) && !nextFlight.getmCodeArrival().equals(aCode)){
+					if(this.layoverValid(flight.getmTimeArrival(), nextFlight.getmTimeDepart()) && !nextFlight.getmCodeArrival().equals(aCode) && !nextFlight.getmCodeDepart().equals(dCode)){
 
 						List<IFlight> fpFlights = new ArrayList(connectingFlights);
 						fpFlights.add(nextFlight);
-						this.getConnectedFlights(plans, fpFlights, builder, aCode, maxLayovers, currentLayover + 1);
+						this.getConnectedFlights(plans, fpFlights, builder, dCode, aCode, maxLayovers, currentLayover + 1);
 					}
 				} catch (ParseException e) {
 					// TODO Auto-generated catch block
@@ -471,12 +473,21 @@ public class FlightManager implements IFlightManager{
 		if(layoverStart.after(layoverEnd)){
 			return false;
 		}
+
+		Date layover = new Date();
+		layover.setTime(layoverStart.getTime() + (1000*60*60*LAYOVER_MIN)); //Subtracting one for boundary
 		
-		long layoverDuration = layoverEnd.getTime() - layoverStart.getTime();
-		if(layoverDuration >= (1000*60*60*LAYOVER_MIN) && layoverDuration >= (1000*60*60*LAYOVER_MAX)){
-			return true;
+		if(layover.after(layoverEnd)){ //next departTime needs to be at least a minimum time away from arrival
+			return false;
 		}
-		return false;
+		
+		layover.setTime(layoverStart.getTime() + (1000*60*60*LAYOVER_MAX));
+		
+		if(layover.before(layoverEnd)){//next departTime needs to be at least a maximum time away from arrival
+			return false;
+		}
+		
+		return true;
 	}
 	
 
@@ -499,5 +510,23 @@ public class FlightManager implements IFlightManager{
 		return false;
 	}
 	
-	
+	private boolean validDirectFlight(IFlight flight, String currentDate){
+		
+		boolean success = true;
+		
+		SimpleDateFormat localSdf = new SimpleDateFormat("yyyy MMM dd");
+		SimpleDateFormat gmtSdf = new SimpleDateFormat("yyyy_MM_dd");
+
+		try {
+			Date localDate = localSdf.parse(flight.getmTimeDepart());
+			Date gmtDate = gmtSdf.parse(currentDate);
+			
+			success = localDate.compareTo(gmtDate) == 0;
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+			
+		return success;
+	}
 }

@@ -103,6 +103,7 @@ public class Flight implements IFlight {
 			Date tmpDate = sdf.parse(mTimeDepart);
 			tmpDate = sdf.parse(mTimeArrival);
 			
+			
 			/**
 			 * Need to match:
 			 * $ at start of string
@@ -132,6 +133,14 @@ public class Flight implements IFlight {
 		
 		// Nothing invalid detected, the object instance looks good
 		return true;
+	}
+	
+	public IAirport getDepartureAirport(){
+		return this.dAirport;
+	}
+	
+	public IAirport getArrivalAirport(){
+		return this.arAirport;
 	}
 	
 	/**
@@ -167,7 +176,7 @@ public class Flight implements IFlight {
 	 * @return the mTimeDepart
 	 */
 	public String getmTimeDepart() {
-		return mTimeDepart;
+		return this.dAirport.getLocalTime(this.mTimeDepart);
 	}
 
 	/**
@@ -181,7 +190,7 @@ public class Flight implements IFlight {
 	 * @return the mTimeArrival
 	 */
 	public String getmTimeArrival() {
-		return mTimeArrival;
+		return this.arAirport.getLocalTime(this.mTimeArrival);
 	}
 
 	/**

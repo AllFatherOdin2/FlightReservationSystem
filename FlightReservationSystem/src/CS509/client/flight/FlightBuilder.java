@@ -76,7 +76,7 @@ public class FlightBuilder
 			Element elementFlight = (Element) nodesFlights.item(i);
 			Flight flight = buildFlight (elementFlight);
 			
-			if (flight.isValid()) {
+			if (flight.isValid() && this.validArrivalDate(flight, currentDate)) {
 				
 				if(!this.arrivals.containsKey(flight.getmCodeDepart())){
 					this.arrivals.put(flight.getmCodeDepart(), new ArrayList<IFlight>());
@@ -101,7 +101,7 @@ public class FlightBuilder
 			Element elementFlight = (Element) nodesFlights.item(i);
 			Flight flight = buildFlight (elementFlight);
 			
-			if (flight.isValid()) {
+			if (flight.isValid() && this.validDepartureDate(flight)) {
 				flightMap.put(flight.getmNumber(), flight);
 			}
 		}
@@ -267,5 +267,62 @@ public class FlightBuilder
 		String nextDate = formatter.format(currentDate);
 				
 		return nextDate;
+	}
+	
+	private String getPreviousDay(String currentDay){
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd");
+		Date currentDate = new Date();
+		
+		try {
+			currentDate = formatter.parse(currentDay);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		currentDate.setTime(currentDate.getTime()-86400000);
+		String nextDate = formatter.format(currentDate);
+				
+		return nextDate;
+	}
+	
+	private boolean validDepartureDate(Flight flight){
+		
+		boolean success = true;
+		
+		SimpleDateFormat localSdf = new SimpleDateFormat("yyyy MMM dd");
+		SimpleDateFormat gmtSdf = new SimpleDateFormat("yyyy_MM_dd");
+
+		try {
+			Date localDate = localSdf.parse(flight.getmTimeDepart());
+			Date gmtDate = gmtSdf.parse(this.date);
+			
+			success = localDate.compareTo(gmtDate) == 0;
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return success;
+	}
+	
+	private boolean validArrivalDate(Flight flight, String currentDate){
+		
+		boolean success = true;
+		
+		SimpleDateFormat localSdf = new SimpleDateFormat("yyyy MMM dd");
+		SimpleDateFormat gmtSdf = new SimpleDateFormat("yyyy_MM_dd");
+
+		try {
+			Date localDate = localSdf.parse(flight.getmTimeArrival());
+			Date gmtDate = gmtSdf.parse(currentDate);
+			
+			success = localDate.compareTo(gmtDate) == 0;
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return success;
 	}
 }

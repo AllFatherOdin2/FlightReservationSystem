@@ -37,6 +37,7 @@ public class ScannerCollectInfoState extends ScannerBaseState
 		}
 		catch(Exception e)
 		{			
+			e.printStackTrace();
 			this.display.DisplayMessage(this.errorMessage);	
 			return new ScannerCollectInfoState(this.display, this.services, this.tripManager);
 		}

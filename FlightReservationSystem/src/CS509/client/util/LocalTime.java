@@ -37,8 +37,8 @@ public class LocalTime implements ILocalTime
         }catch(Exception e){
         	e.printStackTrace();
         }
-        lcTime = formatter.format(TimeTemp);
-        return formatter.format(lcTime);
+        return lcTime = formatter.format(TimeTemp);
+        //return formatter.format(lcTime);
     }
     
 }
