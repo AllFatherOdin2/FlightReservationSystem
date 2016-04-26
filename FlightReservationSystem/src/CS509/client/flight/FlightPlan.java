@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import CS509.client.Interfaces.*;
 
@@ -89,16 +90,7 @@ public class FlightPlan implements IFlightPlan
 				
 				this.departureTime = this.connectingFlights.get(0).getmTimeDepart();
 				
-				SimpleDateFormat formatter = new SimpleDateFormat("yyyy MMM dd hh:mm zzzz");
-				
-				SimpleDateFormat timeFormatter = new SimpleDateFormat("hh:mm:ss");
-				Date layoverStart = formatter.parse(this.departureTime);
-				Date layoverEnd = formatter.parse(this.arrivalTime);
-				
-				long layoverDuration = layoverEnd.getTime() - layoverStart.getTime();
-				
-				Date totalTime = new Date(layoverDuration);
-				this.totalFlightTime = timeFormatter.format(totalTime);
+				this.calculateTotalFlightTime();
 			}catch(Exception e){
 				e.printStackTrace();
 			}		
@@ -133,5 +125,20 @@ public class FlightPlan implements IFlightPlan
 	public String getTotalTime() {
 		// TODO Auto-generated method stub
 		return this.totalFlightTime;
+	}
+	
+	private void calculateTotalFlightTime() throws ParseException{
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy MMM dd hh:mm zzzz");
+		formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
+		
+		SimpleDateFormat timeFormatter = new SimpleDateFormat("hh:mm:ss");
+		Date layoverStart = formatter.parse(this.departureTime);
+		Date layoverEnd = formatter.parse(this.arrivalTime);
+		
+		long layoverDuration = layoverEnd.getTime() - layoverStart.getTime();
+		
+		Date totalTime = new Date(layoverDuration);
+		String timeString = formatter.format(totalTime);
+		this.totalFlightTime = timeString.substring(12, 17);
 	}
 }
