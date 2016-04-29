@@ -10,10 +10,18 @@ public class ScannerDisplayTripsState extends ScannerBaseState {
 	
 	@Override
 	public IDisplayState Process() {
+		
 		for(ITrip trip : this.tripManager.getTrips()){
-			if(!trip.getReserved()){
-				return new ScannerDisplayFlightsState(this.display, this.services, this.tripManager, trip);
+			if(!trip.hasFlights()){
+				this.display.DisplayMessage("A section of your trip has no flights; Unable to process this trip\n");
+				return new ScannerPlanAnotherTripState(this.display, this.services, this.tripManager);
 			}
+		}
+		
+		for(ITrip trip : this.tripManager.getTrips()){
+				if(!trip.getReserved()){
+					return new ScannerDisplayFlightsState(this.display, this.services, this.tripManager, trip);
+				}
 		}
 		
 		return new ScannerPlanAnotherTripState(this.display, this.services, this.tripManager);

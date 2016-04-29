@@ -25,6 +25,11 @@ public class Trip implements ITrip
 	}
 	
 	@Override
+	public boolean hasFlights(){
+		return !this.flightPlans.isEmpty();
+	}
+	
+	@Override
 	public String getDepartureAirportCode() {
 		return arrivalAirportCode;
 	}

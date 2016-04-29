@@ -17,4 +17,6 @@ public interface ITrip
 	public void setReserved(boolean isReserved);
 	
 	public boolean getReserved();
+	
+	public boolean hasFlights();
 }
